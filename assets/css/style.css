@@ -726,8 +726,7 @@ h6 {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #aab7cf transparent;
-  box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
-  background-color: #f6f6f6;
+  background-color: transparent;
 }
 
 @media (max-width: 1199px) {
@@ -739,7 +738,7 @@ h6 {
 .sidebar::-webkit-scrollbar {
   width: 5px;
   height: 8px;
-  background-color: #fff;
+  background-color: transparent;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
@@ -791,7 +790,7 @@ h6 {
 .sidebar-nav .nav-heading {
   font-size: 11px;
   text-transform: uppercase;
-  color: #ffcb74;
+  color: black;
   font-weight: 600;
   margin: 10px 0 5px 15px;
 }
@@ -801,9 +800,9 @@ h6 {
   align-items: center;
   font-size: 15px;
   font-weight: 600;
-  color: #ffcb74;
+  color: black;
   transition: 0.3;
-  background: #2F2F2F;
+  background: transparent;
   padding: 10px 15px;
   border-radius: 4px;
 }
@@ -811,7 +810,7 @@ h6 {
 .sidebar-nav .nav-link i {
   font-size: 16px;
   margin-right: 10px;
-  color: #ffcb74;
+  color: black;
 }
 
 .sidebar-nav .nav-link.collapsed {

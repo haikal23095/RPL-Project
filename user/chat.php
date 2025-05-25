@@ -45,7 +45,7 @@ $result = mysqli_query($kon, $query);
 
     <!-- Favicons -->
     <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
-    <link href="../assets/img/LOGOCASALUXE2.png" rel="apple-touch-icon">
+    <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">

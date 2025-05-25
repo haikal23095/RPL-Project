@@ -23,7 +23,7 @@
           </a>
         </li>
         <li class="nav-item pe-3">
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="profil.php">
             <span class="d-none d-md-block ps-2"><i style="font-size: 20px" class="bi bi-person"></i>&nbsp; Halo, <?= $_SESSION["user"] ?>!</span>
           </a><!-- End Profile Image Icon -->
         </li><!-- End Profile Nav -->
