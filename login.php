@@ -134,10 +134,9 @@ if (isset($_POST["register"])){
 	<title>GameGlee Login Page</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-    <link href="https://code.iconify.design/3/3.1.0/iconify.min.css" rel="stylesheet">
-
-    <!-- Favicons -->
-  <link href="assets/img/logo_CasaLuxe" rel="icon" sizes="48x48">
+  <link href="https://code.iconify.design/3/3.1.0/iconify.min.css" rel="stylesheet">
+  <!-- Favicons -->
+  <link href="assets/img/logo_CasaLuxe.png" rel="icon" sizes="48x48">
 </head>
 <body>
 	<div class="container" id="main">
@@ -179,13 +178,13 @@ if (isset($_POST["register"])){
       <div class="overlay-container">
         <div class="overlay">
           <div class="overlay-left">
-                      <img src="assets/img/Logo_GG.png" alt="Logo Gameglee" class="logo">
-            <h1>Wellcome Back!</h1>
+            <img src="assets/img/logo_CasaLuxe.png" alt="Logo Gameglee" class="logo">
+            <h1>Welcome Back!</h1>
             <p>To keep connected with us please login with your personal account</p>
             <button id="signIn">Login</button>
           </div>
           <div class="overlay-right">
-                      <img src="assets/img/Logo_GG.png" alt="Logo Gameglee" class="logo">
+            <img src="assets/img/logo_CasaLuxe.png" alt="Logo Gameglee" class="logo">
             <h1>Hi, Friend</h1>
             <p>Please enter your personal details and start to feel the glee with us.</p>
             <button id="signUp">Register</button>
@@ -193,29 +192,7 @@ if (isset($_POST["register"])){
         </div>
       </div>
     </div>
-    <div class="slider">
-        <div class="list">
-                <div class="item">
-                    <img src="assets/img/BG LOGIN.jpg" alt="bg 1">
-                </div>
-                <div class="item">
-                    <img src="assets/img/BG LOGIN 2.jpg" alt="bg 2">
-                </div>
-                <div class="item">
-                    <img src="assets/img/BG LOGIN 3.jpg" alt="bg 3">
-                </div>
-                <div class="item">
-                    <img src="assets/img/BG LOGIN 4.jpg" alt="bg 4">
-                </div>
-                <div class="item">
-                    <img src="assets/img/BG LOGIN 5.jpg" alt="bg 5">
-                </div>
-                <div class="item">
-                    <img src="assets/img/BG LOGIN 6.jpg" alt="bg 6">
-                </div>
-            </div>
-        </div>
-        <script src="assets/js/login.js" type="text/javascript"></script>
+    <script src="assets/js/login.js" type="text/javascript"></script>
   </script>
 </body>
 </html>
