@@ -58,7 +58,7 @@ if (isset($_POST["login"])) {
 
               // SET SESSION DAN REDIRECT
               $_SESSION["cs"] = $row_cs["nama"];
-              header("Location: CS/index.php");
+              header("Location: cs/index_admin.php");
               exit;
           }
       }
@@ -132,8 +132,8 @@ if (isset($_POST["login"])) {
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-lg-9 col-md-6 d-flex flex-column align-items-center justify-content-center">
-
               <div class="d-flex justify-content-center py-4">
+                 <img src="assets/img/logo_CasaLuxe.png" alt="logo_casaluxe" class="logo" style="width: 100px; height: 100px;">
                 <a href="#" class="logo d-flex align-items-center w-auto">
                   <span class="d-none d-lg-block">&nbsp; CasaLuxe</span>
                 </a>

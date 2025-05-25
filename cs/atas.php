@@ -1,0 +1,34 @@
+<header id="header" class="header fixed-top d-flex align-items-center">
+
+  <div class="container-fluid d-flex align-items-center justify-content-between">
+
+    <div class="d-flex align-items-center">
+      <a href="index.php" class="logo d-flex align-items-center">
+        <span class="d-none d-lg-block"></i>&nbsp; CasaLuxe</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn ms-3"></i>
+    </div><!-- End Logo -->
+
+    <nav class="header-nav">
+      <ul class="d-flex align-items-center mb-0">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle" href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <span class="d-none d-md-block ps-2"><i style="font-size: 20px" class="bi bi-person"></i>&nbsp; Halo, <?= $_SESSION["cs"] ?>!</span>
+          </a><!-- End Profile Image Icon -->
+
+          
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </div><!-- End Container -->
+</header><!-- End Header -->
