@@ -3,65 +3,67 @@ session_start();
 require "db.php";
 $error = "";
 
-if (isset($_POST["login"])) {
+if (isset($_POST["login"])){
   // LOGIN USER
   $email = mysqli_real_escape_string($kon, isset($_POST["email"]) ? $_POST["email"] : "");
-  $pwd = mysqli_real_escape_string($kon, isset($_POST["pwd"]) ? $_POST["pwd"] : "");
+  $pwd  = mysqli_real_escape_string($kon, isset($_POST["pwd"]) ? $_POST["pwd"] : "");
 
   // CEK APAKAH MASIH KOSONG
-  if (empty($email) || empty($pwd)) {
-      $msg = '
-          <div class="alert alert-warning">
+  if (empty($email) or empty($pwd))
+  {
+    $msg = '
+      <div class="alert alert-warning">
               &nbsp; MAAF, EMAIL / PASSWORD ANDA MASIH KOSONG. SILAHKAN ISI DENGAN BENAR!
-          </div>
+      </div>
+    ';
+  } else {}
+    // PROSEDUR LOGIN BUAT ADMIN :
+    $kue_admin = mysqli_query($kon, "SELECT * FROM user WHERE email = '" . $email . "' AND password = '" . $pwd . "'");
+    $row_admin = mysqli_fetch_array($kue_admin);
+    
+    if (!($row_admin))
+    {
+      $msg = '
+        <div class="alert alert-danger">
+          &nbsp; MAAF, EMAIL / PASSWORD ANDA SALAH. SILAHKAN ULANGI LAGI !
+        </div>
       ';
-  } else {
+    } else {
+        if ($row_admin["level"] == "admin") {
+          // UPDATE ACTIVE FIELD
+          $update_admin_active = "UPDATE user SET active = NOW() WHERE email = '$email'";
+          mysqli_query($kon, $update_admin_active);
 
-      // PROSEDUR LOGIN UNTUK ADMIN
-      $kue_admin = mysqli_query($kon, "SELECT * FROM user WHERE email = '$email' AND password = '$pwd'");
-      $row_admin = mysqli_fetch_array($kue_admin);
-
-      if (!$row_admin) {
-          $msg = '
-              <div class="alert alert-danger">
-                  &nbsp; MAAF, EMAIL / PASSWORD ANDA SALAH. SILAHKAN ULANGI LAGI!
-              </div>
-          ';
-      } else {
-          if ($row_admin["level"] == "admin") {
-              // UPDATE ACTIVE FIELD
-              $update_admin_active = "UPDATE user SET active = NOW() WHERE email = '$email'";
-              mysqli_query($kon, $update_admin_active);
-
-              // SET SESSION DAN REDIRECT
-              $_SESSION["admin"] = $row_admin["nama"];
-              header("Location: admin/index.php");
-              exit;
-          }
+          // SET SESSION DAN REDIRECT
+          $_SESSION["admin"] = $row_admin["nama"];
+          header("Location: admin/index.php");
+          exit;
       }
+    }
 
-      // PROSEDUR LOGIN UNTUK CUSTOMER SERVICE
-      $kue_cs = mysqli_query($kon, "SELECT * FROM user WHERE email = '$email' AND password = '$pwd'");
-      $row_cs = mysqli_fetch_array($kue_cs);
+    // PROSEDUR LOGIN BUAT CS :
+    $kue_cs = mysqli_query($kon, "SELECT * FROM user WHERE email = '" . $email . "' AND password = '" . $pwd . "'");
+    $row_cs = mysqli_fetch_array($kue_cs);
+    
+    if (!($row_cs))
+    {
+      $msg = '
+        <div class="alert alert-danger">
+          &nbsp; MAAF, EMAIL / PASSWORD ANDA SALAH. SILAHKAN ULANGI LAGI !
+        </div>
+      ';
+    } else {
+        if ($row_cs["level"] == "cs") {
+          // UPDATE ACTIVE FIELD
+          $update_cs_active = "UPDATE user SET active = NOW() WHERE email = '$email'";
+          mysqli_query($kon, $update_cs_active);
 
-      if (!$row_cs) {
-          $msg = '
-              <div class="alert alert-danger">
-                  &nbsp; MAAF, EMAIL / PASSWORD ANDA SALAH. SILAHKAN ULANGI LAGI!
-              </div>
-          ';
-      } else {
-          if ($row_cs["level"] == "cs") {
-              // UPDATE ACTIVE FIELD
-              $update_admin_active = "UPDATE user SET active = NOW() WHERE email = '$email'";
-              mysqli_query($kon, $update_admin_active);
-
-              // SET SESSION DAN REDIRECT
-              $_SESSION["cs"] = $row_cs["nama"];
-              header("Location: cs/index_admin.php");
-              exit;
-          }
+          // SET SESSION DAN REDIRECT
+          $_SESSION["cs"] = $row_cs["nama"];
+          header("Location: cs/index_admin.php");
+          exit;
       }
+    }
 
       // PROSEDUR LOGIN UNTUK USER
       $kue_user = mysqli_query($kon, "SELECT * FROM user WHERE email = '$email' AND password = '$pwd'");
@@ -85,127 +87,135 @@ if (isset($_POST["login"])) {
               exit;
           }
       }
+
   }
+
+  $error = true;
+
+if (isset($_POST["register"])){
+  $nama_user = mysqli_real_escape_string($kon, isset($_POST["nama_user"]) ? $_POST["nama_user"] : "");
+  $email = mysqli_real_escape_string($kon, isset($_POST["email"]) ? $_POST["email"] : "");
+  $password = mysqli_real_escape_string($kon, isset($_POST["password"]) ? $_POST["password"] : "");
+  $no_tlp = mysqli_real_escape_string($kon, isset($_POST["no_tlp"]) ? $_POST["no_tlp"] : "");
+  $alamat = mysqli_real_escape_string($kon, isset($_POST["alamat"]) ? $_POST["alamat"] : "");
+  $level = mysqli_real_escape_string($kon, isset($_POST["level"]) ? $_POST["level"] : "");
+
+  if (empty($nama_user) or empty($email) or empty($password) or empty($no_tlp) or empty($alamat) or empty($level)){
+    $msg = '
+      <div class="alert alert-warning">
+        &nbsp; MAAF, SEMUA FIELD HARUS DIISI. SILAHKAN ISI DENGAN BENAR !
+      </div>
+    ';
+  } else {
+    $query = mysqli_query($kon, "INSERT INTO user (nama, email, password, no_tlp, alamat, level) VALUES ('$nama_user', '$email', '$password', '$no_tlp', '$alamat', '$level')");
+    if ($query){
+      $msg = '
+        <div class="alert alert-success">
+          &nbsp; REGISTER BERHASIL. SILAHKAN LOGIN !
+        </div>
+      ';
+      header("Location: login.php");
+      exit(); // Pastikan script berhenti setelah redirect
+    } else {
+      $msg = '
+        <div class="alert alert-danger">
+          &nbsp; REGISTER GAGAL. SILAHKAN ULANGI LAGI !
+        </div>
+      ';
+    }
+  }
+
   $error = true;
 }
-
-
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<title>GameGlee Login Page</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <link href="https://code.iconify.design/3/3.1.0/iconify.min.css" rel="stylesheet">
 
-  <title>LOGIN</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-  <link href="assets/img/logo_CasaLuxe.png" rel="icon" sizes="48x48">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
-
+    <!-- Favicons -->
+  <link href="assets/img/logo_CasaLuxe" rel="icon" sizes="48x48">
 </head>
-
 <body>
-
-  <main>
-    <div class="container">
-
-      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-lg-9 col-md-6 d-flex flex-column align-items-center justify-content-center">
-              <div class="d-flex justify-content-center py-4">
-                 <img src="assets/img/logo_CasaLuxe.png" alt="logo_casaluxe" class="logo" style="width: 100px; height: 100px;">
-                <a href="#" class="logo d-flex align-items-center w-auto">
-                  <span class="d-none d-lg-block">&nbsp; CasaLuxe</span>
-                </a>
-              </div><!-- End Logo -->
-
-              <?php
-              if ($error){
-                echo $msg ;
-              }
-              ?>
-
-              <div class="card mb-3">
-
-                <div class="card-body">
-
-                  <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4"><i class="bi bi-person"></i>&nbsp; LOGIN ACCOUNT</h5>
-                    <p class="text-center small">Masukkan identitas Anda disini</p>
-                  </div>
-
-                  <form method="post" class="row g-3 needs-validation">
-
-                    <div class="col-12">
-                      <label class="form-label"><i class="bi bi-envelope"></i>&nbsp; EMAIL</label>
-                      <div class="input-group has-validation">
-                        <input type="text" name="email" class="form-control" placeholder="Masukkan email Anda" required>
-                        <div class="invalid-feedback">Masukkan email anda dengan benar.</div>
-                      </div>
-                    </div>
-
-                    <div class="col-12">
-                      <label class="form-label"><i class="bi bi-lock"></i>&nbsp; PASSWORD</label>
-                      <input type="password" name="pwd" class="form-control" placeholder="Masukkan password Anda" required>
-                      <div class="invalid-feedback">Masukkan password Anda dengan benar.</div>
-                    </div>
-
-                    <div class="col-12">
-                      <button name="login" class="btn btn-primary w-100" type="submit"><i class="bi bi-arrow-right"></i>&nbsp; LOGIN</button>
-                    </div>
-
-                    <div class="col-12">
-                      <a href="register.php" class="btn btn-secondary w-100"><i class="bi bi-pencil"></i>&nbsp; REGISTER</a>
-                    </div>
-              
-                  </form>
-
-                </div>
-              </div>
+	<div class="container" id="main">
+      <div class="sign-up">
+        <form class="register" method="post">
+            <h1>Register</h1>
+            <div class="social-container">
+                <a href="#" class="social"><span class="grommet-icons--facebook-option"></span></a>
+                <a href="#" class="social"><span class="flat-color-icons--google"></span></a>
             </div>
+            <p>or create your new account</p>
+            <input type="text" name="nama_user" placeholder="Nama Lengkap" required="">
+            <input type="email" name="email" placeholder="Email" required="">
+            <input type="text" name="no_tlp" placeholder="Nomor Telepon" required="">
+            <input type="text" name="alamat" placeholder="Alamat" required="">
+            <input type="password" name="password" placeholder="Password" required="">
+            <select name="level" class="form-control">
+                <option value="">Pilih Level Anda Sebagai User</option>
+                <option value="user">User</option>
+            </select>            
+            <button name="register" type="submit">Register</button>
+        </form>
+      </div>
+
+      <div class="sign-in">
+          <form class="login" method="post">
+              <h1>Login</h1>
+              <div class="social-container">
+                  <a href="#" class="social"><span class="grommet-icons--facebook-option"></span></a>
+                  <a href="#" class="social"><span class="flat-color-icons--google"></span></a>
+              </div>
+              <p>or use your account</p>
+              <input type="email" name="email" placeholder="Email" required="">
+              <input type="password" name="pwd" placeholder="Password" required="">
+              <button name="login" type="submit">Login</button>
+          </form>
+      </div>
+
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-left">
+                      <img src="assets/img/Logo_GG.png" alt="Logo Gameglee" class="logo">
+            <h1>Wellcome Back!</h1>
+            <p>To keep connected with us please login with your personal account</p>
+            <button id="signIn">Login</button>
+          </div>
+          <div class="overlay-right">
+                      <img src="assets/img/Logo_GG.png" alt="Logo Gameglee" class="logo">
+            <h1>Hi, Friend</h1>
+            <p>Please enter your personal details and start to feel the glee with us.</p>
+            <button id="signUp">Register</button>
           </div>
         </div>
-
-      </section>
-
+      </div>
     </div>
-  </main><!-- End #main -->
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/chart.js/chart.umd.js"></script>
-  <script src="assets/vendor/echarts/echarts.min.js"></script>
-  <script src="assets/vendor/quill/quill.min.js"></script>
-  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
-
+    <div class="slider">
+        <div class="list">
+                <div class="item">
+                    <img src="assets/img/BG LOGIN.jpg" alt="bg 1">
+                </div>
+                <div class="item">
+                    <img src="assets/img/BG LOGIN 2.jpg" alt="bg 2">
+                </div>
+                <div class="item">
+                    <img src="assets/img/BG LOGIN 3.jpg" alt="bg 3">
+                </div>
+                <div class="item">
+                    <img src="assets/img/BG LOGIN 4.jpg" alt="bg 4">
+                </div>
+                <div class="item">
+                    <img src="assets/img/BG LOGIN 5.jpg" alt="bg 5">
+                </div>
+                <div class="item">
+                    <img src="assets/img/BG LOGIN 6.jpg" alt="bg 6">
+                </div>
+            </div>
+        </div>
+        <script src="assets/js/login.js" type="text/javascript"></script>
+  </script>
 </body>
-
 </html>
