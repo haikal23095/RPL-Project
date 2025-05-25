@@ -83,9 +83,9 @@
       </li> 
 
       <li class="nav-item">
-        <a class="nav-link <?php if($page == "komunitas"){ echo "collapsed"; } ?>" href="forum_komunitas.php">
+        <a class="nav-link <?php if($page == "chat"){ echo "collapsed"; } ?>" href="chat.php">
           <i class="bi bi-headset"></i>
-          <span>COMMUNITY</span>
+          <span>CUSTOMER SERVICE</span>
         </a>
       </li> 
 

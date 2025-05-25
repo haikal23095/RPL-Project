@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../db.php";
-$page = "produk";
+$page = "promo";
 
 if (!isset($_SESSION["user"])) {
     header("Location: ../login.php");
