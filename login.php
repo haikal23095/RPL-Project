@@ -136,7 +136,7 @@ if (isset($_POST["register"])){
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
   <link href="https://code.iconify.design/3/3.1.0/iconify.min.css" rel="stylesheet">
   <!-- Favicons -->
-  <link href="assets/img/logo_CasaLuxe.png" rel="icon" sizes="48x48">
+  <link href="assets/img/LOGOCASALUXE2.png" rel="icon" sizes="48x48">
 </head>
 <body>
 	<div class="container" id="main">
