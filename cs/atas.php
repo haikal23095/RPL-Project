@@ -18,9 +18,9 @@
           </a>
         </li><!-- End Search Icon-->
 
-        <li class="nav-item dropdown pe-3">
+        <li class="nav-item pe-3">
 
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="profil.php">
             <span class="d-none d-md-block ps-2"><i style="font-size: 20px" class="bi bi-person"></i>&nbsp; Halo, <?= $_SESSION["cs"] ?>!</span>
           </a><!-- End Profile Image Icon -->
 

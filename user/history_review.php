@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../db.php'); // Koneksi ke database
+$page = "history_review";
 
 // Pastikan admin login
 if (!isset($_SESSION['user'])) {
@@ -203,7 +204,7 @@ if ($result) {
     <!-- Header -->
     <?php require "atas.php"; ?>
     <!-- Sidebar -->
-    <?php require "menu.php"; ?>
+    <?php require "profil_menu.php"; ?>
 
     <main id="main" class="main">
         <div class="pagetitle">

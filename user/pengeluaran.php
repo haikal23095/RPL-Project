@@ -64,7 +64,7 @@ $nama_bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "
 </head>
 <body>
     <?php require "atas.php"; ?>
-    <?php require "menu.php"; ?>
+    <?php require "profil_menu.php"; ?>
     <main id="main" class="main">
         <div class="pagetitle">
             <h1><i class="bi bi-clock-history"></i>&nbsp; Riwayat Pengeluaran</h1>

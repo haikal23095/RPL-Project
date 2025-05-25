@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../db.php';
+$page = "wishlist";
 
 // Pastikan user sudah login
 if (!isset($_SESSION['user'])) {
@@ -88,7 +89,7 @@ if (isset($_POST['add_to_cart'])) {
     <?php require "atas.php"; ?>
 
     <!-- SIDEBAR -->
-    <?php require "menu.php"; ?>
+    <?php require "profil_menu.php"; ?>
 
     <main id="main" class="main">
         <div class="pagetitle">

@@ -118,7 +118,7 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
 <!-- End Header -->
 
 <!-- ======= Sidebar ======= -->
-<?php require "menu.php"; ?>
+<?php require "profil_menu.php"; ?>
 <!-- End Sidebar-->
 <main id="main" class="main">
     <div class="container mt-5">

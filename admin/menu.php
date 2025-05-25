@@ -69,13 +69,6 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <?php if($page == "komunitas"){ echo "collapsed"; } ?>" href="forum_komunitas.php">
-          <i class="bi bi-headset"></i>
-          <span>COMMUNITY</span>
-        </a>
-      </li> 
-
-      <li class="nav-item">
         <a class="nav-link" href="logout.php">
           <i class="bi bi-box-arrow-right"></i>
           <span>LOG-OUT</span>

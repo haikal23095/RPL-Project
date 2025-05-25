@@ -2,24 +2,24 @@
 session_start();
 require "../db.php"; 
 
-if (!isset($_SESSION["user"])) {
+if (!isset($_SESSION["cs"])) {
     header("Location: ../login.php");
     exit;
 }
 
-$user_id = $_SESSION["user"]; 
-$result = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$user_id'");
+$cs_id = $_SESSION["cs"]; 
+$result = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$cs_id'");
 
 if (!$result) {
     die('Invalid query: ' . mysqli_error($kon));
 }
 
-$user = mysqli_fetch_assoc($result);
+$cs = mysqli_fetch_assoc($result);
 
-// if (!$user) {
-//     echo "Error: User not found.";
-//     exit;
-// }
+if (!$cs) {
+    echo "Error: Petugas not found.";
+    exit;
+}
 
 
 ?>
@@ -29,13 +29,13 @@ $user = mysqli_fetch_assoc($result);
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Profil User</title>
+    <title>Profil CS</title>
     <meta name="robots" content="noindex, nofollow" />
     <meta content="" name="description" />
     <meta content="" name="keywords" />
     <!-- Favicons -->
-    <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
-    <link href="../assets/img/LOGOCASALUXE2.png" rel="apple-touch-icon">
+    <link href="../assets/img/favicon.png" rel="icon">
+    <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -62,11 +62,11 @@ $user = mysqli_fetch_assoc($result);
     <?php require "atas.php"; ?>
 
     <!-- SIDEBAR -->
-    <?php require "profil_menu.php"; ?>
+    <?php require "menu.php"; ?>
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-person-circle"></i>&nbsp; Profil User</h1>
+            <h1><i class="bi bi-person-circle"></i>&nbsp; Profil CS</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">DASHBOARD</a></li>
@@ -98,13 +98,13 @@ $user = mysqli_fetch_assoc($result);
                             <h2 class="text-center mb-4">Profil</h2>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <img src="../uploads/<?php echo htmlspecialchars($user['foto']); ?>" alt="Profile Image" class="img-fluid rounded mb-4" />
+                                    <img src="../uploads/<?php echo htmlspecialchars($cs['foto']); ?>" alt="Profile Image" class="img-fluid rounded mb-4" />
                                 </div>
                                 <div class="col-md-8">
-                                    <h3><?php echo htmlspecialchars($user['nama']); ?></h3>
-                                    <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
-                                    <p><strong>No Telp:</strong> <?php echo htmlspecialchars($user['no_tlp']); ?></p>
-                                    <p><strong>Alamat:</strong> <?php echo htmlspecialchars($user['alamat']); ?></p>
+                                    <h3><?php echo htmlspecialchars($cs['nama']); ?></h3>
+                                    <p><strong>Email:</strong> <?php echo htmlspecialchars($cs['email']); ?></p>
+                                    <p><strong>No Telp:</strong> <?php echo htmlspecialchars($cs['no_tlp']); ?></p>
+                                    <p><strong>Alamat:</strong> <?php echo htmlspecialchars($cs['alamat']); ?></p>
                                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                                         <i class="bi bi-pencil-square"></i>&nbsp; Edit Profil
                                     </button>
@@ -127,23 +127,23 @@ $user = mysqli_fetch_assoc($result);
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" name="user_id" value="<?php echo $user['id_user']; ?>">
-                        <input type="hidden" name="foto_lama" value="<?php echo htmlspecialchars($user['foto']); ?>">
+                        <input type="hidden" name="cs_id" value="<?php echo $cs['id_user']; ?>">
+                        <input type="hidden" name="foto_lama" value="<?php echo htmlspecialchars($cs['foto']); ?>">
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="nama" name="nama" value="<?php echo htmlspecialchars($user['nama']); ?>" required>
+                            <input type="text" class="form-control" id="nama" name="nama" value="<?php echo htmlspecialchars($cs['nama']); ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($cs['email']); ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="no_tlp" class="form-label">No Telp</label>
-                            <input type="text" class="form-control" id="no_tlp" name="no_tlp" value="<?php echo htmlspecialchars($user['no_tlp']); ?>" required>
+                            <input type="text" class="form-control" id="no_tlp" name="no_tlp" value="<?php echo htmlspecialchars($cs['no_tlp']); ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="alamat" class="form-label">Alamat</label>
-                            <textarea class="form-control" id="alamat" name="alamat" rows="3" required><?php echo htmlspecialchars($user['alamat']); ?></textarea>
+                            <textarea class="form-control" id="alamat" name="alamat" rows="3" required><?php echo htmlspecialchars($cs['alamat']); ?></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="foto" class="form-label">Ganti Foto Profil</label>

@@ -238,7 +238,7 @@ if ($row_enum) {
     <!-- Header -->
     <?php require "atas.php"; ?>
     <!-- Sidebar -->
-    <?php require "menu.php"; ?>
+    <?php require "profil_menu.php"; ?>
 
     <main id="main" class="main">
         <div class="pagetitle">
