@@ -17,6 +17,7 @@ body{
 	min-height: 100%;
     margin-top: 2%;
 }
+
 .container{
 	position: relative;
 	width: 968px;
@@ -31,7 +32,7 @@ body{
 }
 
 .overlay-container .overlay-left img{
-    width: 50px;
+    width: 200px;
     border-radius: 6px;
     align-items: center;
     margin-right: 20px;
@@ -39,7 +40,7 @@ body{
 }
 
 .overlay-container .overlay-right img{
-    width: 50px;
+    width: 200px;
     border-radius: 6px;
     align-items: center;
     margin-right: 20px;
