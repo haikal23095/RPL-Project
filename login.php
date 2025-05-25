@@ -40,6 +40,29 @@ if (isset($_POST["login"])) {
           }
       }
 
+      // PROSEDUR LOGIN UNTUK CUSTOMER SERVICE
+      $kue_cs = mysqli_query($kon, "SELECT * FROM user WHERE email = '$email' AND password = '$pwd'");
+      $row_cs = mysqli_fetch_array($kue_cs);
+
+      if (!$row_cs) {
+          $msg = '
+              <div class="alert alert-danger">
+                  &nbsp; MAAF, EMAIL / PASSWORD ANDA SALAH. SILAHKAN ULANGI LAGI!
+              </div>
+          ';
+      } else {
+          if ($row_cs["level"] == "cs") {
+              // UPDATE ACTIVE FIELD
+              $update_admin_active = "UPDATE user SET active = NOW() WHERE email = '$email'";
+              mysqli_query($kon, $update_admin_active);
+
+              // SET SESSION DAN REDIRECT
+              $_SESSION["cs"] = $row_cs["nama"];
+              header("Location: cs/index_admin.php");
+              exit;
+          }
+      }
+
       // PROSEDUR LOGIN UNTUK USER
       $kue_user = mysqli_query($kon, "SELECT * FROM user WHERE email = '$email' AND password = '$pwd'");
       $row_user = mysqli_fetch_array($kue_user);
@@ -80,7 +103,7 @@ if (isset($_POST["login"])) {
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/Logo_GG.png" rel="icon" sizes="48x48">
+  <link href="assets/img/logo_CasaLuxe.png" rel="icon" sizes="48x48">
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -109,10 +132,10 @@ if (isset($_POST["login"])) {
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-lg-9 col-md-6 d-flex flex-column align-items-center justify-content-center">
-
               <div class="d-flex justify-content-center py-4">
+                 <img src="assets/img/logo_CasaLuxe.png" alt="logo_casaluxe" class="logo" style="width: 100px; height: 100px;">
                 <a href="#" class="logo d-flex align-items-center w-auto">
-                  <span class="d-none d-lg-block"><i class="bi bi-controller"></i>&nbsp; Gamify</span>
+                  <span class="d-none d-lg-block">&nbsp; CasaLuxe</span>
                 </a>
               </div><!-- End Logo -->
 
