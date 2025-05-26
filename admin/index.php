@@ -22,24 +22,13 @@ $row_produk = mysqli_num_rows($sql_produk);
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>DASHBOARD</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
-
-  <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
   <title>DASHBOARD</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="../assets/img/favicon.png" rel="icon">
-  <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
+  <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -172,6 +161,13 @@ $row_produk = mysqli_num_rows($sql_produk);
   <script src="../assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Core Bootstrap JS -->
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../assets/js/main.js"></script>
 
 </body>

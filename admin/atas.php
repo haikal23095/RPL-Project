@@ -17,65 +17,15 @@
             <i class="bi bi-search"></i>
           </a>
         </li><!-- End Search Icon-->
-
-        <li class="nav-item dropdown pe-3">
-
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <span class="d-none d-md-block dropdown-toggle ps-2"><i style="font-size: 20px" class="bi bi-person"></i>&nbsp; Halo, <?= $_SESSION["admin"] ?>!</span>
+        <li class="nav-item pe-4">
+          <a class="nav-link nav-profile d-flex align-items-center pe-1" href="notifikasi.php">
+            <span class="d-none d-md-block ps-2"><i style="font-size: 20px" class="bi bi-bell"></i></span>
+          </a>
+        </li>
+        <li class="nav-item pe-3">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="profil.php">
+            <span class="d-none d-md-block ps-2"><i style="font-size: 20px" class="bi bi-person"></i>&nbsp; Halo, <?= $_SESSION["admin"] ?>!</span>
           </a><!-- End Profile Image Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6><?= $_SESSION["admin"] ?></h6>
-              <span>Selamat Berbelanja!</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="profil.php">
-                <i class="bi bi-person"></i>
-                <span>Profile</span>
-              </a>
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="index_admin.php">
-                <i class="bi bi-headset"></i>
-                <span>CS</span>
-              </a>
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="review.php">
-                <i class="bi bi-star"></i>
-                <span>Review</span>
-              </a>
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="feedback.php">
-                <i class="bi bi-chat-square-text"></i>
-                <span>Feedback</span>
-              </a>
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="notifikasi.php">
-                <i class="bi bi-bell-fill"></i>
-                <span>Notifikasi</span>
-              </a>
-            </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="logout.php">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Log-Out</span>
-              </a>
-            </li>
-
-          </ul><!-- End Profile Dropdown Items -->
         </li><!-- End Profile Nav -->
 
       </ul>

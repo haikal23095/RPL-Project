@@ -131,7 +131,7 @@ if (isset($_POST["register"])){
 <!DOCTYPE html>
 <html>
 <head>
-	<title>GameGlee Login Page</title>
+	<title>CasaLuxe Login Page</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
   <link href="https://code.iconify.design/3/3.1.0/iconify.min.css" rel="stylesheet">
