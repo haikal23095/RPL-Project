@@ -4,7 +4,8 @@
 
     <div class="d-flex align-items-center">
       <a href="index.php" class="logo d-flex align-items-center">
-        <span class="d-none d-lg-block"><i class="bi bi-controller"></i>&nbsp; Gamify</span>
+        <img src="../assets/img/LOGOCASALUXE2.png" alt="logo">
+        <span class="d-none d-lg-block">&nbsp; CasaLuxe</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn ms-3"></i>
     </div><!-- End Logo -->
@@ -17,6 +18,11 @@
             <i class="bi bi-search"></i>
           </a>
         </li><!-- End Search Icon-->
+        <li class="nav-item pe-4">
+          <a class="nav-link nav-profile d-flex align-items-center pe-1" href="kategori.php">
+            <span class="d-none d-md-block ps-2"><i style="font-size: 20px" class="bi bi-ui-checks-grid"></i></span>
+          </a>
+        </li>
         <li class="nav-item pe-4">
           <a class="nav-link nav-profile d-flex align-items-center pe-1" href="notifikasi.php">
             <span class="d-none d-md-block ps-2"><i style="font-size: 20px" class="bi bi-bell"></i></span>

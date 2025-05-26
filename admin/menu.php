@@ -26,13 +26,6 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link <?php if($page == "kategori"){ echo "collapsed"; } ?>" href="kategori.php">
-          <i class="bi bi-list-nested"></i>
-          <span>DATA KATEGORI</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
         <a class="nav-link <?php if($page == "info"){ echo "collapsed"; } ?>" href="informasipromo.php">
           <i class="bi bi-megaphone"></i>
           <span>INFORMASI PROMO</span>
