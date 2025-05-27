@@ -2,17 +2,17 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
-    <h5 class="text-center">MAIN MENU</h5>
+    <h5 class="text-center"></h5>
       <li class="nav-item">
         <a class="nav-link <?php if($page == "dashboard"){ echo "collapsed"; } ?>" href="index.php">
           <i class="bi bi-grid"></i>
-          <span>DASHBOARD</span>
+          <span>BERANDA</span>
         </a>
       </li> 
       <li class="nav-item">
         <a class="nav-link <?php if($page == "history_pembayaran"){ echo "collapsed"; } ?>" href="history_pembayaran.php">
           <i class="bi bi-cash-stack"></i>
-          <span>HISTORY PEMBAYARAN</span>
+          <span>RIWAYAT PEMBAYARAN</span>
         </a>
       </li> 
 
@@ -48,14 +48,14 @@
       <li class="nav-item">
         <a class="nav-link <?php if($page == "history_review"){ echo "collapsed"; } ?>" href="history_review.php">
           <i class="bi bi-chat-quote"></i>
-          <span>HISTORY REVIEW</span>
+          <span>RIWAYAT ULASAN</span>
         </a>
       </li>
       
       <li class="nav-item">
         <a class="nav-link <?php if($page == "wishlist"){ echo "collapsed"; } ?>" href="wishlist.php">
           <i class="bi bi-heart-fill"></i>
-          <span>WISHLIST</span>
+          <span>DAFTAR KEINGINAN</span>
         </a>
       </li>
       
@@ -63,6 +63,13 @@
         <a class="nav-link <?php if($page == "history"){ echo "collapsed"; } ?>" href="pengeluaran.php">
           <i class="bi bi-wallet2"></i>
           <span>PENGELUARAN</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="logout.php">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>KELUAR</span>
         </a>
       </li>
     </ul>

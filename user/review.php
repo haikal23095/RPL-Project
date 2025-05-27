@@ -62,19 +62,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($reviewCount > 0) {
         $errorMessage = "Anda sudah memberikan ulasan untuk produk ini.";
     } else {
-        $rating = isset($_POST['rating']) ? intval($_POST['rating']) : 0;
+        $rating_produk = isset($_POST['rating_produk']) ? intval($_POST['rating_produk']) : 0;
+        $rating_pelayanan = isset($_POST['rating_pelayanan']) ? intval($_POST['rating_pelayanan']) : 0;
+        $rating_pengiriman = isset($_POST['rating_pengiriman']) ? intval($_POST['rating_pengiriman']) : 0;
         $review = isset($_POST['review']) ? trim($_POST['review']) : '';
 
         // Validasi rating dan ulasan
-        if ($rating < 1 || $rating > 5) {
+        if ($rating_produk < 1 || $rating_produk > 5) {
             $errorMessage = "Rating harus antara 1 dan 5.";
         } elseif (empty($review)) {
             $errorMessage = "Ulasan tidak boleh kosong.";
         } else {
             // Simpan ulasan ke database
-            $sql = "INSERT INTO review_produk (id_user, id_produk, id_pesanan, rating, komentar) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO review_produk (id_user, id_produk, id_pesanan, rating_produk, rating_pelayanan, rating_pengiriman, komentar) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = mysqli_prepare($kon, $sql);
-            mysqli_stmt_bind_param($stmt, "iiiis", $userId, $id_produk, $id_pesanan, $rating, $review);
+            mysqli_stmt_bind_param($stmt, "iiiiiis", $userId, $id_produk, $id_pesanan, $rating_produk, $rating_pelayanan, $rating_pengiriman, $review);
 
             if (mysqli_stmt_execute($stmt)) {
                 $successMessage = "Ulasan berhasil ditambahkan!";
@@ -193,8 +195,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- Formulir Ulasan -->
                         <form method="POST" class="mt-4" style="display: block;">
                             <div class="mb-3">
-                                <label for="rating" class="form-label">Rating:</label>
-                                <select name="rating" id="rating" class="form-select" required>
+                                <label for="rating_produk" class="form-label">Kualitas Produk:</label>
+                                <select name="rating_produk" id="rating_produk" class="form-select" required>
+                                    <option value="1">1 - Sangat Buruk</option>
+                                    <option value="2">2 - Buruk</option>
+                                    <option value="3">3 - Cukup</option>
+                                    <option value="4">4 - Baik</option>
+                                    <option value="5">5 - Sangat Baik</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rating_pelayanan" class="form-label">Kualitas Pelayanan:</label>
+                                <select name="rating_pelayanan" id="rating_pelayanan" class="form-select" required>
+                                    <option value="1">1 - Sangat Buruk</option>
+                                    <option value="2">2 - Buruk</option>    
+                                    <option value="3">3 - Cukup</option>
+                                    <option value="4">4 - Baik</option>
+                                    <option value="5">5 - Sangat Baik</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rating_pengiriman" class="form-label">Kecepatan Pengiriman:</label>
+                                <select name="rating_pengiriman" id="rating_pengiriman" class="form-select" required>
                                     <option value="1">1 - Sangat Buruk</option>
                                     <option value="2">2 - Buruk</option>
                                     <option value="3">3 - Cukup</option>
@@ -204,8 +226,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="mb-3">
-                                <label for="review" class="form-label">Ulasan:</label>
-                                <textarea name="review" id="review" class="form-control" rows="5" placeholder="Tulis ulasan Anda di sini..." required></textarea>
+                                <label for="review" class="form-label">Deskripsi:</label>
+                                <textarea name="review" id="review" class="form-control" rows="5" placeholder="Ketikkan kesan anda disini" required></textarea>
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100">Kirim Ulasan</button>

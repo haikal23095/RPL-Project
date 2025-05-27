@@ -6,7 +6,7 @@
       <li class="nav-item">
         <a class="nav-link <?php if($page == "dashboard"){ echo "collapsed"; } ?>" href="index.php">
           <i class="bi bi-grid"></i>
-          <span>DASHBOARD</span>
+          <span>BERANDA</span>
         </a>
       </li>
 
@@ -20,9 +20,11 @@
       <li class="nav-item">
         <a class="nav-link <?php if($page == "fav"){ echo "collapsed"; } ?>" href="most_favorite.php">
           <i class="bi bi-star-fill"></i>
-          <span>FAVORITE</span>
+          <span>FAVORIT</span>
         </a>
       </li>
+      <br>
+      <br>
       <br>
       <br>
       <br>
@@ -40,17 +42,9 @@
       <li class="nav-item">
         <a class="nav-link <?php if($page == "chat"){ echo "collapsed"; } ?>" href="chat.php">
           <i class="bi bi-headset"></i>
-          <span>CUSTOMER SERVICE</span>
+          <span>PELAYANAN PELANGGAN</span>
         </a>
       </li> 
-
-      <li class="nav-item">
-        <a class="nav-link" href="logout.php">
-          <i class="bi bi-box-arrow-right"></i>
-          <span>LOG-OUT</span>
-        </a>
-      </li>
-
     </ul>
 
 </aside>

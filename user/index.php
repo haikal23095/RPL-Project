@@ -102,7 +102,7 @@ $row_user = mysqli_fetch_array($kue_user);
           <!-- Products Section -->
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>Produk Kami</h2>
-            <a href="produk.php" class="btn btn-clear">Lainnya -></a>
+            <a href="produk.php" class="btn btn-clear">Produk Lainnya  ></a>
           </div>
           <div class="row">
             <?php

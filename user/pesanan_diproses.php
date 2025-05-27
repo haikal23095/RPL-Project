@@ -86,7 +86,7 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
 <main id="main" class="main">
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4>Pesanan Diproses</h4>
+            <h4>PESANAN MENUNGGU DIKIRIM</h4>
         </div>
         <?php if (count($pesanan) > 0): ?>
             <?php foreach ($pesanan as $row): ?>

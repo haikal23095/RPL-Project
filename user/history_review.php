@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $usernama = $_SESSION['user']; // Ambil nama user dari session
 
 // Ambil semua ulasan dari database
-$sql = "SELECT rp.id_review, rp.id_produk, rp.rating, rp.komentar, rp.tanggal_review, rp.komentar_admin, 
+$sql = "SELECT rp.id_review, rp.id_produk, rp.rating_produk, rp.rating_pelayanan, rp.rating_pengiriman, rp.komentar, rp.tanggal_review, rp.komentar_admin, 
         p.nama_produk, p.gambar, u.nama
         FROM review_produk rp
         
@@ -59,6 +59,17 @@ if ($result) {
 } else {
     $errorMessage = "Gagal mengambil data ulasan: " . mysqli_error($kon);
     $reviews = []; // Pastikan $reviews terdefinisi sebagai array kosong
+}
+
+$overallRating = 0;
+if (count($reviews) > 0) {
+    $totalRating = 0;
+    foreach ($reviews as $review) {
+        $totalRating += $review['rating_produk'] + $review['rating_pelayanan'] + $review['rating_pengiriman'];
+    }
+    $overallRating = round($totalRating / 3);
+} else {
+    $overallRating = 0; // Jika tidak ada ulasan, set rating keseluruhan ke 0
 }
 ?>
 
@@ -239,7 +250,7 @@ if ($result) {
                                             <th>No.</th>
                                             <th>Produk</th>
                                             <th>Nama User</th>
-                                            <th>Rating</th>
+                                            <th>Rating keseluruhan</th>
                                             <th>Ulasan</th>
                                             <th>Balasan Admin</th>
                                             <th>Tanggal</th>
@@ -260,7 +271,7 @@ if ($result) {
                                                     </div>
                                                 </td>
                                                 <td><?= htmlspecialchars($review['nama']); ?></td>
-                                                <td><?= htmlspecialchars($review['rating']); ?></td>
+                                                <td><?= htmlspecialchars($overallRating); ?></td>
                                                 <td><?= htmlspecialchars($review['komentar']); ?></td>
                                                 <td>
                                                     <?php if (empty($review['komentar_admin'])): ?>
