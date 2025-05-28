@@ -26,39 +26,103 @@ if (!$user_id) {
     echo "<div class='alert alert-danger'>User not found.</div>";
     exit;
 }
+
+// Query untuk mendapatkan semua promo yang tersedia
+$promo_query = "SELECT p.id, p.code, p.discount_type, p.discount_value, 
+                p.times_used, p.usage_limit
+                FROM promo p";
+$promo_result = mysqli_query($kon, $promo_query);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Available Promo Codes</title>
+    <title>Kode Promo - CasaLuxe</title>
     
     <!-- Bootstrap CSS -->
     <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     
     <style>
-        .promo-card {
-            background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
+        body {
+            background-color: #f8f9fa;
         }
-        .promo-code {
-            font-size: 24px;
+        .header-title {
+            color: #333;
             font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
+            text-align: center;
+            margin: 20px 0;
         }
-        .promo-value {
-            font-size: 18px;
+        .promo-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .section-title {
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .promo-item {
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            position: relative;
+        }
+        .promo-title {
+            font-weight: bold;
+            color: #007bff;
             margin-bottom: 5px;
         }
-        .promo-type {
+        .promo-detail {
+            margin-bottom: 5px;
             font-size: 14px;
-            opacity: 0.8;
+        }
+        .promo-expiry {
+            color: #6c757d;
+            font-size: 13px;
+        }
+        .promo-code {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .divider {
+            border-top: 1px dashed #ddd;
+            margin: 20px 0;
+        }
+        .action-section {
+            text-align: center;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .action-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .customer-service {
+            text-align: center;
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .usage-info {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
         }
     </style>
     <?php include 'aset.php'; ?>
@@ -69,11 +133,11 @@ if (!$user_id) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-gift"></i> Your Special Promo Codes</h1>
+            <h1><i class="bi bi-tag"></i> Kode Promo</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
-                    <li class="breadcrumb-item active">PROMO CODES</li>
+                    <li class="breadcrumb-item active">KODE PROMO</li>
                 </ol>
             </nav>
         </div>
@@ -83,63 +147,71 @@ if (!$user_id) {
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Available Promo Codes</h5>
-                            <div class="row">
+                            <h2 class="header-title">CasaLuxe</h2>
+                            <h3 class="text-center mb-4">KODE PROMO</h3>
+                            
+                            <div class="divider"></div>
+                            
+                            <div class="promo-section">
+                                <h4 class="section-title">INFORMASI PROMO</h4>
+                                
+                                <div class="promo-item">
+                                    <div class="promo-title">FAVORIT</div>
+                                </div>
+                                
                                 <?php
-                                try {
-                                    if (!$kon) {
-                                        throw new Exception("Database connection failed");
+                                if ($promo_result && mysqli_num_rows($promo_result) > 0) {
+                                    while ($promo = mysqli_fetch_assoc($promo_result)) {
+                                        // $end_date = date('d-m-Y', strtotime($promo['end_date']));
+                                        // $min_purchase = number_format($promo['min_purchase'], 0, ',', '.');
+                                        
+                                        // Format nilai diskon
+                                        $discount_value = ($promo['discount_type'] == 'fixed') 
+                                            ? 'Rp ' . number_format($promo['discount_value'], 0, ',', '.') 
+                                            : $promo['discount_value'] . '%';
+                                        
+                                        // Hitung sisa kuota
+                                        $remaining = $promo['usage_limit'] - $promo['times_used'];
+                                        ?>
+                                        <div class="promo-item">
+                                            <span class="promo-code"><?= htmlspecialchars($promo['code']) ?></span>
+                                            <div class="promo-title">
+                                                Discount <?= $discount_value ?>
+                                                <?= ($promo['discount_type'] == 'percentage') ? 'Up to IDR 100.000' : '' ?>
+                                            </div>
+                                            <div class="promo-detail">
+                                                Min. Total Buy IDR 
+                                            </div>
+                                            <div class="promo-expiry">
+                                                Until <?= htmlspecialchars('xxxx') ?>
+                                            </div>
+                                            <div class="usage-info">
+                                                Used: <?= $promo['times_used'] ?>/<?= $promo['usage_limit'] ?> 
+                                                (Remaining: <?= $remaining ?>)
+                                            </div>
+                                        </div>
+                                        <?php
                                     }
-
-                                    $num_promos = 2;
-                                    $promo_query = "SELECT p.id, p.code, p.discount_type, p.discount_value 
-                                                    FROM promo p
-                                                    LEFT JOIN user_promo_codes upc ON p.id = upc.promo_id AND upc.user_id = ?
-                                                    WHERE upc.id_user_promo_code IS NULL 
-                                                      AND p.times_used < p.usage_limit  
-                                                    LIMIT ?";
-                                    
-                                    $stmt = mysqli_prepare($kon, $promo_query);
-                                    if ($stmt) {
-                                        mysqli_stmt_bind_param($stmt, "ii", $user_id, $num_promos);
-                                        mysqli_stmt_execute($stmt);
-                                        $result = mysqli_stmt_get_result($stmt);
-
-                                        if ($result && mysqli_num_rows($result) > 0) {
-                                            while ($promo_row = mysqli_fetch_assoc($result)) {
-                                                ?>
-                                                <div class="col-md-6">
-                                                    <div class="promo-card">
-                                                        <div class="promo-code">
-                                                            <?php echo htmlspecialchars($promo_row['code']); ?>
-                                                        </div>
-                                                        <div class="promo-value">
-                                                            <?php
-                                                            if ($promo_row['discount_type'] == 'fixed') {
-                                                                echo 'Rp. ' . number_format($promo_row['discount_value'], 0, ',', '.');
-                                                            } else {
-                                                                echo htmlspecialchars($promo_row['discount_value']) . '%';
-                                                            }
-                                                            ?>
-                                                        </div>
-                                                        <div class="promo-type">
-                                                            <?php echo ($promo_row['discount_type'] == 'fixed' ? 'Fixed Discount' : 'Percentage Discount'); ?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <?php
-                                            }
-                                        } else {
-                                            echo "<div class='alert alert-info'>No promo codes available at the moment.</div>";
-                                        }
-                                        mysqli_stmt_close($stmt);
-                                    } else {
-                                        echo "<div class='alert alert-warning'>Error preparing database query.</div>";
-                                    }
-                                } catch (Exception $e) {
-                                    echo "<div class='alert alert-danger'>An error occurred: " . htmlspecialchars($e->getMessage()) . "</div>";
+                                } else {
+                                    echo "<div class='alert alert-info'>No promo codes available at the moment.</div>";
                                 }
                                 ?>
+                            </div>
+                            
+                            <div class="divider"></div>
+                            
+                            <div class="action-section" onclick="copyAllPromoCodes()">
+                                <div class="action-title">KLAIM</div>
+                            </div>
+                            
+                            <div class="action-section" onclick="window.location.href='how_to_use.php'">
+                                <div class="action-title">CARA PENGGUNAAN</div>
+                            </div>
+                            
+                            <div class="divider"></div>
+                            
+                            <div class="customer-service">
+                                PELAYANAN PELANGGAN
                             </div>
                         </div>
                     </div>
@@ -154,5 +226,33 @@ if (!$user_id) {
     <!-- Vendor JS Files -->
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/main.js"></script>
+    
+    <script>
+        function copyAllPromoCodes() {
+            let codes = [];
+            document.querySelectorAll('.promo-code').forEach(el => {
+                codes.push(el.textContent);
+            });
+            
+            if (codes.length > 0) {
+                navigator.clipboard.writeText(codes.join('\n')).then(() => {
+                    alert('All promo codes copied to clipboard!\n' + codes.join('\n'));
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            } else {
+                alert('No promo codes available to copy.');
+            }
+        }
+        
+        // Fungsi untuk copy single promo code
+        function copyPromoCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Promo code copied: ' + code);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
 </body>
-</html> 
+</html>

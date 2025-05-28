@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../db.php";
-$page = "grafik_penjualan";
+$page = "penjualan";
 date_default_timezone_set('Asia/Jakarta');
 
 if (!isset($_SESSION["admin"])) {
@@ -57,6 +57,7 @@ $top_products = mysqli_fetch_all($top_products_query, MYSQLI_ASSOC);
     <meta content="" name="keywords" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <?php include "aset.php"; ?>
 </head>
 <body>
@@ -160,8 +161,8 @@ $top_products = mysqli_fetch_all($top_products_query, MYSQLI_ASSOC);
                     datasets: [{
                         label: 'Jumlah Terjual',
                         data: <?= json_encode($chart_values) ?>,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
                         borderWidth: 1
                     }]
                 },
