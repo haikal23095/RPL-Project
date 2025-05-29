@@ -151,8 +151,10 @@ $cartSuccess = isset($_GET['cart_success']);
                         <h2>AMBIL PROMO REDEEM-MU</h2>
                     </div> -->
 
-                    <img src="../assets/img/promo1.png" alt="promo1" style="margin-bottom:40px; width: 1500px;">
-                    <!-- All Promo Section -->
+                    <div class="d-flex justify-content-center mb-4">
+                        <img src="../assets/img/promo1.png" alt="promo1" style="width: 100%; max-width: 1500px;" class="">
+                    </div>
+                                        <!-- All Promo Section -->
                     <div class="promo-section">
                         <h3 class="promo-section-title">SEMUA PROMO</h3>
                         <div class="row">
