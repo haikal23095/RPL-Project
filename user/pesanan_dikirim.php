@@ -102,6 +102,7 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
                     <div class="ms-auto text-end">
                         <p>IDR <?php echo number_format($row['harga'], 0, ',', '.'); ?></p>
                         <p>Total: IDR <?php echo number_format($row['total_harga'], 0, ',', '.'); ?></p>
+                        <!-- <a href="pesanan_dikirim_detail.php?id=<?php echo $row['id_pesanan']; ?>" class="btn btn-info me-2" style="color:white;">Detail</a> -->
                         <a href="selesai.php?id=<?php echo $row['id_pesanan']; ?>" class="btn btn-orange" >Pesanan Selesai</a>
                         <a href="batalkan.php?id=<?php echo $row['id_pesanan']; ?>" class="btn" style="background-color: #8B4513; color: white; margin-right: 8px;">Batalkan</a>
                     </div>
