@@ -67,8 +67,9 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
             border-radius: 8px;
         }
         .btn-orange {
-            background-color: orange;
-            color: white;
+            background-color: #FF8800 !important;
+            border: none !important;
+            color: white !important;
         }
     </style>
     <?php include 'aset.php'; ?>
@@ -101,7 +102,8 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
                     <div class="ms-auto text-end">
                         <p>IDR <?php echo number_format($row['harga'], 0, ',', '.'); ?></p>
                         <p>Total: IDR <?php echo number_format($row['total_harga'], 0, ',', '.'); ?></p>
-                        <a href="lacak.php?id=<?php echo $row['id_pesanan']; ?>" class="btn btn-primary">Lacak Pengiriman</a>
+                        <a href="selesai.php?id=<?php echo $row['id_pesanan']; ?>" class="btn btn-orange" >Pesanan Selesai</a>
+                        <a href="batalkan.php?id=<?php echo $row['id_pesanan']; ?>" class="btn" style="background-color: #8B4513; color: white; margin-right: 8px;">Batalkan</a>
                     </div>
                 </div>
             <?php endforeach; ?>
