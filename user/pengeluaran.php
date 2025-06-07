@@ -19,6 +19,41 @@ $kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$user'");
 $row_user = mysqli_fetch_array($kue_user);
 $user_id = $row_user['id_user'];
 
+
+// Query untuk grafik: total pengeluaran per hari pada bulan & tahun terpilih
+$grafikQuery = "SELECT 
+    DATE(pesanan.tanggal_pesanan) as tanggal, 
+    SUM(pesanan.total_harga) as total
+    FROM pesanan
+    WHERE pesanan.id_user = ?";
+
+$grafikParams = [$user_id];
+
+if (!empty($month)) {
+    $grafikQuery .= " AND MONTH(pesanan.tanggal_pesanan) = ?";
+    $grafikParams[] = $month;
+}
+
+if (!empty($year)) {
+    $grafikQuery .= " AND YEAR(pesanan.tanggal_pesanan) = ?";
+    $grafikParams[] = $year;
+}
+
+$grafikQuery .= " GROUP BY tanggal ORDER BY tanggal ASC";
+
+
+$grafikStmt = $kon->prepare($grafikQuery);
+$grafikStmt->bind_param(str_repeat("i", count($grafikParams)), ...$grafikParams);
+$grafikStmt->execute();
+$grafikResult = $grafikStmt->get_result();
+
+$grafikLabels = [];
+$grafikData = [];
+while ($row = $grafikResult->fetch_assoc()) {
+    $grafikLabels[] = $row['tanggal'];
+    $grafikData[] = $row['total'];
+}
+
 // Query untuk menampilkan data pengeluaran berdasarkan bulan dan tahun jika dipilih
 $query = "SELECT 
             produk.nama_produk, 
@@ -60,6 +95,9 @@ $nama_bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "
     <title>Riwayat Pengeluaran</title>
     <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <!-- ...existing code... -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- ...existing code... -->
     <?php include 'aset.php'; ?>
 </head>
 <body>
@@ -108,6 +146,11 @@ $nama_bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "
                                     </div>
                                 </div>
                             </form>
+
+                            <!-- Grafik Pengeluaran -->
+                            <div class="mb-4">
+                                <canvas id="pengeluaranChart" height="100"></canvas>
+                            </div>
 
                             <!-- Tabel Data Pengeluaran -->
                             <table class="table table-bordered">
@@ -164,5 +207,40 @@ $nama_bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "
     <!-- Vendor JS Files -->
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/main.js"></script>
+    <!-- ...existing code... -->
+    <script>
+    const ctx = document.getElementById('pengeluaranChart').getContext('2d');
+    const pengeluaranChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($grafikLabels) ?>,
+            datasets: [{
+                label: 'Total Pengeluaran',
+                data: <?= json_encode($grafikData) ?>,
+                borderColor: 'rgba(255, 159, 64, 1)', // Orange
+                backgroundColor: 'rgba(255, 159, 64, 0.7)', // Orange transparan
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: { display: true, text: 'Grafik Pengeluaran per Hari' }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'Rp ' + value.toLocaleString('id-ID');
+                        }
+                    }
+                }
+            }
+        }
+    });
+    </script>
+<!-- ...existing code... -->                    
 </body>
 </html>
