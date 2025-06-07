@@ -64,6 +64,10 @@ $result = mysqli_query($kon, $query);
         .btn-outline-dark {
         border-color: #ccc;
         }
+        .btn-custom-small {
+            font-size: 0.75rem !important;
+            padding: 0.3rem 0.5rem !important;
+        }
 
     </style>
     <?php include 'aset.php'; ?>
@@ -96,9 +100,9 @@ $result = mysqli_query($kon, $query);
                 <div class="mt-auto d-flex justify-content-between gap-2">
                     <form method="POST" action="add_to_cart.php" class="w-50">
                         <input type="hidden" name="product_id" value="<?= $row['id_produk']; ?>">
-                        <button type="submit" name="add_to_cart" class="btn btn-warning text-white w-100 fw-semibold rounded-pill">BELI SEKARANG</button>
+                        <button type="submit" name="add_to_cart" class="btn btn-sm text-white w-100 fw-semibold btn-custom-small" style="background-color: #1a877e;">BELI SEKARANG</button>
                     </form>
-                    <a href="detail_produk.php?product_id=<?= $row['id_produk']; ?>" class="btn btn-outline-dark w-50 fw-semibold rounded-pill">MASUK KERANJANG</a>
+                    <a href="detail_produk.php?product_id=<?= $row['id_produk']; ?>" class="btn btn-warning text-white btn-sm w-50 fw-semibold btn-custom-small">MASUK KERANJANG</a>
                 </div>
 
             
