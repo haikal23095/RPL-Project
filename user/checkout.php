@@ -17,52 +17,61 @@ if (!$row_user) {
 
 $userId = $row_user['id_user'];
 
+if (isset($_POST['checkout']) && isset($_POST['selected_items'])) {
+    $_SESSION['checkout_cart_ids'] = $_POST['selected_items'];
+    header("Location: checkout.php");
+    exit();
+}
+
 $checkoutItems = [];
 $promoApplied = false;
+$selectedItems = []; // pastikan selalu terdefinisi
+$itemIds = []; // Untuk id_keranjang yang akan dihapus
 
-if (isset($_POST['selected_items']) && !empty($_POST['selected_items'])) {
-    $selectedItems = $_POST['selected_items'];
-    $sanitizedItems = array_map('intval', $selectedItems); // Sanitize input
 
-    if (!empty($sanitizedItems)) {
-        $itemIds = implode(',', $sanitizedItems);
-
-        // Debugging: Check the selected items
-        error_log("Selected Items: " . print_r($selectedItems, true));
-        error_log("Sanitized Items: " . print_r($sanitizedItems, true));
-        error_log("Item IDs: " . $itemIds);
-
-        $sql = "SELECT p.*, k.id_keranjang, k.id_produk, k.user_id, p.nama_produk, p.harga, p.gambar, k.jumlah
-                FROM keranjang k
-                JOIN produk p ON k.id_produk = p.id_produk
-                WHERE k.id_keranjang IN ($itemIds) AND k.user_id = $userId";
-        
-        // Debugging: Log the SQL query
-        error_log("SQL Query: " . $sql);
-
-        $result = mysqli_query($kon, $sql);
-
-        if ($result) {
-            if (mysqli_num_rows($result) > 0) {
-                $checkoutItems = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                $_SESSION['checkout_items'] = $checkoutItems;
-                // Debugging: Log the fetched items
-                error_log("Fetched Items: " . print_r($checkoutItems, true));
-            } else {
-                // Debugging: Log no rows found
-                error_log("No rows found for the given item IDs.");
-                die('Tidak ada item dalam checkout.');
-            }
-        } else {
-            // Debugging: Log the error message
-            error_log("MySQL Error: " . mysqli_error($kon));
-            die('Error executing query.');
+// Beli Lagi: jika ada parameter ulang di URL
+if (isset($_GET['ulang'])) {
+    $ulangId = intval($_GET['ulang']);
+    // Ambil semua produk dari pesanan_detail berdasarkan id_pesanan
+    $sql = "SELECT pd.id_produk, pd.jumlah, pr.nama_produk, pr.harga, pr.gambar, pr.stok
+            FROM pesanan_detail pd
+            JOIN produk pr ON pd.id_produk = pr.id_produk
+            WHERE pd.id_pesanan = $ulangId";
+    $result = mysqli_query($kon, $sql);
+    if ($result && mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $checkoutItems[] = $row;
+            $selectedItems[] = $row['id_produk'];
         }
-        unset($_SESSION['temp_cart']);
+        $_SESSION['temp_cart'] = $checkoutItems;
     } else {
-        die('No valid items selected.');
+        $error = "Tidak dapat menemukan produk dari pesanan sebelumnya.";
     }
-} elseif (isset($_POST['buy_now'])) {
+} 
+// Checkout dari keranjang (selected_items dari session)
+elseif (isset($_SESSION['checkout_cart_ids']) && is_array($_SESSION['checkout_cart_ids'])) {
+    $cartIds = array_map('intval', $_SESSION['checkout_cart_ids']);
+    $cartIdsStr = implode(',', $cartIds);
+
+    $sql = "SELECT k.id_keranjang, k.id_produk, k.jumlah, p.nama_produk, p.harga, p.gambar, p.stok
+            FROM keranjang k
+            JOIN produk p ON k.id_produk = p.id_produk
+            WHERE k.id_keranjang IN ($cartIdsStr)";
+    $result = mysqli_query($kon, $sql);
+    if ($result && mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $checkoutItems[] = $row;
+            $selectedItems[] = $row['id_keranjang'];
+            $itemIds[] = $row['id_keranjang'];
+        }
+        $_SESSION['temp_cart'] = $checkoutItems;
+    } else {
+        $error = "Tidak dapat menemukan produk dari keranjang.";
+    }
+}
+
+// Buy now (langsung dari produk)
+elseif (isset($_POST['buy_now'])) {
     $productId = intval($_POST['product_id']);
     $productQuery = "SELECT id_produk, nama_produk, harga, gambar, stok FROM produk WHERE id_produk = '$productId'";
     $result = mysqli_query($kon, $productQuery);
@@ -74,8 +83,9 @@ if (isset($_POST['selected_items']) && !empty($_POST['selected_items'])) {
     } else {
         die("Produk tidak ditemukan.");
     }
-} elseif (isset($_SESSION['temp_cart']) && !empty($_SESSION['temp_cart'])) {
-    // Gunakan session temp_cart jika ada
+}
+// Gunakan session temp_cart jika ada
+elseif (isset($_SESSION['temp_cart']) && !empty($_SESSION['temp_cart'])) {
     $checkoutItems = $_SESSION['temp_cart'];
 } else {
     $error = "Tidak ada item yang diproses untuk checkout.";
@@ -86,6 +96,12 @@ $grandTotal = 0;
 foreach ($checkoutItems as $item) {
     $grandTotal += $item['harga'] * $item['jumlah'];
 }
+
+// Hitung ongkos kirim 10% dari total harga produk
+$biaya_kirim = ceil($grandTotal * 0.10); // dibulatkan ke atas jika perlu
+
+// Tambahkan ongkos kirim ke total
+$grandTotal += $biaya_kirim;
 
 // Terapkan diskon
 if (isset($_POST['apply_promo'])) {
@@ -186,6 +202,15 @@ if (isset($_POST['confirm_order'])) {
 
             $orderIds = array();
 
+            // Buat satu pesanan saja untuk semua produk
+            $insertOrder = "INSERT INTO pesanan (id_user, total_harga, status_pesanan, tanggal_pesanan)
+                VALUES ('$userId', '$grandTotal', 'Diproses', NOW())";
+            if (!mysqli_query($kon, $insertOrder)) {
+                throw new Exception('Error inserting order: ' . mysqli_error($kon));
+            }
+            $orderId = mysqli_insert_id($kon);
+
+            // Insert semua produk ke pesanan_detail
             foreach ($checkoutItems as $item) {
                 $productId = $item['id_produk'];
                 $quantity = $item['jumlah'];
@@ -194,54 +219,55 @@ if (isset($_POST['confirm_order'])) {
                 if ($item['stok'] < $quantity) {
                     throw new Exception("Stok produk '{$item['nama_produk']}' tidak mencukupi.");
                 }
-
-                $insertOrder = "INSERT INTO pesanan (id_user, total_harga, id_produk, jumlah, status_pesanan, tanggal_pesanan)
-                                VALUES ('$userId', '$grandTotal', '$productId', '$quantity', 'Diproses', NOW())";
-                if (!mysqli_query($kon, $insertOrder)) {
-                    throw new Exception('Error inserting order: ' . mysqli_error($kon));
+                
+                $insertDetail = "INSERT INTO pesanan_detail (id_pesanan, id_produk, jumlah, subtotal)
+                            VALUES ('$orderId', '$productId', '$quantity', '".($price * $quantity)."')";
+                if (!mysqli_query($kon, $insertDetail)) {
+                    throw new Exception('Error inserting order detail: ' . mysqli_error($kon));
                 }
-                $orderId = mysqli_insert_id($kon);
-                $orderIds[] = $orderId;
 
                 $updateStock = "UPDATE produk SET stok = stok - $quantity WHERE id_produk = '$productId'";
                 if (!mysqli_query($kon, $updateStock)) {
                     throw new Exception('Error updating stock: ' . mysqli_error($kon));
                 }
+            }
 
-                $insertPayment = "INSERT INTO pembayaran (id_pesanan, metode_pembayaran, status_pembayaran, tanggal_pembayaran)
-                                 VALUES ('$orderId', '$payment_method', 'Dibayar', NOW())";
-                if (!mysqli_query($kon, $insertPayment)) {
-                    throw new Exception('Error inserting payment: ' . mysqli_error($kon));
-                }
+            // Insert pembayaran
+            $insertPayment = "INSERT INTO pembayaran (id_pesanan, metode_pembayaran, status_pembayaran, tanggal_pembayaran)
+                                VALUES ('$orderId', '$payment_method', 'Dibayar', NOW())";
+            if (!mysqli_query($kon, $insertPayment)) {
+                throw new Exception('Error inserting payment: ' . mysqli_error($kon));
+            }
 
-                // Insert pengiriman_pesanan
-                $nomor_resi = 'RSI' . date('YmdHis') . rand(100, 999);
-                $tanggal_kirim = date('Y-m-d H:i:s');
-                $perkiraan_tiba = date('Y-m-d H:i:s', strtotime('+3 days'));
+            // Insert pengiriman_pesanan
+            $nomor_resi = 'RSI' . date('YmdHis') . rand(100, 999);
+            $tanggal_kirim = date('Y-m-d H:i:s');
+            $perkiraan_tiba = date('Y-m-d H:i:s', strtotime('+3 days'));
 
-                $insertShipping = "INSERT INTO pengiriman_pesanan (
-                    id_pesanan, 
-                    id_user,
-                    nomor_resi,
-                    nama_kurir,
-                    alamat_pengiriman,
-                    tanggal_kirim,
-                    perkiraan_tiba,
-                    status_pengiriman,
-                    biaya_kirim
-                ) VALUES ('$orderId', '$userId', '$nomor_resi', '$kurir_terpilih', '$address', '$tanggal_kirim', '$perkiraan_tiba', 'dalam_pengiriman', '$biaya_kirim')";
+            $insertShipping = "INSERT INTO pengiriman_pesanan (
+                id_pesanan, 
+                id_user,
+                nomor_resi,
+                nama_kurir,
+                alamat_pengiriman,
+                tanggal_kirim,
+                perkiraan_tiba,
+                status_pengiriman,
+                biaya_kirim
+            ) VALUES ('$orderId', '$userId', '$nomor_resi', '$kurir_terpilih', '$address', '$tanggal_kirim', '$perkiraan_tiba', 'dalam_pengiriman', '$biaya_kirim')";
 
-                if (!mysqli_query($kon, $insertShipping)) {
-                    throw new Exception('Error inserting shipping: ' . mysqli_error($kon));
-                }
+            if (!mysqli_query($kon, $insertShipping)) {
+                throw new Exception('Error inserting shipping: ' . mysqli_error($kon));
             }
 
             // Hapus item dari keranjang jika berasal dari keranjang
             if (!empty($itemIds)) {
-                $deleteCart = "DELETE FROM keranjang WHERE id_keranjang IN ($itemIds)";
+                $cartIdsStr = implode(',', array_map('intval', $itemIds));
+                $deleteCart = "DELETE FROM keranjang WHERE id_keranjang IN ($cartIdsStr)";
                 if (!mysqli_query($kon, $deleteCart)) {
                     throw new Exception('Error deleting cart items: ' . mysqli_error($kon));
                 }
+                unset($_SESSION['checkout_cart_ids']);
             }
 
             mysqli_commit($kon); 
@@ -479,12 +505,15 @@ if (isset($_POST['confirm_order'])) {
                                     </tbody>
                                     <tfoot>
                                         <tr>
+                                            <th colspan="4" class="text-end">Ongkos Kirim (10%)</th>
+                                            <th>Rp <?= number_format($biaya_kirim, 0, ',', '.'); ?></th>
+                                        </tr>
+                                        <tr>
                                             <th colspan="4" class="text-end">Total</th>
                                             <th><div id="grand_total">Rp <?= number_format($grandTotal, 0, ',', '.'); ?></div></th>
                                         </tr>
                                     </tfoot>
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -502,7 +531,6 @@ if (isset($_POST['confirm_order'])) {
                                 <?php 
                                     // Pastikan variabel terdefinisi
                                     $selectedItems = isset($selectedItems) && is_array($selectedItems) ? $selectedItems : []; 
-                                                                            
                                     foreach ($selectedItems as $itemId): 
                                     ?>
                                         <input type="hidden" name="selected_items[]" value="<?php echo $itemId; ?>">
