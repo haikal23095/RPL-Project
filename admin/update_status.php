@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'gamify';
+$dbname = 'casaluxedb';
 $username = 'root';
 $password = '';
 

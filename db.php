@@ -1,8 +1,8 @@
 <?php
 $host = "localhost";
 $user = "root";
-$pwd  = "48475948";
-$db   = "gamify";
+$pwd  = "";
+$db   = "casaluxedb";
 
 $kon  = mysqli_connect($host, $user, $pwd, $db);
 ?>

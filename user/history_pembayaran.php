@@ -227,10 +227,27 @@ mysqli_stmt_close($stmt);
                                             <td>Rp <?= number_format($order['total_harga'], 0, ',', '.'); ?></td>
                                             <td><?= htmlspecialchars($order['status_pesanan']); ?></td>
                                             <td>
-                                                
-                                                <a href="checkout.php?ulang=<?= $order['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
+                                                <!-- Selesai Button -->
+                                                <?php if ($order['status_pesanan'] !== 'Selesai' AND $order['status_pesanan'] !== 'Dibatalkan'  AND $order['status_pesanan'] !== 'Diproses'): ?>
+                                                    <button class="btn btn-warning btn-sm selesai-btn" data-id="<?= $order['id_pesanan']; ?>">Selesai</button>
+                                                <?php endif; ?>
+                                                <!-- Nilai Button -->
+                                                <?php if ($order['status_pesanan'] === 'Selesai' && empty($order['sudah_dinilai'])): ?>
+                                                    <a href="review.php?id=<?= $order['id_pesanan'] ?>" class="btn btn-primary btn-sm">Nilai</a>
+                                                <?php endif; ?>
+                                                <?php if ($order['status_pesanan'] === 'Selesai' && !empty($order['sudah_dinilai'])): ?>
+                                                    <a href="checkout.php?ulang=<?= $order['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
+                                                <?php endif; ?>
+                                                <?php if ($order['status_pesanan'] === 'Dibatalkan'): ?>
+                                                    <a href="checkout.php?ulang=<?= $order['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
+                                                <?php endif; ?>
                                                 <?php if ($order['status_pesanan'] === 'Diproses'): ?>
                                                     <a href="form_pembatalan.php?id_pesanan=<?= urlencode($order['id_pesanan']); ?>" class="btn btn-danger btn-sm">Batalkan</a>
+                                                <?php endif; ?>
+                                                <!-- Lacak Button -->
+                                                <?php if ($order['status_pesanan'] !== 'Selesai'  AND $order['status_pesanan'] !== 'Dibatalkan' AND $order['status_pesanan'] !== 'Diproses' ): ?>
+                                                    <a href="lacak.php?id=<?= $order['id_pesanan'] ?>" 
+                                                       class="btn btn-info btn-sm">Lacak</a>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
@@ -330,6 +347,40 @@ mysqli_stmt_close($stmt);
             }
             return true;
         }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selesaiButtons = document.querySelectorAll('.selesai-btn');
+
+            selesaiButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const pesananId = this.getAttribute('data-id');
+
+                    if (confirm('Apakah Anda yakin ingin menyelesaikan pesanan ini?')) {
+                        fetch('update_status.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `id_pesanan=${pesananId}&status=selesai`,
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Pesanan berhasil diselesaikan!');
+                                location.reload(); // Reload to reflect changes
+                            } else {
+                                alert('Gagal menyelesaikan pesanan. Silakan coba lagi.');
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error:', err);
+                            alert('Terjadi kesalahan. Silakan coba lagi.');
+                        });
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

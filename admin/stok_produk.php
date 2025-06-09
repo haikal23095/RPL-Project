@@ -29,7 +29,7 @@ $sqlProducts = "
         p.nama_produk, 
         p.stok, 
         (SELECT SUM(jumlah) FROM pesanan WHERE id_produk = p.id_produk AND status_pesanan != 'Dibatalkan') AS total_terjual, 
-        (SELECT AVG(rating) FROM review_produk WHERE id_produk = p.id_produk) AS rata_rating 
+        (SELECT AVG(rating_produk) FROM review_produk WHERE id_produk = p.id_produk) AS rata_rating 
     FROM produk p
 ";
 $resultProducts = mysqli_query($kon, $sqlProducts);

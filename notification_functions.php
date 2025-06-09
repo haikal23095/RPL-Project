@@ -110,7 +110,7 @@ function monitorReviewChanges($kon) {
         // Notifikasi untuk Admin
         createNotification($kon, 'admin', 'Review Baru', 
             "Review baru dari {$review['nama_user']} untuk produk {$review['nama_produk']} 
-            dengan rating {$review['rating']}/5", 
+            dengan rating {$review['rating_produk']}/5", 
             null, $review['id_produk']);
         
         // Update status notifikasi

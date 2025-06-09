@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Ambil semua ulasan dari database
-$sql = "SELECT rp.id_review, rp.id_produk, rp.rating, rp.komentar, rp.tanggal_review, rp.komentar_admin, 
+$sql = "SELECT rp.id_review, rp.id_produk, rp.rating_produk, rp.komentar, rp.tanggal_review, rp.komentar_admin, 
         p.nama_produk, p.gambar, u.nama
         FROM review_produk rp
         JOIN produk p ON rp.id_produk = p.id_produk
@@ -256,7 +256,7 @@ if ($result) {
                                                     </div>
                                                 </td>
                                                 <td><?= htmlspecialchars($review['nama']); ?></td>
-                                                <td><?= htmlspecialchars($review['rating']); ?></td>
+                                                <td><?= htmlspecialchars($review['rating_produk']); ?></td>
                                                 <td><?= htmlspecialchars($review['komentar']); ?></td>
                                                 <td>
                                                     <?php if (empty($review['komentar_admin'])): ?>

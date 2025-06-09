@@ -7,7 +7,7 @@ if (!isset($_SESSION["admin"])) {
 }
 
 $host = 'localhost';
-$dbname = 'gamify';
+$dbname = 'casaluxedb';
 $username = 'root';
 $password = '';
 
@@ -23,11 +23,10 @@ try {
 $status_filter = isset($_GET['status']) ? $_GET['status'] : '';
 
 // Query untuk menampilkan daftar pesanan dengan join tabel user dan produk
-$query = "SELECT p.id_pesanan, u.nama AS customer_name, pr.nama_produk, 
+$query = "SELECT p.id_pesanan, u.nama AS customer_name, 
                  p.tanggal_pesanan, p.total_harga, p.status_pesanan
           FROM pesanan p
-          JOIN user u ON p.id_user = u.id_user
-          JOIN produk pr ON p.id_produk = pr.id_produk";
+          JOIN user u ON p.id_user = u.id_user";
 
 if (!empty($status_filter)) {
     $query .= " WHERE p.status_pesanan = :status";
@@ -88,7 +87,6 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tr>
                             <th>#</th>
                             <th>Nama Pembeli</th>
-                            <th>Produk</th>
                             <th>Tanggal</th>
                             <th>Total</th>
                             <th>Status</th>
@@ -104,7 +102,6 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <tr>
                                     <td><?= $index + 1 ?></td>
                                     <td><?= htmlspecialchars($order['customer_name']) ?></td>
-                                    <td><?= htmlspecialchars($order['nama_produk']) ?></td>
                                     <td><?= $order['tanggal_pesanan'] ?></td>
                                     <td>Rp <?= number_format($order['total_harga'], 0, ',', '.') ?></td>
                                     <td>
