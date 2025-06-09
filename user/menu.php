@@ -2,7 +2,7 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
-    <h5 class="text-center">MAIN MENU</h5>
+    <h5 class="text-center"></h5>
       <li class="nav-item">
         <a class="nav-link <?php if($page == "dashboard"){ echo "collapsed"; } ?>" href="index.php">
           <i class="bi bi-grid"></i>
