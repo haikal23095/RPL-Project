@@ -9,7 +9,7 @@ if (!isset($_SESSION["admin"])) {
 $host = 'localhost';
 $dbname = 'gamify';
 $username = 'root';
-$password = '';
+$password = '48475948';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);

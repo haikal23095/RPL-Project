@@ -9,13 +9,13 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
+$nama_user = $_SESSION['user'];
 // Query untuk mengambil data pesanan dengan status 'Dibatalkan'
-$query = "SELECT p.*, pr.nama_produk, pr.harga, pr.gambar 
-          FROM pesanan p
-          JOIN produk pr ON p.id_produk = pr.id_produk
-          WHERE p.status_pesanan = 'Dibatalkan'";
-
-$result = $kon->query($query);
+// Query untuk mengambil list pesanan user yang statusnya 'Dibatalkan'
+$stmt = $kon->prepare("SELECT * FROM pesanan JOIN user ON user.id_user = pesanan.id_user WHERE status_pesanan = 'Dibatalkan' AND nama = ? ORDER BY tanggal_pesanan DESC");
+$stmt->bind_param("i", $nama_user);
+$stmt->execute();
+$result = $stmt->get_result();
 $pesanan = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
@@ -90,33 +90,78 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
         </div>
 
         <?php if (count($pesanan) > 0): ?>
-            <?php foreach ($pesanan as $row): ?>
-                <div class="pesanan-card d-flex align-items-center">
-                    <div>
-                        <img src="../uploads/<?php echo $row['gambar']; ?>" alt="<?php echo $row['nama_produk']; ?>">
-                    </div>
-                    <div class="ms-3">
-                        <h5><?php echo $row['nama_produk']; ?></h5>
-                        <p class="mb-1">Jumlah: <?php echo $row['jumlah']; ?></p>
-                        <p><?php echo date('d-m-Y', strtotime($row['tanggal_pesanan'])); ?></p>
-                    </div>
-                    <div class="ms-auto text-end">
-                        <p>IDR <?php echo number_format($row['harga'], 0, ',', '.'); ?></p>
-                        <p>Total: IDR <?php echo number_format($row['total_harga'], 0, ',', '.'); ?></p>
-                        <form method="POST" action="checkout.php">
-                            <input type="hidden" name="product_id" value="<?= $row['id_produk']; ?>">
-                            <button type="submit" name="buy_now" class="btn btn-success">&nbsp;Beli Lagi</button>
-                        </form>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID Pesanan</th>
+                            <th>Tanggal</th>
+                            <th>Total Harga</th>
+                            <th>Status</th>
+                            <th>Notifikasi</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($pesanan as $i => $row): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($row['id_pesanan']) ?></td>
+                            <td><?= date('d-m-Y', strtotime($row['tanggal_pesanan'])) ?></td>
+                            <td>IDR <?= number_format($row['total_harga'], 0, ',', '.') ?></td>
+                            <td><?= htmlspecialchars($row['status_pesanan']) ?></td>
+                            <td><?= htmlspecialchars($row['notifikasi_status']) ?></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary btn-detail"
+                                    data-id="<?= $row['id_pesanan'] ?>"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#detailModal">
+                                    Detail
+                                </button>
+                                <a href="checkout.php?ulang=<?= $row['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php else: ?>
             <p>Tidak ada pesanan yang dibatalkan.</p>
         <?php endif; ?>
     </div>
 </main>
 
+<!-- Modal Detail Pesanan -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Konten detail akan dimuat via AJAX -->
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
+
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const detailButtons = document.querySelectorAll('.btn-detail');
+    detailButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const idPesanan = this.getAttribute('data-id');
+            const modalContent = document.querySelector('#detailModal .modal-content');
+            modalContent.innerHTML = `<div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status"></div>
+                <div>Memuat detail...</div>
+            </div>`;
+            fetch('pesanan_detail_ajax.php?id_pesanan=' + idPesanan)
+                .then(res => res.text())
+                .then(html => {
+                    modalContent.innerHTML = html;
+                });
+        });
+    });
+});
+</script>
 
 <!-- Vendor JS Files -->
 <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>

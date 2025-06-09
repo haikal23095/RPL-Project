@@ -8,8 +8,11 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$user = $_SESSION["user"];
-$kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$user'");
+// Ambil nama user dari session
+$nama_user = $_SESSION["user"];
+
+// Ambil data user
+$kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$nama_user'");
 $row_user = mysqli_fetch_array($kue_user);
 $userId = $row_user['id_user'];
 
@@ -25,27 +28,27 @@ if ($orderId <= 0) {
 $successMessage = '';
 $errorMessage = '';
 
-// Ambil informasi pesanan untuk mendapatkan `id_produk` dan gambar produk
-$sql = "SELECT p.id_pesanan, p.id_produk, pr.gambar, pr.nama_produk 
-        FROM pesanan p 
-        JOIN produk pr ON p.id_produk = pr.id_produk 
-        WHERE p.id_pesanan = ? AND p.id_user = ?";
+// Ambil semua produk dalam pesanan (dari pesanan_detail)
+$sql = "SELECT pd.id_produk, pr.gambar, pr.nama_produk
+        FROM pesanan_detail pd
+        JOIN produk pr ON pd.id_produk = pr.id_produk
+        WHERE pd.id_pesanan = ?";
 $stmt = mysqli_prepare($kon, $sql);
-mysqli_stmt_bind_param($stmt, "ii", $orderId, $userId);
+mysqli_stmt_bind_param($stmt, "i", $orderId);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
-$order = mysqli_fetch_assoc($result);
+
+$produk_pesanan = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $produk_pesanan[] = $row;
+}
 mysqli_stmt_close($stmt);
 
-if (!$order) {
-    die("Pesanan tidak ditemukan.");
+if (empty($produk_pesanan)) {
+    die("Pesanan tidak ditemukan atau tidak ada produk di dalamnya.");
 }
 
-// Ambil data
-$id_produk = $order['id_produk'];
-$id_pesanan = $order['id_pesanan'];
-$gambar_produk = $order['gambar']; // Ambil gambar produk
-$nama_produk = $order['nama_produk']; // Ambil nama produk
+
 
 // Ambil informasi ulasan yang sudah ada
 $sql = "SELECT COUNT(*) as count FROM review_produk WHERE id_produk = ? AND id_user = ? AND id_pesanan = ?";
@@ -58,36 +61,56 @@ mysqli_stmt_close($stmt);
 
 // Proses pengiriman ulasan
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Cek apakah pengguna sudah memberikan ulasan
-    if ($reviewCount > 0) {
-        $errorMessage = "Anda sudah memberikan ulasan untuk produk ini.";
-    } else {
-        $rating_produk = isset($_POST['rating_produk']) ? intval($_POST['rating_produk']) : 0;
-        $rating_pelayanan = isset($_POST['rating_pelayanan']) ? intval($_POST['rating_pelayanan']) : 0;
-        $rating_pengiriman = isset($_POST['rating_pengiriman']) ? intval($_POST['rating_pengiriman']) : 0;
-        $review = isset($_POST['review']) ? trim($_POST['review']) : '';
+    $reviewed = false;
+    foreach ($produk_pesanan as $produk) {
+        $id_produk = $produk['id_produk'];
+        $rating_produk = isset($_POST["rating_produk_$id_produk"]) ? intval($_POST["rating_produk_$id_produk"]) : 0;
+        $rating_pelayanan = isset($_POST["rating_pelayanan_$id_produk"]) ? intval($_POST["rating_pelayanan_$id_produk"]) : 0;
+        $rating_pengiriman = isset($_POST["rating_pengiriman_$id_produk"]) ? intval($_POST["rating_pengiriman_$id_produk"]) : 0;
+        $review = isset($_POST["review_$id_produk"]) ? trim($_POST["review_$id_produk"]) : '';
+
+        // Cek apakah sudah pernah review produk ini di pesanan ini
+        $sql = "SELECT COUNT(*) as count FROM review_produk WHERE id_produk = ? AND id_user = ? AND id_pesanan = ?";
+        $stmt = mysqli_prepare($kon, $sql);
+        mysqli_stmt_bind_param($stmt, "iii", $id_produk, $userId, $orderId);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $reviewCount = mysqli_fetch_assoc($result)['count'];
+        mysqli_stmt_close($stmt);
+
+        if ($reviewCount > 0) {
+            $errorMessage .= "Anda sudah memberikan ulasan untuk produk {$produk['nama_produk']}.<br>";
+            continue;
+        }
 
         // Validasi rating dan ulasan
         if ($rating_produk < 1 || $rating_produk > 5) {
-            $errorMessage = "Rating harus antara 1 dan 5.";
-        } elseif (empty($review)) {
-            $errorMessage = "Ulasan tidak boleh kosong.";
-        } else {
-            // Simpan ulasan ke database
-            $sql = "INSERT INTO review_produk (id_user, id_produk, id_pesanan, rating_produk, rating_pelayanan, rating_pengiriman, komentar) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $stmt = mysqli_prepare($kon, $sql);
-            mysqli_stmt_bind_param($stmt, "iiiiiis", $userId, $id_produk, $id_pesanan, $rating_produk, $rating_pelayanan, $rating_pengiriman, $review);
-
-            if (mysqli_stmt_execute($stmt)) {
-                $successMessage = "Ulasan berhasil ditambahkan!";
-            } else {
-                $errorMessage = "Terjadi kesalahan saat menambahkan ulasan: " . mysqli_error($kon);
-            }
-
-            mysqli_stmt_close($stmt);
+            $errorMessage .= "Rating produk untuk {$produk['nama_produk']} harus antara 1 dan 5.<br>";
+            continue;
         }
+        if (empty($review)) {
+            $errorMessage .= "Ulasan untuk {$produk['nama_produk']} tidak boleh kosong.<br>";
+            continue;
+        }
+
+        // Simpan ulasan ke database
+        $sql = "INSERT INTO review_produk (id_user, id_produk, id_pesanan, rating_produk, rating_pelayanan, rating_pengiriman, komentar) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($kon, $sql);
+        mysqli_stmt_bind_param($stmt, "iiiiiis", $userId, $id_produk, $orderId, $rating_produk, $rating_pelayanan, $rating_pengiriman, $review);
+
+        if (mysqli_stmt_execute($stmt)) {
+            $reviewed = true;
+        } else {
+            $errorMessage .= "Terjadi kesalahan saat menambahkan ulasan untuk {$produk['nama_produk']}: " . mysqli_error($kon) . "<br>";
+        }
+        mysqli_stmt_close($stmt);
+    }
+    if ($reviewed && empty($errorMessage)) {
+        $successMessage = "Ulasan berhasil ditambahkan!";
     }
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -174,17 +197,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </nav>
         </div>
 
-    <section class="section">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card mb-4">
-                    <img src="../uploads/<?= htmlspecialchars($gambar_produk); ?>" 
-                         alt="Gambar Produk" 
-                         class="card-img-top" 
-                         style="max-height: 300px; object-fit: contain;">
-                    <div class="card-body">
-                        <h3 class="card-title">Ulasan untuk Pesanan #<?= htmlspecialchars($id_pesanan); ?></h3>
-
+        <section class="section">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card mb-4">
+                        <h3 class="card-title">Ulasan untuk Pesanan #<?= htmlspecialchars($orderId); ?></h3>
+                        
                         <!-- Pesan sukses atau error -->
                         <?php if ($successMessage): ?>
                             <div class="alert alert-success"><?= $successMessage; ?></div>
@@ -193,54 +211,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
 
                         <!-- Formulir Ulasan -->
-                        <form method="POST" class="mt-4" style="display: block;">
-                            <div class="mb-3">
-                                <label for="rating_produk" class="form-label">Kualitas Produk:</label>
-                                <select name="rating_produk" id="rating_produk" class="form-select" required>
-                                    <option value="1">1 - Sangat Buruk</option>
-                                    <option value="2">2 - Buruk</option>
-                                    <option value="3">3 - Cukup</option>
-                                    <option value="4">4 - Baik</option>
-                                    <option value="5">5 - Sangat Baik</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="rating_pelayanan" class="form-label">Kualitas Pelayanan:</label>
-                                <select name="rating_pelayanan" id="rating_pelayanan" class="form-select" required>
-                                    <option value="1">1 - Sangat Buruk</option>
-                                    <option value="2">2 - Buruk</option>    
-                                    <option value="3">3 - Cukup</option>
-                                    <option value="4">4 - Baik</option>
-                                    <option value="5">5 - Sangat Baik</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="rating_pengiriman" class="form-label">Kecepatan Pengiriman:</label>
-                                <select name="rating_pengiriman" id="rating_pengiriman" class="form-select" required>
-                                    <option value="1">1 - Sangat Buruk</option>
-                                    <option value="2">2 - Buruk</option>
-                                    <option value="3">3 - Cukup</option>
-                                    <option value="4">4 - Baik</option>
-                                    <option value="5">5 - Sangat Baik</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="review" class="form-label">Deskripsi:</label>
-                                <textarea name="review" id="review" class="form-control" rows="5" placeholder="Ketikkan kesan anda disini" required></textarea>
-                            </div>
-
+                        <form method="POST" class="mt-4">
+                            <?php foreach ($produk_pesanan as $produk): ?>
+                                <div class="mb-4 border-bottom pb-3">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <img src="../uploads/<?= htmlspecialchars($produk['gambar']); ?>" alt="Gambar Produk" class="img-fluid rounded" style="max-height: 100px;">
+                                        </div>
+                                        <div class="col-md-10">
+                                            <h5><?= htmlspecialchars($produk['nama_produk']); ?></h5>
+                                            <div class="mb-2">
+                                                <label for="rating_produk_<?= $produk['id_produk'] ?>" class="form-label">Kualitas Produk:</label>
+                                                <select name="rating_produk_<?= $produk['id_produk'] ?>" id="rating_produk_<?= $produk['id_produk'] ?>" class="form-select" required>
+                                                    <option value="1">1 - Sangat Buruk</option>
+                                                    <option value="2">2 - Buruk</option>
+                                                    <option value="3">3 - Cukup</option>
+                                                    <option value="4">4 - Baik</option>
+                                                    <option value="5">5 - Sangat Baik</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label for="rating_pelayanan_<?= $produk['id_produk'] ?>" class="form-label">Kualitas Pelayanan:</label>
+                                                <select name="rating_pelayanan_<?= $produk['id_produk'] ?>" id="rating_pelayanan_<?= $produk['id_produk'] ?>" class="form-select" required>
+                                                    <option value="1">1 - Sangat Buruk</option>
+                                                    <option value="2">2 - Buruk</option>
+                                                    <option value="3">3 - Cukup</option>
+                                                    <option value="4">4 - Baik</option>
+                                                    <option value="5">5 - Sangat Baik</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label for="rating_pengiriman_<?= $produk['id_produk'] ?>" class="form-label">Kecepatan Pengiriman:</label>
+                                                <select name="rating_pengiriman_<?= $produk['id_produk'] ?>" id="rating_pengiriman_<?= $produk['id_produk'] ?>" class="form-select" required>
+                                                    <option value="1">1 - Sangat Buruk</option>
+                                                    <option value="2">2 - Buruk</option>
+                                                    <option value="3">3 - Cukup</option>
+                                                    <option value="4">4 - Baik</option>
+                                                    <option value="5">5 - Sangat Baik</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label for="review_<?= $produk['id_produk'] ?>" class="form-label">Deskripsi:</label>
+                                                <textarea name="review_<?= $produk['id_produk'] ?>" id="review_<?= $produk['id_produk'] ?>" class="form-control" rows="3" placeholder="Ketikkan kesan anda disini" required></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
                             <button type="submit" class="btn btn-primary w-100">Kirim Ulasan</button>
-                            <a href="history_pembayaran.php" class="btn btn-secondary w-100 mt-2">Kembali</a>
+                            <a href="pesanan_selesai.php" class="btn btn-secondary w-100 mt-2">Kembali</a>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
+        </section>
+    </main>
     <!-- Vendor JS Files -->
- <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/vendor/chart.js/chart.min.js"></script>
     <script src="../assets/vendor/echarts/echarts.min.js"></script>

@@ -18,12 +18,12 @@ if (!is_array($status_filter)) {
 }
 
 // Query untuk mengambil data pesanan dengan status "Dikirim"
-$query = "SELECT p.*, pr.nama_produk, pr.harga, pr.gambar
-          FROM pesanan p
-          JOIN produk pr ON p.id_produk = pr.id_produk
-          WHERE p.status_pesanan = 'Dikirim'";
-
+$query = "SELECT pesanan.* FROM pesanan 
+          JOIN user ON user.id_user = pesanan.id_user 
+          WHERE pesanan.status_pesanan = 'Dikirim' AND user.nama = ? 
+          ORDER BY pesanan.tanggal_pesanan DESC";
 $stmt = $kon->prepare($query);
+$stmt->bind_param("s", $_SESSION['user']);
 $stmt->execute();
 $result = $stmt->get_result();
 $pesanan = $result->fetch_all(MYSQLI_ASSOC);
@@ -67,8 +67,9 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
             border-radius: 8px;
         }
         .btn-orange {
-            background-color: orange;
-            color: white;
+            background-color: #FF8800 !important;
+            border: none !important;
+            color: white !important;
         }
     </style>
     <?php include 'aset.php'; ?>
@@ -85,31 +86,68 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
 
 <main id="main" class="main">
     <div class="container mt-5">
-        <h4 class="mb-4">Pesanan Dikirim</h4>
-
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4>DAFTAR PESANAN DIKIRIM</h4>
+        </div>
         <?php if (count($pesanan) > 0): ?>
-            <?php foreach ($pesanan as $row): ?>
-                <div class="pesanan-card d-flex align-items-center">
-                    <div>
-                        <img src="../uploads/<?php echo $row['gambar']; ?>" alt="<?php echo $row['nama_produk']; ?>">
-                    </div>
-                    <div class="ms-3">
-                        <h5><?php echo $row['nama_produk']; ?></h5>
-                        <p class="mb-1">Jumlah: x<?php echo $row['jumlah']; ?></p>
-                        <p><?php echo date('d-m-Y', strtotime($row['tanggal_pesanan'])); ?></p>
-                    </div>
-                    <div class="ms-auto text-end">
-                        <p>IDR <?php echo number_format($row['harga'], 0, ',', '.'); ?></p>
-                        <p>Total: IDR <?php echo number_format($row['total_harga'], 0, ',', '.'); ?></p>
-                        <a href="lacak.php?id=<?php echo $row['id_pesanan']; ?>" class="btn btn-primary">Lacak Pengiriman</a>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID Pesanan</th>
+                            <th>Tanggal</th>
+                            <th>Total Harga</th>
+                            <th>Status</th>
+                            <th>Notifikasi</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($pesanan as $i => $row): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($row['id_pesanan']) ?></td>
+                            <td><?= date('d-m-Y', strtotime($row['tanggal_pesanan'])) ?></td>
+                            <td>IDR <?= number_format($row['total_harga'], 0, ',', '.') ?></td>
+                            <td><?= htmlspecialchars($row['status_pesanan']) ?></td>
+                            <td><?= htmlspecialchars($row['notifikasi_status']) ?></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary btn-detail" 
+                                    data-id="<?= $row['id_pesanan'] ?>" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#detailModal">
+                                    Detail
+                                </button>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php else: ?>
-            <p>Tidak ada pesanan yang sedang dikirim.</p>
+            <p>Tidak ada pesanan yang dikirim.</p>
         <?php endif; ?>
     </div>
 </main>
+
+<!-- Modal Detail Pesanan -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalLabel">Detail Pesanan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-detail-content">
+        <!-- Isi detail pesanan akan dimuat via AJAX -->
+        <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"></div>
+            <div>Memuat detail...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -124,5 +162,25 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
 
 <!-- Template Main JS File -->
 <script src="../assets/js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const detailButtons = document.querySelectorAll('.btn-detail');
+    detailButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const idPesanan = this.getAttribute('data-id');
+            const modalContent = document.getElementById('modal-detail-content');
+            modalContent.innerHTML = `<div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status"></div>
+                <div>Memuat detail...</div>
+            </div>`;
+            fetch('pesanan_detail_ajax.php?id_pesanan=' + idPesanan)
+                .then(res => res.text())
+                .then(html => {
+                    modalContent.innerHTML = html;
+                });
+        });
+    });
+});
+</script>
 </body>
 </html>

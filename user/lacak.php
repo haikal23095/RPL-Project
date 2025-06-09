@@ -27,7 +27,7 @@ $sql = "SELECT pg.nomor_resi, pg.nama_kurir, pg.alamat_pengiriman,
         pg.status_pengiriman, pg.biaya_kirim
         FROM pengiriman_pesanan pg
         JOIN pesanan p ON pg.id_pesanan = p.id_pesanan
-        WHERE pg.id_pesanan = ? AND pg.id_user = ?";
+        WHERE pg.id_pesanan = ? AND p.id_user = ?";
 $stmt = mysqli_prepare($kon, $sql);
 
 if (!$stmt) {
@@ -44,7 +44,7 @@ mysqli_stmt_close($stmt);
 
 // Pastikan $shippingData tidak null
 if (!$shippingData) {
-    die("Data pengiriman tidak ditemukan.");
+    die("Data pengiriman tidak ditemukan atau Anda tidak berhak mengakses pesanan ini.");
 }
 
 // Tentukan progress berdasarkan status pengiriman

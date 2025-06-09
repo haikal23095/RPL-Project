@@ -80,6 +80,14 @@ $cartItems = mysqli_query($kon, "SELECT k.*, p.nama_produk, p.harga, p.gambar
     WHERE k.user_id = $user_id");
 
 $row_keranjang = ($cartItems && mysqli_num_rows($cartItems) > 0);
+
+if (isset($_POST['checkout']) && isset($_POST['selected_items'])) {
+    // Simpan id_keranjang yang dicentang ke session
+    $_SESSION['checkout_cart_ids'] = $_POST['selected_items'];
+    header("Location: checkout.php");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
