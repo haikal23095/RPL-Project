@@ -35,10 +35,6 @@
       <br>
       <br>
       <br>
-      <br>
-      <br>
-      <br>
-      
       <li class="nav-item">
         <a class="nav-link <?php if($page == "chat"){ echo "collapsed"; } ?>" href="chat.php">
           <i class="bi bi-headset"></i>
