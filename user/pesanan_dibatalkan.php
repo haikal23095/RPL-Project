@@ -84,6 +84,15 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
 <!-- End Sidebar-->
 
 <main id="main" class="main">
+    <div class="pagetitle">
+            <h1><i class="bi bi-x-lg"></i> PESANAN DIBATALKAN</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.php">PROFIL</a></li>
+                    <li class="breadcrumb-item active">PESANAN DIBATALKAN</li>
+                </ol>
+            </nav>
+        </div>
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4>Pesanan Dibatalkan</h4>

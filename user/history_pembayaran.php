@@ -152,11 +152,11 @@ mysqli_stmt_close($stmt);
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-box-arrow-in-left"></i> Histori Pembelian</h1>
+            <h1><i class="bi bi-cash-stack"></i> HISTORI PEMBAYARAN</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item active">Histori Pembelian</li>
+                    <li class="breadcrumb-item"><a href="index.php">PROFIL</a></li>
+                    <li class="breadcrumb-item active">HISTORI PEMBAYARAN</li>
                 </ol>
             </nav>
         </div>

@@ -102,12 +102,20 @@ $result = mysqli_query($kon, $query);
   <?php require "menu.php"; ?>
   <!-- End Sidebar-->
   <main id="main" class="main">
+    <div class="pagetitle">
+            <h1><i class="bi bi-headset"></i>&nbsp;PELAYANAN PELANGGAN</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item active">PELAYANAN PELANGGAN</li>
+                </ol>
+            </nav>
+        </div>
     <div class="container mt-4">
-        <h2>Customer Service</h2>
         <div class="border rounded p-3 mb-3" style="height: 400px; overflow-y: auto;">
             <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                 <div class="d-flex <?php echo $row['sender'] == 'user' ? 'justify-content-end' : 'justify-content-start'; ?> mb-2">
-                    <div class="p-2 <?php echo $row['sender'] == 'user' ? 'bg-primary text-white' : 'bg-light'; ?> rounded" style="max-width: 70%;">
+                    <div class="p-2 <?php echo $row['sender'] == 'user' ? 'bg-warning text-white' : 'bg-light'; ?> rounded" style="max-width: 70%;">
                         <?php echo htmlspecialchars($row['message']); ?>
                     </div>
                 </div>

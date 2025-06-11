@@ -133,7 +133,7 @@ $cartSuccess = isset($_GET['cart_success']);
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-megaphone"></i>&nbsp;Informasi Promo</h1>
+            <h1><i class="bi bi-megaphone"></i>&nbsp;INFORMASI PROMO</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">HOME</a></li>

@@ -147,7 +147,6 @@ if (count($reviews) > 0) {
         }
 
         .product-name {
-            font-weight: normal;
             color: #333;
             font-size: 0.9rem; /* Ukuran font nama produk */
         }
@@ -219,11 +218,11 @@ if (count($reviews) > 0) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-chat-dots"></i> Ulasan Produk</h1>
+            <h1><i class="bi bi-chat-quote"></i> RIWAYAT ULASAN</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item active">Ulasan Produk</li>
+                    <li class="breadcrumb-item"><a href="index.php">PROFIL</a></li>
+                    <li class="breadcrumb-item active">RIWAYAT ULASAN</li>
                 </ol>
             </nav>
         </div>
