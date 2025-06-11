@@ -96,112 +96,117 @@ $deleteError = isset($_GET['delete_error']); // Cek apakah ada notifikasi error
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Produk - Admin</title>
+    <title>Data Produk</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #f5f5f5;
+            background-color: #FAF8F4;
+            font-family: 'Poppins', sans-serif;
         }
-
-        .wrapper {
-            display: block;
+        .btn-sukses {
+            background: linear-gradient(to right, #EFAA31, #FF8A0D);
+            border: none;
+            font-weight: 600;
+            color: #fff;
+            border-radius: 10px;
+            padding: 10px 20px;
         }
-
-        .content {
-            flex: 1;
-            padding-left: 30px;
+        .btn-sukses:hover {
+            background: linear-gradient(to right, #FF8A0D, #EFAA31);
         }
-
         .card {
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            background-color: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease-in-out;
+            padding: 16px;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        .card-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 0;
+        }
+        .harga-text {
+            color: #D9530B;
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+        .btn-outline-dark {
+            border-radius: 8px;
+            padding: 0;
+            font-size: 10px !important;
+            font-weight: bold !important;
+            width: 100px;
+            height: 46px;
+            position: relative;
+            display: inline-block;
+            text-decoration: none;
+            font-family: 'Andika', sans-serif !important;
+            border: 1px solid #000;
+            color: #000;
             background: transparent;
         }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 166, 0, 0.5);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        .btn-outline-dark::before {
+            content: "Detail Produk";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            font-size: 10px !important;
+            font-weight: bold !important;
+            font-family: 'Andika', sans-serif !important;
         }
-
-        .card-img-top {
-            border-radius: 15px 15px 0 0;
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover .card-img-top {
-            transform: scale(1.05);
-        }
-
-        .card-body {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 1.5rem;
-            border-radius: 0 0 15px 15px;
-        }
-
-        .card-title {
-            color: #ffa500 !important;
-        }
-        .card-text {
-            color: #fff;
-            margin-bottom: 0.8rem;
-        }
-
-        .card-text strong {
-            color: #ffa500;
-        }
-
-        .btn {
+        .btn-hapus {
+            background-color: #763D2D !important;
+            color: #fff !important;
+            border-radius: 8px;
+            padding: 0;
+            font-size: 10px !important;
+            font-weight: bold !important;
             border: none;
-            padding: 8px 15px;
-            margin: 5px 0;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.9rem;
+            width: 100px;
+            height: 46px;
+            position: relative;
+            display: inline-block;
+            font-family: 'Andika', sans-serif !important;
         }
-
-        .btn-info {
-            background: rgba(255, 165, 0, 0.8);
-            color: #000;
-        }
-
-        .btn-info:hover {
-            background: #ffa500;
-            transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background: rgba(220, 53, 69, 0.8);
+        .btn-hapus::before {
+            content: "Hapus Produk";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            font-size: 10px !important;
+            font-weight: bold !important;
+            font-family: 'Andika', sans-serif !important;
             color: #fff;
         }
-
-        .btn-danger:hover {
-            background: #dc3545;
-            transform: translateY(-2px);
+        .card-img-top {
+            border-radius: 16px;
+            object-fit: contain;
+            width: 100%;
+            height: 170px;
+            margin-bottom: 12px;
         }
-
-        .btn-sukses {
-            background: linear-gradient(45deg, #ff6b00, #ffa500);
-            color: white !important;
-            padding: 10px 20px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+        .card-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
         }
-
-        .btn-sukses:hover {
-            background: linear-gradient(45deg, #ffa500, #ff6b00);
-            transform: translateY(-2px);
-            border: transparent;
-            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+        .product-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.25rem;
         }
     </style>
 
@@ -241,37 +246,32 @@ $deleteError = isset($_GET['delete_error']); // Cek apakah ada notifikasi error
     </div>
 
     <main id="main" class="main">
-        <div class="pagetitle">
-            <h1><i class="bi bi-grid"></i>&nbsp; PRODUK</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
-                    <li class="breadcrumb-item active">PRODUK</li>
-                </ol>
-            </nav>
-        </div><!-- End Page Title -->
-
-        <!-- Tombol Tambah Produk -->
-        <div class="mb-3">
-            <a href="tambah_produk.php" class="btn btn-sukses w-auto">Tambah Produk</a>
+        <div class="pagetitle d-flex align-items-center justify-content-start gap-3">
+            <div>
+                <h1><i class="fas fa-box"></i>&nbsp; DATA PRODUK</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                        <li class="breadcrumb-item active">DATA PRODUK</li>
+                    </ol>
+                </nav>
+            </div>
         </div>
-
+        <a href="tambah_produk.php" class="btn btn-sukses">+ Tambah Produk</a>
         <!-- Tampilkan Produk -->
-        <div class="row g-3">
+        <div class="row mt-4 g-3">
             <?php if (count($filteredProducts) > 0): ?>
                 <?php foreach ($filteredProducts as $product): ?>
                     <div class="col-md-3">
                         <div class="card">
                             <img src="../uploads/<?= htmlspecialchars($product['image']); ?>" class="card-img-top" alt="Gambar Produk">
-                            <div class="card-body">
-                                <h5 class="card-title"><?= htmlspecialchars($product['name']); ?></h5>
-                                <p class="card-text"><?= htmlspecialchars($product['category']); ?></p>
-                                <p class="card-text"><strong>Harga: </strong>Rp <?= number_format($product['price'], 0, ',', '.'); ?></p>
-                                <p class="card-text"><strong>Stok: </strong><?= htmlspecialchars($product['stock']); ?> pcs</p>
-                                <!-- Detail Produk dan Edit Produk -->
-                                <a href="detail_produk.php?product_id=<?= urlencode($product['id']); ?>" class="btn btn-info mb-2">Detail Produk</a>
-                                <!-- Tombol Hapus Produk -->
-                                <button type="button" onclick="confirmDelete(<?= htmlspecialchars($product['id']); ?>)" class="btn btn-danger">Hapus Produk</button>
+                            <div class="product-info">
+                                <h5 class="card-title text-dark"><?= htmlspecialchars($product['name']); ?></h5>
+                                <p class="harga-text">IDR. <?= number_format($product['price'], 0, ',', '.'); ?></p>
+                            </div>
+                            <div class="card-buttons">
+                                <a href="detail_produk.php?product_id=<?= urlencode($product['id']); ?>" class="btn btn-outline-dark"></a>
+                                <button type="button" onclick="confirmDelete(<?= htmlspecialchars($product['id']); ?>)" class="btn btn-hapus"></button>
                             </div>
                         </div>
                     </div>
