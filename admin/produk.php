@@ -248,7 +248,7 @@ $deleteError = isset($_GET['delete_error']); // Cek apakah ada notifikasi error
     <main id="main" class="main">
         <div class="pagetitle d-flex align-items-center justify-content-start gap-3">
             <div>
-                <h1><i class="fas fa-box"></i>&nbsp; DATA PRODUK</h1>
+                <h1><i class="bi bi-box-seam-fill"></i>&nbsp; DATA PRODUK</h1>
                 <nav>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.php">HOME</a></li>

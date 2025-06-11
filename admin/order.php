@@ -62,12 +62,22 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php include 'menu.php'; ?>
 
 <main id="main" class="main">
+    <div class="pagetitle">
+            <h1><i class="bi bi-currency-dollar"></i>&nbsp; PESANAN MASUK</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item active"> PESANAN MASUK</li>
+                </ol>
+            </nav>
+    </div>
     <div class="container">
-        <div class="row">
+        
+        <!-- <div class="row">
             <div class="col">
-                <h1><i class="bi bi-grid"></i>&nbsp; Daftar Pesanan</h1>
+                <h1><i class="bi bi-currency-dollar"></i>&nbsp; PESANAN MASUK</h1>
             </div>
-        </div>
+        </div> -->
 
         <!-- Filter Status -->
         <form method="GET" class="mb-3">

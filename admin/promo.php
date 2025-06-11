@@ -66,11 +66,11 @@ if (isset($_POST['generate_promo'])) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-percent"></i>&nbsp; PROMO DISCOUNT</h1>
+            <h1><i class="bi bi-tags"></i>&nbsp; KODE PROMO</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
-                    <li class="breadcrumb-item active">CODE PROMO</li>
+                    <li class="breadcrumb-item active"> KODE PROMO</li>
                 </ol>
             </nav>
         </div>

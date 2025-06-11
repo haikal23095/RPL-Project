@@ -83,11 +83,11 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-megaphone"></i>&nbsp; MANAJEMEN PROMO</h1>
+            <h1><i class="bi bi-megaphone"></i>&nbsp; INFORMASI PROMO</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
-                    <li class="breadcrumb-item active">PROMO</li>
+                    <li class="breadcrumb-item active">INFORMASI PROMO</li>
                 </ol>
             </nav>
         </div>

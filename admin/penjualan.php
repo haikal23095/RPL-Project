@@ -71,12 +71,21 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php include 'menu.php'; ?>
 
 <main id="main" class="main">
+    <div class="pagetitle">
+            <h1><i class="bi bi-graph-up"></i>&nbsp; DATA PENJUALAN</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item active"> DATA PENJUALAN</li>
+                </ol>
+            </nav>
+    </div>
     <div class="container">
-        <div class="row mb-4">
+        <!-- <div class="row mb-4">
             <div class="col">
                 <h1><i class="bi bi-graph-up"></i>&nbsp; Data Penjualan</h1>
             </div>
-        </div>
+        </div> -->
 
         <!-- Total Pendapatan dan Filter -->
         <div class="row mb-4">
