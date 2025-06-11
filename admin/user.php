@@ -113,11 +113,11 @@ if (isset($_POST["update"])) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-person"></i>&nbsp; USER</h1>
+            <h1><i class="bi bi-person"></i>&nbsp; DATA USER</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">DASHBOARD</a></li>
-                    <li class="breadcrumb-item active">USER</li>
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item active"> DATA USER</li>
                 </ol>
             </nav>
         </div>

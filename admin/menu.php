@@ -7,7 +7,7 @@
       <li class="nav-item">
         <a class="nav-link <?php if($page == "dashboard"){ echo "collapsed"; } ?>" href="index.php">
           <i class="bi bi-grid"></i>
-          <span>DASHBOARD</span>
+          <span>BERANDA</span>
         </a>
       </li>
 
@@ -36,7 +36,7 @@
       <li class="nav-item">
         <a class="nav-link <?php if($page == "order"){ echo "collapsed"; } ?>" href="order.php">
           <i class="bi bi-currency-dollar"></i>
-          <span>ORDER MASUK</span>
+          <span>PESANAN MASUK</span>
         </a>
       </li>
 
@@ -60,11 +60,14 @@
           <span>STOK & STATISTIK</span>
         </a>
       </li>
-
+      <br>
+      <br>
+      <br>
+      <br>
       <li class="nav-item">
         <a class="nav-link" href="logout.php">
           <i class="bi bi-box-arrow-right"></i>
-          <span>LOG-OUT</span>
+          <span>KELUAR</span>
         </a>
       </li>
 

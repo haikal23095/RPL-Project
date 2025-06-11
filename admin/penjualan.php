@@ -7,7 +7,7 @@ if (!isset($_SESSION["admin"])) {
 }
 
 $host = 'localhost';
-$dbname = 'gamify';
+$dbname = 'casaluxedb'; 
 $username = 'root';
 $password = '';
 
@@ -41,9 +41,10 @@ $total_stmt = $pdo->query($total_query);
 $total_pendapatan = $total_stmt->fetch(PDO::FETCH_ASSOC)['total_pendapatan'] ?? 0;
 
 // Query data pesanan
-$query = "SELECT pr.nama_produk, p.tanggal_pesanan, p.jumlah, pr.harga, p.total_harga 
-          FROM pesanan p
-          JOIN produk pr ON p.id_produk = pr.id_produk
+$query = "SELECT pr.nama_produk, p.tanggal_pesanan, pd.jumlah, pr.harga, p.total_harga 
+          FROM pesanan_detail pd
+          JOIN pesanan p ON pd.id_pesanan = p.id_pesanan
+          JOIN produk pr ON pd.id_produk = pr.id_produk
           WHERE $conditions
           ORDER BY p.tanggal_pesanan DESC";
 $stmt = $pdo->query($query);
@@ -70,12 +71,21 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <?php include 'menu.php'; ?>
 
 <main id="main" class="main">
+    <div class="pagetitle">
+            <h1><i class="bi bi-graph-up"></i>&nbsp; DATA PENJUALAN</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item active"> DATA PENJUALAN</li>
+                </ol>
+            </nav>
+    </div>
     <div class="container">
-        <div class="row mb-4">
+        <!-- <div class="row mb-4">
             <div class="col">
                 <h1><i class="bi bi-graph-up"></i>&nbsp; Data Penjualan</h1>
             </div>
-        </div>
+        </div> -->
 
         <!-- Total Pendapatan dan Filter -->
         <div class="row mb-4">

@@ -59,11 +59,11 @@ $row_user = mysqli_fetch_array($kue_user);
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1><i class="bi bi-grid"></i>&nbsp; DASHBOARD</h1>
+      <h1><i class="bi bi-grid"></i>&nbsp; BERANDA</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
-          <li class="breadcrumb-item active">DASHBOARD</li>
+          <li class="breadcrumb-item active">BERANDA</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
