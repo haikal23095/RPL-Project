@@ -65,7 +65,7 @@ if (!$admin) {
     <?php require "menu.php"; ?>
 
     <main id="main" class="main">
-        <div class="pagetitle">
+        <!-- <div class="pagetitle">
             <h1><i class="bi bi-person-circle"></i>&nbsp; Profil Admin</h1>
             <nav>
                 <ol class="breadcrumb">
@@ -73,7 +73,7 @@ if (!$admin) {
                     <li class="breadcrumb-item active">Profil</li>
                 </ol>
             </nav>
-        </div>
+        </div> -->
         
         <div class="container mt-5">
             <div class="row">

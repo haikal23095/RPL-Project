@@ -79,13 +79,13 @@ $row_produk = mysqli_num_rows($sql_produk);
             <!-- ROW CARDS -->
             <div class="col-xxl-4 col-md-6">
               <div class="card info-card sales-card">
-              <a href="user.php">
+              <a href="order.php">
                 <div class="card-body">
-                  <h5 class="card-title">USER</h5>
+                  <h5 class="card-title">PESANAN MASUK</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-person"></i>
+                      <i class="bi bi-currency-dollar"></i>
                     </div>
                     <div class="ps-3">
                       <h6><?= number_format($row_user, 0, "", ".") ?></h6>
@@ -120,13 +120,13 @@ $row_produk = mysqli_num_rows($sql_produk);
             <div class="col-xxl-4 col-md-6">
               <div class="card info-card sales-card">
 
-              <a href="produk.php">
+              <a href="stok_produk.php">
                 <div class="card-body">
-                  <h5 class="card-title">PRODUK</h5>
+                  <h5 class="card-title"> STOK PRODUK</h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-box-seam-fill"></i>
+                      <i class="bi bi-clipboard-data"></i>
                     </div>
                     <div class="ps-3">
                       <h6><?= number_format($row_produk, 0, "", ".") ?></h6>
@@ -137,6 +137,45 @@ $row_produk = mysqli_num_rows($sql_produk);
               </div>
              </a>
             </div>
+
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+              <a href="user.php">
+                <div class="card-body">
+                  <h5 class="card-title"> DAFTAR USER</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-person"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6><?= number_format($row_user, 0, "", ".") ?></h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+              <a href="order.php?status=Dibatalkan">
+                <div class="card-body">
+                  <h5 class="card-title">PESANAN DIBATALKAN</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-clipboard2-x"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6><?= number_format($row_user, 0, "", ".") ?></h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+
           </div>
         </div>
 
