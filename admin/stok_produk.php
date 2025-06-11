@@ -1,7 +1,10 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
 include('../db.php'); 
 $page = "statistik";
+
 
 if (!isset($_SESSION["admin"])) {
     header("Location: ../login.php");
@@ -9,12 +12,13 @@ if (!isset($_SESSION["admin"])) {
 }
 
 // Statistik produk
+// Corrected: Joining pesanan_detail to sum 'jumlah'
 $sqlStats = "
     SELECT 
-        COUNT(id_produk) AS total_produk, 
-        SUM(CASE WHEN stok = 0 THEN 1 ELSE 0 END) AS unavailable_produk,
-        (SELECT SUM(jumlah) FROM pesanan WHERE status_pesanan != 'Dibatalkan') AS total_terjual
-    FROM produk
+        COUNT(p.id_produk) AS total_produk,
+        SUM(CASE WHEN p.stok = 0 THEN 1 ELSE 0 END) AS unavailable_produk,
+        (SELECT SUM(pd.jumlah) FROM pesanan_detail pd JOIN pesanan ps ON pd.id_pesanan = ps.id_pesanan WHERE ps.status_pesanan != 'Dibatalkan') AS total_terjual
+    FROM produk p
 ";
 $resultStats = mysqli_query($kon, $sqlStats);
 if (!$resultStats) {
@@ -23,12 +27,13 @@ if (!$resultStats) {
 $stats = mysqli_fetch_assoc($resultStats);
 
 // Data stok produk
+// Corrected: Joining pesanan_detail to sum 'jumlah' for individual products
 $sqlProducts = "
     SELECT 
         p.id_produk, 
         p.nama_produk, 
         p.stok, 
-        (SELECT SUM(jumlah) FROM pesanan WHERE id_produk = p.id_produk AND status_pesanan != 'Dibatalkan') AS total_terjual, 
+        (SELECT SUM(pd.jumlah) FROM pesanan_detail pd JOIN pesanan ps ON pd.id_pesanan = ps.id_pesanan WHERE pd.id_produk = p.id_produk AND ps.status_pesanan != 'Dibatalkan') AS total_terjual, 
         (SELECT AVG(rating_produk) FROM review_produk WHERE id_produk = p.id_produk) AS rata_rating 
     FROM produk p
 ";
@@ -82,6 +87,15 @@ $products = mysqli_fetch_all($resultProducts, MYSQLI_ASSOC);
     <?php require "menu.php"; ?>
     <!-- End Sidebar-->
     <main id="main" class="main">
+        <div class="pagetitle">
+            <h1><i class="bi bi-clipboard-data"></i>&nbsp; STOK & STATISTIK</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item active"> STOK & STATISTIK</li>
+                </ol>
+            </nav>
+        </div>
         <!-- Product Statistics -->
         <div class="row mb-4">
             <div class="col-12">
