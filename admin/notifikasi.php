@@ -9,12 +9,17 @@ function checkProductStock($kon) {
     $result = mysqli_query($kon, $query);
     
     while ($product = mysqli_fetch_assoc($result)) {
-        // Periksa apakah notifikasi sudah dibuat sebelumnya
-        $query_notif = "SELECT * FROM notifications WHERE type = 'admin' AND title = 'Stok Produk Rendah' AND message LIKE '%{$product['nama_produk']}%' AND id_produk = {$product['id_produk']}";
+        // Periksa apakah notifikasi sudah dibuat dalam 24 jam terakhir
+        $query_notif = "SELECT * FROM notifications 
+                       WHERE type = 'admin' 
+                       AND title = 'Stok Produk Rendah' 
+                       AND message LIKE '%{$product['nama_produk']}%' 
+                       AND id_produk = {$product['id_produk']}
+                       AND created_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
         $result_notif = mysqli_query($kon, $query_notif);
         
         if (mysqli_num_rows($result_notif) == 0) {
-            // Jika notifikasi belum dibuat, maka buat notifikasi
+            // Jika tidak ada notifikasi dalam 24 jam terakhir, buat notifikasi baru
             createNotification($kon, 'admin', 'Stok Produk Rendah', 
                 "Produk {$product['nama_produk']} tersisa {$product['stok']} unit", 
                 null, $product['id_produk']);
@@ -22,7 +27,7 @@ function checkProductStock($kon) {
     }
 }
 
-// Vkontolalidasi Login Admin
+// Validasi Login Admin
 if (!isset($_SESSION['admin']) || empty($_SESSION['admin'])) {
     echo "<script>
             alert('Anda harus login sebagai admin');
@@ -31,10 +36,18 @@ if (!isset($_SESSION['admin']) || empty($_SESSION['admin'])) {
     exit();
 }
 
-// Generate admin notifications
-checkProductStock($kon);
-monitorPesananChanges($kon);
-monitorReviewChanges($kon);
+// Generate admin notifications hanya jika belum ada notifikasi dalam 5 menit terakhir
+$check_recent = "SELECT COUNT(*) as count FROM notifications 
+                WHERE type = 'admin' 
+                AND created_at >= DATE_SUB(NOW(), INTERVAL 5 MINUTE)";
+$result_recent = mysqli_query($kon, $check_recent);
+$recent_count = mysqli_fetch_assoc($result_recent)['count'];
+
+if ($recent_count == 0) {
+    checkProductStock($kon);
+    monitorPesananChanges($kon);
+    monitorReviewChanges($kon);
+}
 
 // Tandai Semua Notifikasi Dibaca
 if (isset($_POST['mark_all_read'])) {
@@ -100,34 +113,50 @@ try {
     <title>Notifikasi Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        body { background-color: #f4f6f9; }
+        body { background-color: #F5F3EB; font-family: 'Poppins', sans-serif; }
         .notification-container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 30px auto;
         }
         .notification-card {
+            background: #fff;
+            border-left: 6px solid #FF9900;
+            padding: 20px;
             margin-bottom: 15px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        .notification-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
         .notification-card.unread {
-            border-left: 4px solid #007bff;
-            background-color: #f1f7ff;
+            background-color: #FFF8E7;
         }
         .notification-icon {
-            position: absolute;
-            top: 15px;
-            left: 15px;
             font-size: 2rem;
-            color: #007bff;
+            color: #FF9900;
+            margin-right: 15px;
         }
-        .notification-content {
-            margin-left: 70px;
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .notification-title {
+            font-weight: 600;
+            font-size: 18px;
+        }
+        .notification-date {
+            font-size: 14px;
+            color: #888;
+        }
+        .badge-new {
+            background-color: #FFD700;
+            color: #000;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-left: 10px;
         }
     </style>
     <?php include 'aset.php'; ?>
@@ -141,7 +170,7 @@ try {
         <div class="container notification-container">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>
-                    Notifikasi Admin
+                    Notifikasi
                     <?php if ($unread > 0): ?>
                         <span class="badge bg-danger"><?= $unread ?></span>
                     <?php endif; ?>
@@ -155,65 +184,47 @@ try {
                             </button>
                         </form>
                         <form method="POST">
-                            <button type="submit" name="clear_notifications" class="btn btn-outline-danger btn-sm" 
-                                    onclick="return confirm('Yakin ingin menghapus semua notifikasi?');">
+                            <button type="submit" name="clear_notifications" class="btn btn-outline-danger btn-sm" onclick="return confirm('Yakin ingin menghapus semua notifikasi?');">
                                 <i class="fas fa-trash"></i> Hapus Semua
                             </button>
                         </form>
                     </div>
                 <?php endif; ?>
             </div>
+        </div>
 
-            <?php if (!$result_notif || mysqli_num_rows($result_notif) == 0): ?>
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-inbox fa-3x mb-3"></i>
-                    <p>Tidak ada notifikasi</p>
-                </div>
-            <?php else: ?>
-                <?php 
-                // Reset internal pointer
-                mysqli_data_seek($result_notif, 0);
-                while ($notif = mysqli_fetch_assoc($result_notif)): 
-                ?>
-                    <div class="card notification-card <?= $notif['is_read'] == 0 ? 'unread' : '' ?>">
-                        <div class="card-body d-flex">
-                            <div class="notification-icon">
-                                <?php 
-                                $icon = match(true) {
-                                    stripos($notif['title'], 'Pesanan') !== false => 'fa-shopping-cart',
-                                    stripos($notif['title'], 'Review') !== false => 'fa-comment',
-                                    stripos($notif['title'], 'Stok') !== false => 'fa-box-open',
-                                    default => 'fa-bell'
-                                };
-                                ?>
-                                <i class="fas <?= $icon ?>"></i>
+        <?php if (!$result_notif || mysqli_num_rows($result_notif) == 0): ?>
+            <div class="alert alert-info text-center">
+                <i class="fas fa-inbox fa-3x mb-3"></i>
+                <p>Tidak ada notifikasi</p>
+            </div>
+        <?php else: ?>
+            <?php mysqli_data_seek($result_notif, 0); while ($notif = mysqli_fetch_assoc($result_notif)): ?>
+                <div class="notification-card <?= $notif['is_read'] == 0 ? 'unread' : '' ?>">
+                    <div class="d-flex">
+                        <i class="bi bi-box notification-icon"></i>
+                        <div class="flex-grow-1">
+                            <div class="notification-header">
+                                <span class="notification-title">
+                                    <?= htmlspecialchars($notif['title']) ?>
+                                    <?php if($notif['is_read'] == 0): ?>
+                                        <span class="badge-new">Baru</span>
+                                    <?php endif; ?>
+                                </span>
+                                <span class="notification-date">
+                                    <?= date('d M H:i', strtotime($notif['created_at'])) ?>
+                                </span>
                             </div>
-                            
-                            <div class="notification-content flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <h5 class="card-title mb-0">
-                                        <?= htmlspecialchars($notif['title']) ?>
-                                        <?php if($notif['is_read'] == 0): ?>
-                                            <span class="badge bg-primary ms-2">Baru</span>
-                                        <?php endif; ?>
-                                    </h5>
-                                    <small class="text-muted">
-                                        <?= date('d M H:i', strtotime($notif['created_at'])) ?>
-                                    </small>
-                                </div>
-                                <p class="card-text"><?= htmlspecialchars($notif['message']) ?></p>
-                                
-                            
-                                    <a href="detail_produk.php?product_id=<?= $notif['id_produk'] ?>" class="btn btn-sm btn-outline-primary mt-2">
-                                        Lihat Produk
-                                    </a>
-                            </div>
+                            <p class="mb-2"><?= htmlspecialchars($notif['message']) ?></p>
+                            <a href="detail_produk.php?product_id=<?= $notif['id_produk'] ?>" class="btn btn-sm btn-outline-primary">
+                                Lihat Produk
+                            </a>
                         </div>
                     </div>
-                <?php endwhile; ?>
-            <?php endif; ?>
-        </div>
-    </main>
+                </div>
+            <?php endwhile; ?>
+        <?php endif; ?>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
