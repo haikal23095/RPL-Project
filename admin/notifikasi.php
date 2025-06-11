@@ -22,7 +22,7 @@ function checkProductStock($kon) {
     }
 }
 
-// Validasi Login Admin
+// Vkontolalidasi Login Admin
 if (!isset($_SESSION['admin']) || empty($_SESSION['admin'])) {
     echo "<script>
             alert('Anda harus login sebagai admin');
