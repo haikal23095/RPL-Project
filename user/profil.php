@@ -65,15 +65,15 @@ $user = mysqli_fetch_assoc($result);
     <?php require "profil_menu.php"; ?>
 
     <main id="main" class="main">
-        <div class="pagetitle">
-            <h1><i class="bi bi-person-circle"></i>&nbsp; Profil User</h1>
+        <!-- <div class="pagetitle">
+            <h1><i class="bi bi-person-circle"></i>&nbsp; My Profil</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">DASHBOARD</a></li>
                     <li class="breadcrumb-item active">Profil</li>
                 </ol>
             </nav>
-        </div>
+        </div> -->
         
         <div class="container mt-5">
             <div class="row">
