@@ -574,24 +574,24 @@ h6 {
   list-style: none;
 }
 
-.header-nav>ul {
+.header-nav > ul {
   margin: 0;
   padding: 0;
 }
 
 .header-nav .nav-icon {
   font-size: 22px;
-  color: #ffcb74;
+  color: #2D3A3A; /* UBAH WARNA DI SINI */
   margin-right: 25px;
   position: relative;
 }
 
 .header-nav .nav-cart {
-  color: #ffcb74;
+  color: #2D3A3A; /* UBAH WARNA DI SINI */
 }
 
 .header-nav .nav-profile {
-  color: #ffcb74;
+  color: #2D3A3A; /* UBAH WARNA DI SINI */
 }
 
 .header-nav .nav-profile img {
