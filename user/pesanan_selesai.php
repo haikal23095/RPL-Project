@@ -65,9 +65,17 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
 <?php require "profil_menu.php"; ?>
 <!-- End Sidebar-->
 <main id="main" class="main">
+    <div class="pagetitle">
+            <h1><i class="bi bi-bag-check"></i> PESANAN SELESAI</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.php">PROFIL</a></li>
+                    <li class="breadcrumb-item active">PESANAN SELESAI</li>
+                </ol>
+            </nav>
+        </div>
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4>Pesanan Selesai</h4>
             <form method="get" class="d-inline">
                 <label>
                     <input type="radio" name="filter" value="" <?= $status_filter == '' ? 'checked' : '' ?>> Semua

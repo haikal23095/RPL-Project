@@ -83,6 +83,15 @@ $result = mysqli_query($kon, $query);
   <?php require "menu.php"; ?>
   <!-- End Sidebar-->
     <main id="main" class="main">
+        <div class="pagetitle">
+      <h1><i class="bi bi-star-fill"></i>&nbsp; PRODUK FAVORIT</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+          <li class="breadcrumb-item active">PRODUK FAVORIT</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
     <div class="container mt-5">
         <h2 class="text-center mb-4 fw-bold">PRODUK FAVORIT</h2>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
