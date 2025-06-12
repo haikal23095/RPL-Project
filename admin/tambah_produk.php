@@ -279,7 +279,8 @@ if (isset($_GET['delete_product'])) {
                                 <input type="file" class="form-control" id="image" name="image" required>
                             </div>
 
-                            <button type="submit" name="add_product" class="btn btn-primary">Tambah Produk</button>
+                            <button type="submit" name="add_product" class="btn" style="background-color: #763D2D; color: white;">Batalkan</button>
+                            <button type="submit" name="add_product" class="btn" style="background-color: #1A877E; color: white;">Tambah Produk</button>
                         </form>
                     </div>
                 </div>

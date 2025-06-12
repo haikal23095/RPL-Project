@@ -53,6 +53,7 @@ $promos = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id_produk = $_POST['bonus_item'] ?? 0;
     $title = $_POST['title'];
     $description = $_POST['description'];
     $promo_type = $_POST['promo_type'];
@@ -71,10 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $sql = "INSERT INTO informasipromo (title, description, photo_url, promo_type, start_date, end_date, discount_percentage, bonus_item) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO informasipromo (id_produk, title, description, photo_url, promo_type, start_date, end_date, discount_percentage, bonus_item) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($kon, $sql);
-    mysqli_stmt_bind_param($stmt, "ssssssss", $title, $description, $photo_url, $promo_type, $start_date, $end_date, $discount_percentage, $bonus_item);
+    mysqli_stmt_bind_param($stmt, "issssssss", $id_produk, $title, $description, $photo_url, $promo_type, $start_date, $end_date, $discount_percentage, $bonus_item);
     mysqli_stmt_execute($stmt);
 
     header("Location: informasipromo.php");
