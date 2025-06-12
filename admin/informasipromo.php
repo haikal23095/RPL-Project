@@ -13,11 +13,11 @@ mysqli_stmt_bind_param($stmt, "ss", $current_date, $current_date);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 $informasipromo = mysqli_fetch_all($result, MYSQLI_ASSOC);
-foreach ($informasipromo as $promo) {
-    var_dump($promo);
-    echo "<br><br>";
-}
-die();
+// foreach ($informasipromo as $promo) {
+//     var_dump($promo);
+//     echo "<br><br>";
+// }
+// die();
 
 // Separate informasipromo by type
 $all_informasipromo = $informasipromo;
