@@ -107,7 +107,7 @@ if (isset($_SESSION['reset_success'])) {
 </head>
 <body>
   <header>
-            <a href="#">
+            <a href="landing_page.php">
                 <img src="assets/img/logo_CasaLuxe.png" alt="Logo" class="logo">
             </a>
     </header>
