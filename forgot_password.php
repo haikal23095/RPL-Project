@@ -86,6 +86,7 @@ if (isset($_POST["submit_email"])) {
     <link href="assets/img/LOGOCASALUXE2.png" rel="icon" sizes="48x48">
 </head>
 <body>
+    <!-- Logo GALeri -->
     <header>
             <a href="#">
                 <img src="assets/img/logo_CasaLuxe.png" alt="Logo" class="logo">
@@ -106,22 +107,13 @@ if (isset($_POST["submit_email"])) {
     </div>
 
     <style>
-        /* CSS tambahan atau override untuk forgot_password.php */
         body {
-            /* Pastikan body background color konsisten */
-            background-color: #f8f8f8; 
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-        }
-        header .logo {
-            width: 100px;
-            height: auto;
-            margin-left: 0px;
-            margin-top: 0px;
         }
         #forgot-password-main {
             width: 500px; /* Sesuaikan lebar container */
@@ -155,17 +147,6 @@ if (isset($_POST["submit_email"])) {
             width: 100%;
             margin-bottom: 20px;
             text-align: center;
-        }
-        .header-logo {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 101;
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: #333;
-            text-decoration: none;
         }
         @media (max-width: 768px) {
             #forgot-password-main {

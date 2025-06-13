@@ -3,62 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to GameGlee!</title>
-    <link rel="stylesheet" href="assets/css/styleUI.css">
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <title>CasaLuxe</title>
+    <link rel="stylesheet" href="assets/css/landing_pagestyle.css">
      <!-- Favicons -->
-    <link href="assets/img/Logo_GG.png" rel="icon" sizes="48x48">
+    <link href="assets/img/LOGOCASALUXE2.png" rel="icon" sizes="48x48">
 </head>
 <body>
-  <section>
-    <header>
-    <a href="#">
-            <img src="assets/img/Logo_GG.png" alt="Logo" class="logo">
-    </a>
-    <a href="register.php" class="register-btn"> Register </a>
-    </header>
-    <div class="slider">
-        <div class="list">
-            <div class="item">
-                <img src="assets/img/BG LOGIN.jpg" alt="bg 1">
-            </div>
-            <div class="item">
-                <img src="assets/img/BG LOGIN 2.jpg" alt="bg 2">
-            </div>
-            <div class="item">
-                <img src="assets/img/BG LOGIN 3.jpg" alt="bg 3">
-            </div>
-            <div class="item">
-                <img src="assets/img/BG LOGIN 4.jpg" alt="bg 4">
-            </div>
-            <div class="item">
-                <img src="assets/img/BG LOGIN 5.jpg" alt="bg 5">
-            </div>
-            <div class="item">
-                <img src="assets/img/BG LOGIN 6.jpg" alt="bg 6">
-            </div>
-        </div>
-    </div>
+    <div class="main-wrapper">
+        <header>
+            <a href="#">
+                <img src="assets/img/logo_CasaLuxe.png" alt="Logo" class="logo">
+            </a>
+            <a href="login.php#register" class="register-btn">DAFTAR</a>
+        </header>
 
-    <div class="overlay"></div>
-    
-    <div class="content">
-        <div class="info">
-            <h1>PLAY, SHOP, AND FEEL THE GLEE WITH EVERY CLICK! <br></h1>
-            <p>The Nintendo console offers an immersive gaming experience with a unique
-                blend of innovation and nostalgia. Its versatility, from handheld mode to TV
-                docking, ensures hours of fun for gamers of all ages. With a rich library of
-                exclusive titles, it remains a top choice for both casual and hardcore
-                players.</p>
-            <a href="login.php" class="login-btn">GET STARTED</a>
-        </div>
-    </div>
+        <section class="hero-section">
+            <div class="carousel-container">
+                <div class="carousel-wrapper">
+                    <!-- Menggunakan gambar placeholder sesuai nama file yang diminta -->
+                    <div class="carousel-item"><img src="assets/img/barang A.png" alt="Produk A"></div>
+                    <div class="carousel-item"><img src="assets/img/barang B.png" alt="Produk B"></div>
+                    <div class="carousel-item"><img src="assets/img/barang C.png" alt="Produk C"></div>
+                    <div class="carousel-item"><img src="assets/img/barang D.png" alt="Produk D"></div>
+                    <div class="carousel-item"><img src="assets/img/barang E.png" alt="Produk E"></div>
+                    <div class="carousel-item"><img src="assets/img/barang F.png" alt="Produk F"></div>
+                </div>
+                <!-- Panah navigasi -->
+                <button class="carousel-arrow left-arrow" id="leftArrow">&lt;</button>
+                <button class="carousel-arrow right-arrow" id="rightArrow">&gt;</button>
+            </div>
 
-    <div class="home-sci">
-            <a href="#"><i class='bx bxl-instagram' style='color:#ffffff'  ></i></a>
-            <a href="#"><i class='bx bxl-facebook' style='color:#ffffff' ></i></a>
+            <div class="tagline">
+                <h2>Membuat Kenyamanan</h2>
+                <h2>dengan Kelas.</h2>
+            </div>
+
+            <a href="login.php" class="check-now-btn">Cek Sekarang !</a>
+        </section>
     </div>
-  </section>
 
   <script src="assets/js/landing_page.js"></script>
 </body>

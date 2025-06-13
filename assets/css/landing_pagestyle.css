@@ -28,9 +28,10 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 320px; /* Sesuaikan tinggi gradien, ditingkatkan */
-            background: linear-gradient(to top, #FF8C12 0%, rgba(255, 140, 18, 0.7) 40%, rgba(255, 140, 18, 0) 80%);
-            z-index: -1; /* Di bawah konten */
+            height: 207px; /* Mungkin sedikit lebih tinggi untuk gradien yang lebih halus */
+            /* Gradien yang dimulai dari warna solid, dan transisi ke transparan dengan opasitas lebih rendah */
+            background: linear-gradient(to top, #efa931bb 0%, rgba(239, 170, 49, 0.1) 80%, rgba(239, 170, 49, 0) 100%);
+            z-index: -1;
         }
 
         .main-wrapper {
@@ -48,32 +49,36 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 40px; /* Padding header */
+            padding: 0px 10px; /* Padding header */
             width: 100%;
         }
 
         header .logo {
-            width: 60px;
+            width: 100px;
             height: auto;
             margin-left: 50px;
-            margin-top: 6px;
+            margin-top: 0px;
         }
 
         .register-btn {
-            background-color: #FF8C12; /* Warna orange */
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 5px;
+            background-color: #EFAA31;
+            font-family: 'Andika', sans-serif;
+            color: #ffffff;
+            border: 2px solid #EFAA31;
+            padding: 10px 25px; /* Padding ini akan menimpa padding: 10px; jika ada sebelumnya */
+            border-radius: 25px;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 16px; /* Ukuran font awal */
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            box-shadow: 0 0 15px transparent; /* Shadow awal transparan */
+            transition: background-color 0.3s ease, font-size 0.3s ease, box-shadow 0.3s ease; /* Tambahkan transisi untuk font-size dan box-shadow */
         }
 
         .register-btn:hover {
-            background-color: #e07b00; /* Warna orange lebih gelap saat hover */
+            background-color: #EFAA31; 
+            font-size: 18px; 
+            box-shadow: 0 0 15px rgba(239, 170, 49, 0.5); 
         }
 
         .hero-section {
@@ -82,15 +87,15 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px 40px;
+            padding: 10px 20px;
             text-align: center;
         }
 
         .carousel-container {
             position: relative;
-            width: 70%; /* Sesuaikan lebar carousel */
-            max-width: 800px; /* Maksimal lebar carousel */
-            margin: 40px auto 30px auto;
+            width: 90%; /* Sesuaikan lebar carousel */
+            max-width: 1000px; /* Maksimal lebar carousel */
+            margin: 15px auto 15px auto;
             overflow: hidden; /* Penting untuk menyembunyikan item di luar tampilan */
             background-color: transparent; /* Latar belakang transparan */
             border-radius: 15px; /* Tetap pertahankan border-radius jika diinginkan */
@@ -108,7 +113,7 @@
             left: 0;
             width: 15%; /* Lebar area fade */
             height: 100%;
-            background: linear-gradient(to right, #f8f8f8 0%, rgba(248, 248, 248, 0) 100%); /* Gradien dari warna body ke transparan */
+            background: linear-gradient(to right, #f8f8f8 0%, rgba(224, 224, 50, 0) 100%); /* Gradien dari warna body ke transparan */
             z-index: 5; /* Di atas item carousel, di bawah panah */
             pointer-events: none; /* Memungkinkan klik melewati overlay */
         }
@@ -121,7 +126,7 @@
             right: 0;
             width: 15%; /* Lebar area fade */
             height: 100%;
-            background: linear-gradient(to left, #f8f8f8 0%, rgba(248, 248, 248, 0) 100%); /* Gradien dari warna body ke transparan */
+            background: linear-gradient(to left, #f8f8f8 0%, rgba(224, 224, 50, 0) 100%); /* Gradien dari warna body ke transparan */
             z-index: 5; /* Di atas item carousel, di bawah panah */
             pointer-events: none; /* Memungkinkan klik melewati overlay */
         }
@@ -144,24 +149,19 @@
             align-items: center;
             margin: 0 15px; /* Jarak antar item */
             width: 20%; /* Default width for inactive items */
-            
-            /* DIUBAH: Tetapkan tinggi item secara eksplisit */
-            height: 250px; /* Tinggi yang sama dengan gambar aktif */
+            height: 200px; /* Tinggi yang sama dengan gambar aktif */
         }
 
         .carousel-item.active {
             width: 60%; /* Item aktif lebih besar */
-            /* DIUBAH: Hapus height: auto; agar tidak menimpa tinggi tetap */
         }
 
         .carousel-item:not(.active) {
             opacity: 0.5; /* Kurangi opacity untuk item kecil */
-            filter: grayscale(100%); /* Buat item kecil grayscale */
         }
 
         .carousel-item img {
             max-width: 100%;
-            /* DIUBAH: Gunakan tinggi penuh dari parent item untuk gambar aktif */
             height: 100%; /* Gambar mengisi tinggi container itemnya */
             object-fit: contain; /* Memastikan gambar tidak terpotong */
             transition: all 0.5s ease-in-out; /* Transisi untuk ukuran dan efek */
@@ -169,7 +169,6 @@
         
         .carousel-item:not(.active) img {
             height: 100px; /* Tinggi gambar kecil */
-            /* DIUBAH: Tambahkan margin-top/bottom untuk memusatkan gambar kecil di dalam item 250px */
             margin: auto; /* Memusatkan gambar kecil secara vertikal di dalam item */
         }
 
@@ -177,8 +176,8 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid #ddd;
+            background: transparent;
+            border: transparent;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -188,14 +187,14 @@
             font-size: 24px;
             cursor: pointer;
             z-index: 10; /* Z-index lebih tinggi dari fade overlay */
-            color: #333;
+            color: #2D3A3A;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .carousel-arrow:hover {
-            background-color: #FF8C12;
+            background-color: #EFAA31;
             color: white;
-            border-color: #FF8C12;
+            border-color: none;
         }
 
         .left-arrow {
@@ -212,28 +211,33 @@
 
         .tagline h2 {
             font-family: 'Andika', sans-serif; /* Sesuaikan font slogan */
-            font-size: 40px;
+            font-size: 24px;
             font-weight: 400;
-            color: #333; /* Warna gelap */
+            color: #2D3A3A; /* Warna gelap */
             line-height: 1.2;
             margin: 5px 0;
         }
 
         .check-now-btn {
-            background-color: #FF8C12; /* Warna orange */
-            color: white;
-            border: none;
-            padding: 15px 40px;
+            font-family: 'Aclonica', sans-serif;
+            background-color: transparent; /* Warna orange */
+            color: #2D3A3A;
+            border: 1px solid #2D3A3A;
+            padding: 10px 20px;
             border-radius: 8px;
             text-decoration: none;
-            font-size: 20px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            box-shadow: 0 0 15px transparent; 
         }
 
         .check-now-btn:hover {
-            background-color: #e07b00; /* Warna orange lebih gelap saat hover */
+            background-color: #EFAA31; /* Latar belakang berubah menjadi orange solid */
+            color: white; /* Warna teks berubah menjadi putih */
+            border: 1px solid transparent;
+            box-shadow: 0 0 15px rgba(239, 170, 49, 0.5); 
         }
 
         /* Responsifitas dasar (sesuaikan lebih lanjut sesuai kebutuhan) */
