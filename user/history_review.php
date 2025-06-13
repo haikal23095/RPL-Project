@@ -3,307 +3,158 @@ session_start();
 include('../db.php'); // Koneksi ke database
 $page = "history_review";
 
-// Pastikan admin login
+// Pastikan user login
 if (!isset($_SESSION['user'])) {
     header("Location: ../login.php");
     exit();
 }
 
-// Inisialisasi pesan
-$successMessage = '';
-$errorMessage = '';
-
-// Proses pengiriman balasan admin
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_review = isset($_POST['id_review']) ? intval($_POST['id_review']) : 0;
-    $response = isset($_POST['response']) ? trim($_POST['response']) : '';
-
-    // Validasi input
-    if ($id_review <= 0 || empty($response)) {
-        $errorMessage = "ID review atau balasan tidak valid.";
-    } else {
-        // Simpan balasan admin ke database
-        $sql = "UPDATE review_produk SET komentar_admin = ? WHERE id_review = ?";
-        $stmt = mysqli_prepare($kon, $sql);
-        if ($stmt) { // Cek apakah persiapan berhasil
-            mysqli_stmt_bind_param($stmt, "si", $response, $id_review);
-
-            if (mysqli_stmt_execute($stmt)) {
-                $successMessage = "Balasan berhasil ditambahkan.";
-            } else {
-                $errorMessage = "Terjadi kesalahan saat menambahkan balasan: " . mysqli_error($kon);
-            }
-
-            mysqli_stmt_close($stmt);
-        } else {
-            $errorMessage = "Gagal mempersiapkan pernyataan: " . mysqli_error($kon);
-        }
-    }
-}
-
 $usernama = $_SESSION['user']; // Ambil nama user dari session
 
-// Ambil semua ulasan dari database
+// Ambil semua ulasan dari database untuk user yang login
 $sql = "SELECT rp.id_review, rp.id_produk, rp.rating_produk, rp.rating_pelayanan, rp.rating_pengiriman, rp.komentar, rp.tanggal_review, rp.komentar_admin, 
         p.nama_produk, p.gambar, u.nama
         FROM review_produk rp
-        
         JOIN produk p ON rp.id_produk = p.id_produk
         JOIN user u ON rp.id_user = u.id_user
-        WHERE u.nama = '$usernama'
+        WHERE u.nama = ?
         ORDER BY rp.tanggal_review DESC";
-$result = mysqli_query($kon, $sql);
+
+$stmt = mysqli_prepare($kon, $sql);
+mysqli_stmt_bind_param($stmt, "s", $usernama);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+
+$reviews = [];
 if ($result) {
     $reviews = mysqli_fetch_all($result, MYSQLI_ASSOC);
     mysqli_free_result($result);
 } else {
-    $errorMessage = "Gagal mengambil data ulasan: " . mysqli_error($kon);
-    $reviews = []; // Pastikan $reviews terdefinisi sebagai array kosong
+    // Sebaiknya ada penanganan error jika query gagal
+    die("Gagal mengambil data ulasan: " . mysqli_error($kon));
+}
+mysqli_stmt_close($stmt);
+
+// Logika untuk pesan balasan (jika ada)
+$successMessage = '';
+$errorMessage = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_review'])) {
+    // Logika untuk memproses balasan admin bisa ditaruh di sini jika halaman ini juga untuk admin.
+    // Namun karena ini di folder /user, kita asumsikan ini hanya untuk tampilan.
 }
 
-$overallRating = 0;
-if (count($reviews) > 0) {
-    $totalRating = 0;
-    foreach ($reviews as $review) {
-        $totalRating += $review['rating_produk'] + $review['rating_pelayanan'] + $review['rating_pengiriman'];
-    }
-    $overallRating = round($totalRating / 3);
-} else {
-    $overallRating = 0; // Jika tidak ada ulasan, set rating keseluruhan ke 0
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Review History</title>
-    <!-- Favicons -->
-    <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
-    <link href="../assets/img/LOGOCASALUXE2.png" rel="apple-touch-icon">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
-    <!-- Vendor CSS Files -->
-    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="../assets/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="../assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-    <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="../assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-    <!-- Template Main CSS File -->
-    <link href="../assets/css/style.css" rel="stylesheet">
+    <title>Riwayat Ulasan</title>
+    
+    <?php include "aset.php"; ?>
+    
     <style>
-        /* Gaya Umum */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        /* Gaya Tabel */
-        .table {
-            background: #fff;
-            border-radius: 4px;
-            margin: 20px 0;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .table th {
-            background: #e9ecef;
-            color: #333;
-            padding: 10px;
-            text-align: left;
-        }
-
-        .table td {
-            padding: 10px;
+        .table th, .table td {
             vertical-align: middle;
-            background: #fff;
-            border-bottom: 1px solid #ddd;
         }
-
-        .table tr:hover td {
-            background: #f1f1f1;
-        }
-
-        /* Gaya Gambar Produk */
-        .product-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
         .product-img {
-            width: 60px; /* Ukuran gambar */
+            width: 60px;
             height: 60px;
             object-fit: cover;
-            border-radius: 4px;
+            border-radius: 5px;
         }
-
-        .product-name {
-            color: #333;
-            font-size: 0.9rem; /* Ukuran font nama produk */
-        }
-
-        /* Gaya Tombol */
-        .btn {
-            border-radius: 4px;
-            padding: 5px 10px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-success {
-            background-color: #28a745;
-            color: #fff;
-        }
-
-        .btn-success:hover {
-            background-color: #218838;
-        }
-
-        /* Gaya Modal */
-        .modal-content {
-            border-radius: 8px; /* Sudut lembut */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
-        }
-
-        .modal-header {
-            background-color: #007bff; /* Warna latar belakang header */
-            color: #fff; /* Warna teks header */
-            border-top-left-radius: 8px; /* Sudut lembut */
-            border-top-right-radius: 8px; /* Sudut lembut */
-        }
-
-        .modal-footer {
-            border-bottom-left-radius: 8px; /* Sudut lembut */
-            border-bottom-right-radius: 8px; /* Sudut lembut */
-        }
-
-        .modal.fade .modal-dialog {
-            transition: transform 0.2s ease, opacity 0.2s ease; /* Transisi halus */
-        }
-
-        .modal.fade.show .modal-dialog {
-            transform: translate(0, 0); /* Posisi normal saat modal muncul */
-            opacity: 1; /* Transparansi penuh saat modal muncul */
-        }
-
-        .modal.fade .modal-dialog {
-            transform: translate(0, -20px); /* Posisi awal saat modal muncul */
-            opacity: 0; /* Transparansi awal */
+        .rating-star {
+            color: #ffc107; /* Warna kuning untuk bintang */
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <?php require "atas.php"; ?>
-    <!-- Sidebar -->
     <?php require "profil_menu.php"; ?>
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-chat-quote"></i> RIWAYAT ULASAN</h1>
+            <h1><i class="bi bi-chat-square-quote-fill"></i> Riwayat Ulasan</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">PROFIL</a></li>
-                    <li class="breadcrumb-item active">RIWAYAT ULASAN</li>
+                    <li class="breadcrumb-item"><a href="index.php">Profil</a></li>
+                    <li class="breadcrumb-item active">Riwayat Ulasan</li>
                 </ol>
             </nav>
         </div>
 
         <section class="section">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">Daftar Ulasan</h3>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Ulasan yang Telah Anda Berikan</h5>
 
-                            <!-- Pesan sukses atau error -->
-                            <?php if ($successMessage): ?>
-                                <div class="alert alert-success"><?= $successMessage; ?></div>
-                            <?php elseif ($errorMessage): ?>
-                                <div class="alert alert-danger"><?= $errorMessage; ?></div>
-                            <?php endif; ?>
+                    <?php if ($successMessage): ?>
+                        <div class="alert alert-success"><?= $successMessage; ?></div>
+                    <?php elseif ($errorMessage): ?>
+                        <div class="alert alert-danger"><?= $errorMessage; ?></div>
+                    <?php endif; ?>
 
-                            <!-- Tabel Ulasan -->
-                            <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <thead>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Produk</th>
+                                    <th>Rating Keseluruhan</th>
+                                    <th>Ulasan Anda</th>
+                                    <th>Balasan Admin</th>
+                                    <th>Tanggal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (empty($reviews)): ?>
+                                    <tr>
+                                        <td colspan="6">
+                                            <div class="alert alert-info text-center">Anda belum memberikan ulasan apapun.</div>
+                                        </td>
+                                    </tr>
+                                <?php else: ?>
+                                    <?php foreach ($reviews as $index => $review): ?>
                                         <tr>
-                                            <th>No.</th>
-                                            <th>Produk</th>
-                                            <th>Nama User</th>
-                                            <th>Rating keseluruhan</th>
-                                            <th>Ulasan</th>
-                                            <th>Balasan Admin</th>
-                                            <th>Tanggal</th>
+                                            <td><?= $index + 1; ?></td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="../uploads/<?= htmlspecialchars($review['gambar']); ?>" alt="<?= htmlspecialchars($review['nama_produk']); ?>" class="product-img me-3">
+                                                    <span><?= htmlspecialchars($review['nama_produk']); ?></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                // --- PERBAIKAN LOGIKA ---
+                                                // Hitung rata-rata rating untuk ulasan ini saja.
+                                                $average_rating = ($review['rating_produk'] + $review['rating_pelayanan'] + $review['rating_pengiriman']) / 3;
+                                                ?>
+                                                <span class="fw-bold"><?= number_format($average_rating, 1); ?></span>
+                                                <i class="bi bi-star-fill rating-star"></i>
+                                            </td>
+                                            <td><?= htmlspecialchars($review['komentar']); ?></td>
+                                            <td>
+                                                <?php if (empty($review['komentar_admin'])): ?>
+                                                    <span class="text-muted fst-italic">Belum ada balasan</span>
+                                                <?php else: ?>
+                                                    <?= htmlspecialchars($review['komentar_admin']); ?>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td><?= date('d M Y', strtotime($review['tanggal_review'])); ?></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($reviews as $index => $review): ?>
-                                            <tr>
-                                                <td><?= $index + 1; ?></td>
-                                                <td>
-                                                    <div class="product-container">
-                                                        <img src="../uploads/<?= htmlspecialchars($review['gambar']); ?>" 
-                                                             alt="<?= htmlspecialchars($review['nama_produk']); ?>" 
-                                                             class="product-img">
-                                                        <div class="product-name">
-                                                            <?= htmlspecialchars($review['nama_produk']); ?>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td><?= htmlspecialchars($review['nama']); ?></td>
-                                                <td><?= htmlspecialchars($overallRating); ?></td>
-                                                <td><?= htmlspecialchars($review['komentar']); ?></td>
-                                                <td>
-                                                    <?php if (empty($review['komentar_admin'])): ?>
-                                                        Belum ada balasan
-                                                    <?php else: ?>
-                                                        <?= htmlspecialchars($review['komentar_admin']); ?>
-                                                    <?php endif; ?>
-                                                </td>
-                                                <td><?= date('d/m/Y H:i', strtotime($review['tanggal_review'])); ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </section>
     </main>
     
-    <!-- Vendor JS Files -->
-    <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/vendor/chart.js/chart.min.js"></script>
-    <script src="../assets/vendor/echarts/echarts.min.js"></script>
-    <script src="../assets/vendor/quill/quill.min.js"></script>
-    <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="../assets/vendor/php-email-form/validate.js"></script>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Template Main JS File -->
-    <script src="../assets/js/main.js"></script>
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>
