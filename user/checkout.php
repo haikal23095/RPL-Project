@@ -2,26 +2,19 @@
 session_start();
 include('../db.php');
 
-// --- PERBAIKAN: Tambahkan blok ini untuk menangkap item dari keranjang ---
-// Blok ini akan memproses POST request dari halaman keranjang, menyimpan item ke session,
-// lalu me-redirect halaman ke dirinya sendiri (via GET) untuk diproses lebih lanjut.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
     if (!empty($_POST['selected_items'])) {
         $_SESSION['checkout_cart_ids'] = $_POST['selected_items'];
-        // Redirect untuk memulai proses checkout dengan session yang sudah terisi
         header("Location: checkout.php");
         exit();
     } else {
-        // Jika tidak ada item yang dipilih, kembalikan ke keranjang dengan pesan error
         header("Location: add_to_cart.php?error=no_items_selected");
         exit();
     }
 }
 
 
-// Logika reset promo hanya saat halaman diakses via GET (bukan dari redirect internal)
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['ulang'])) {
-    // Cek jika kita datang dari redirect setelah memilih item, jangan reset session
     $is_redirected_from_cart = isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'add_to_cart.php') !== false;
 
     if (!$is_redirected_from_cart) {
@@ -47,7 +40,6 @@ if (!$row_user) {
 
 $userId = $row_user['id_user'];
 
-// --- LOGIKA AJAX PROMO (Tidak berubah, sudah benar) ---
 if (isset($_POST['apply_promo'])) {
     header('Content-Type: application/json');
     $promoCode = mysqli_real_escape_string($kon, $_POST['promo_code']);
@@ -116,7 +108,6 @@ if (isset($_POST['apply_promo'])) {
 }
 
 
-// --- Inisialisasi variabel dan pengambilan item (Tidak Diubah) ---
 $checkoutItems = [];
 $error = null;
 $itemIds = [];
@@ -177,7 +168,6 @@ $biaya_kirim = ceil($subtotal * 0.10);
 $grandTotal = $subtotal + $biaya_kirim;
 
 
-// --- LOGIKA CONFIRM ORDER (Tidak Diubah, sekarang akan bekerja dengan benar) ---
 if (isset($_POST['confirm_order'])) {
     if (empty($checkoutItems)) {
         $error = "Sesi checkout berakhir. Silakan ulangi.";
