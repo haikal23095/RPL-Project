@@ -1,0 +1,336 @@
+
+        /* Import Fonts (sesuaikan dengan font yang Anda inginkan) */
+
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+
+        /* Reset dasar */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Andika', sans-serif; /* Font default */
+            background-color: #f8f8f8; /* Warna latar belakang terang */
+            display: flex;
+            width: auto;
+            flex-direction: column;
+            height: auto; /* Memastikan halaman setidaknya setinggi viewport */
+            position: relative; /* Untuk gradien di bawah */
+        }
+
+        /* Gradien di bagian bawah halaman */
+        body::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 320px; /* Sesuaikan tinggi gradien, ditingkatkan */
+            background: linear-gradient(to top, #FF8C12 0%, rgba(255, 140, 18, 0.7) 40%, rgba(255, 140, 18, 0) 80%);
+            z-index: -1; /* Di bawah konten */
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+            max-width: 1200px; /* Batasi lebar konten utama */
+            margin: 0 auto; /* Pusatkan konten */
+            position: relative;
+            z-index: 1; /* Pastikan konten di atas gradien */
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px; /* Padding header */
+            width: 100%;
+        }
+
+        header .logo {
+            width: 60px;
+            height: auto;
+            margin-left: 50px;
+            margin-top: 6px;
+        }
+
+        .register-btn {
+            background-color: #FF8C12; /* Warna orange */
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .register-btn:hover {
+            background-color: #e07b00; /* Warna orange lebih gelap saat hover */
+        }
+
+        .hero-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+            text-align: center;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 70%; /* Sesuaikan lebar carousel */
+            max-width: 800px; /* Maksimal lebar carousel */
+            margin: 40px auto 30px auto;
+            overflow: hidden; /* Penting untuk menyembunyikan item di luar tampilan */
+            background-color: transparent; /* Latar belakang transparan */
+            border-radius: 15px; /* Tetap pertahankan border-radius jika diinginkan */
+            padding: 30px 60px; /* Padding untuk jarak dari panah */
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Untuk menempatkan carousel-wrapper di tengah container */
+        }
+
+        /* Efek fade pada sisi kiri carousel */
+        .carousel-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 15%; /* Lebar area fade */
+            height: 100%;
+            background: linear-gradient(to right, #f8f8f8 0%, rgba(248, 248, 248, 0) 100%); /* Gradien dari warna body ke transparan */
+            z-index: 5; /* Di atas item carousel, di bawah panah */
+            pointer-events: none; /* Memungkinkan klik melewati overlay */
+        }
+
+        /* Efek fade pada sisi kanan carousel */
+        .carousel-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 15%; /* Lebar area fade */
+            height: 100%;
+            background: linear-gradient(to left, #f8f8f8 0%, rgba(248, 248, 248, 0) 100%); /* Gradien dari warna body ke transparan */
+            z-index: 5; /* Di atas item carousel, di bawah panah */
+            pointer-events: none; /* Memungkinkan klik melewati overlay */
+        }
+
+
+        .carousel-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out; /* Transisi untuk pergerakan halus */
+            justify-content: center; /* Pusat item di dalam wrapper */
+            align-items: center; /* Pusatkan item secara vertikal */
+            padding: 0 10%; /* Tambahkan padding di sisi untuk gambar kecil terlihat */
+            box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+            white-space: nowrap; /* Mencegah item membungkus ke baris baru */
+        }
+
+        .carousel-item {
+            flex-shrink: 0; /* Mencegah item menyusut */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 15px; /* Jarak antar item */
+            width: 20%; /* Default width for inactive items */
+            
+            /* DIUBAH: Tetapkan tinggi item secara eksplisit */
+            height: 250px; /* Tinggi yang sama dengan gambar aktif */
+        }
+
+        .carousel-item.active {
+            width: 60%; /* Item aktif lebih besar */
+            /* DIUBAH: Hapus height: auto; agar tidak menimpa tinggi tetap */
+        }
+
+        .carousel-item:not(.active) {
+            opacity: 0.5; /* Kurangi opacity untuk item kecil */
+            filter: grayscale(100%); /* Buat item kecil grayscale */
+        }
+
+        .carousel-item img {
+            max-width: 100%;
+            /* DIUBAH: Gunakan tinggi penuh dari parent item untuk gambar aktif */
+            height: 100%; /* Gambar mengisi tinggi container itemnya */
+            object-fit: contain; /* Memastikan gambar tidak terpotong */
+            transition: all 0.5s ease-in-out; /* Transisi untuk ukuran dan efek */
+        }
+        
+        .carousel-item:not(.active) img {
+            height: 100px; /* Tinggi gambar kecil */
+            /* DIUBAH: Tambahkan margin-top/bottom untuk memusatkan gambar kecil di dalam item 250px */
+            margin: auto; /* Memusatkan gambar kecil secara vertikal di dalam item */
+        }
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10; /* Z-index lebih tinggi dari fade overlay */
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .carousel-arrow:hover {
+            background-color: #FF8C12;
+            color: white;
+            border-color: #FF8C12;
+        }
+
+        .left-arrow {
+            left: 10px;
+        }
+
+        .right-arrow {
+            right: 10px;
+        }
+
+        .tagline {
+            margin-bottom: 30px;
+        }
+
+        .tagline h2 {
+            font-family: 'Andika', sans-serif; /* Sesuaikan font slogan */
+            font-size: 40px;
+            font-weight: 400;
+            color: #333; /* Warna gelap */
+            line-height: 1.2;
+            margin: 5px 0;
+        }
+
+        .check-now-btn {
+            background-color: #FF8C12; /* Warna orange */
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .check-now-btn:hover {
+            background-color: #e07b00; /* Warna orange lebih gelap saat hover */
+        }
+
+        /* Responsifitas dasar (sesuaikan lebih lanjut sesuai kebutuhan) */
+        @media (max-width: 992px) {
+            .carousel-container {
+                width: 85%;
+                padding: 20px 40px;
+            }
+            .carousel-item img {
+                height: 180px;
+            }
+            .tagline h2 {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+            .logo-text {
+                font-size: 32px;
+            }
+            .register-btn {
+                padding: 8px 20px;
+                font-size: 14px;
+            }
+            .carousel-container {
+                width: 95%;
+                padding: 15px 30px;
+            }
+            .carousel-item {
+                /* min-width: 100%; */
+                height: 200px; /* Menyesuaikan tinggi item pada responsif */
+            }
+            .carousel-item img {
+                height: 100%; /* Mengisi tinggi item */
+            }
+            .carousel-item:not(.active) img {
+                height: 80px; /* Tinggi gambar kecil responsif */
+            }
+            .carousel-arrow {
+                width: 35px;
+                height: 35px;
+                font-size: 20px;
+            }
+            .tagline h2 {
+                font-size: 26px;
+            }
+            .check-now-btn {
+                padding: 12px 30px;
+                font-size: 18px;
+            }
+            .carousel-item.active img {
+                height: 200px; /* Tinggi gambar tengah responsif */
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo-text {
+                font-size: 28px;
+            }
+            .register-btn {
+                padding: 6px 15px;
+                font-size: 12px;
+            }
+            .carousel-container {
+                padding: 10px 20px;
+            }
+            .carousel-wrapper {
+                gap: 10px;
+                padding: 0 5%;
+            }
+            .carousel-item {
+                margin: 0 5px;
+                height: 150px; /* Menyesuaikan tinggi item pada responsif sangat kecil */
+            }
+            .carousel-item img {
+                height: 100%;
+            }
+            .carousel-arrow {
+                display: none;
+            }
+            .tagline h2 {
+                font-size: 20px;
+            }
+            .check-now-btn {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+            body::after {
+                height: 150px;
+            }
+            .carousel-item.active img {
+                height: 150px; /* Tinggi gambar tengah di layar sangat kecil */
+            }
+            .carousel-item:not(.active) img {
+                height: 60px; /* Tinggi gambar kecil di layar sangat kecil */
+            }
+        }
