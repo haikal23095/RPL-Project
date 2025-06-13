@@ -3,7 +3,7 @@ session_start();
 include '../db.php';
 $page = "chat";
 
-// Pastikan user telah login dan session user_id tersedia
+// Pastikan user telah login
 if (!isset($_SESSION['user'])) {
     die("Harap login terlebih dahulu.");
 }
@@ -13,136 +13,194 @@ $kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$user'");
 $row_user = mysqli_fetch_array($kue_user);
 
 $user_id = $row_user['id_user'];
+$user_photo = $row_user['foto_profil'] ?? 'default.png';
 
-// Ambil nama admin untuk ditampilkan di chat
-$admin_query = "SELECT nama FROM user WHERE level='admin' LIMIT 1";
+// Ambil data admin
+$admin_query = "SELECT nama, foto FROM user WHERE level='cs' LIMIT 1";
 $admin_result = mysqli_query($kon, $admin_query);
 $admin_data = mysqli_fetch_assoc($admin_result);
 $admin_name = $admin_data['nama'] ?? 'Admin';
+$admin_photo = $admin_data['foto'] ?? 'default.png';
 
-// Jika form dikirim
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $message = mysqli_real_escape_string($kon, $_POST['message']);
+// Logika Post-Redirect-Get untuk mengirim pesan
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty(trim($_POST['message']))) {
+    $message = mysqli_real_escape_string($kon, trim($_POST['message']));
+    
     $query = "INSERT INTO messages (sender, user_id, message) VALUES ('user', '$user_id', '$message')";
-    if (!mysqli_query($kon, $query)) {
-        echo "Error: " . mysqli_error($kon);
+    
+    if (mysqli_query($kon, $query)) {
+        header("Location: chat.php");
+        exit();
+    } else {
+        $error_message = "Error: " . mysqli_error($kon);
     }
 }
 
-// Ambil pesan antara user dan admin
-$query = "SELECT * FROM messages WHERE user_id='$user_id' ORDER BY timestamp";
+// Ambil riwayat pesan
+$query = "SELECT * FROM messages WHERE user_id='$user_id' ORDER BY timestamp ASC";
 $result = mysqli_query($kon, $query);
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>CUSTOMER SERVICE</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+    <title>Customer Service</title>
+    
+    <?php include 'aset.php'; ?>
 
-    <!-- Favicons -->
-    <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
-    <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
-    <!-- Vendor CSS Files -->
-    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="../assets/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="../assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-    <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="../assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-    <!-- Template Main CSS File -->
-    <link href="../assets/css/style.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f5f5f5;
+        .chat-card {
+            display: flex;
+            flex-direction: column;
+            height: 75vh;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            background-color: #fff;
         }
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom : 20px;
-            min-height: 450px; /* Ukuran kartu seragam */
+        .chat-header {
+            border-bottom: 1px solid #e9ecef;
+            padding: 1rem 1.5rem;
         }
-        .card-img-top {
-            height: 250px; /* Ukuran gambar seragam */
-            object-fit: cover; /* Memastikan gambar tidak terdistorsi */
-            border-radius: 15px 15px 0 0;
+        .chat-body {
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background-color: #f8f9fa;
         }
-        .card-body {
-            min-height: 150px; /* Menyesuaikan tinggi deskripsi produk agar seragam */
+        .chat-footer {
+            border-top: 1px solid #e9ecef;
+            padding: 1rem 1.5rem;
         }
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
+        .message-row {
+            display: flex;
+            margin-bottom: 1.25rem;
         }
-        .btn-wishlist {
-            margin-top: 10px;
+
+        /* --- PERBAIKAN DI SINI --- */
+        .message-bubble {
+            display: inline-block; 
+            padding: 0.7rem 1.1rem;
+            border-radius: 1.25rem;
+            max-width: 75%;
+            line-height: 1.4;
+            word-wrap: break-word;
+            min-width: 80px;      
+            text-align: left;     
+        }
+
+        .message-row.sent {
+            justify-content: flex-end;
+        }
+        .message-row.sent .message-bubble {
+            background-color: #0d6efd;
+            color: white;
+            border-top-right-radius: 0.5rem;
+        }
+        .message-row.received {
+            justify-content: flex-start;
+        }
+        .message-row.received .message-bubble {
+            background-color: #e9ecef;
+            color: #212529;
+            border-top-left-radius: 0.5rem;
+        }
+        .message-time {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 4px;
+            padding: 0 0.5rem;
+        }
+        .message-row.sent .message-time {
+            text-align: right;
+        }
+        .profile-pic {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .chat-footer .form-control {
+            border-radius: 1.5rem;
+            border-color: #ced4da;
+        }
+        .chat-footer .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+        }
+        .chat-footer .btn-send {
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
         }
     </style>
-    <?php include 'aset.php'; ?>
 </head>
 
 <body>
-  <!-- ======= Header ======= -->
-  <?php require "atas.php"; ?>
-  <!-- End Header -->
+    <?php require "atas.php"; ?>
+    <?php require "menu.php"; ?>
 
-  <!-- ======= Sidebar ======= -->
-  <?php require "menu.php"; ?>
-  <!-- End Sidebar-->
-  <main id="main" class="main">
-    <div class="pagetitle">
-            <h1><i class="bi bi-headset"></i>&nbsp;PELAYANAN PELANGGAN</h1>
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1><i class="bi bi-headset"></i> Pelayanan Pelanggan</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
-                    <li class="breadcrumb-item active">PELAYANAN PELANGGAN</li>
+                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                    <li class="breadcrumb-item active">Chat</li>
                 </ol>
             </nav>
         </div>
-    <div class="container mt-4">
-        <div class="border rounded p-3 mb-3" style="height: 400px; overflow-y: auto;">
-            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                <div class="d-flex <?php echo $row['sender'] == 'user' ? 'justify-content-end' : 'justify-content-start'; ?> mb-2">
-                    <div class="p-2 <?php echo $row['sender'] == 'user' ? 'bg-warning text-white' : 'bg-light'; ?> rounded" style="max-width: 70%;">
-                        <?php echo htmlspecialchars($row['message']); ?>
+        
+        <section class="section">
+            <div class="chat-card">
+                <div class="chat-header d-flex align-items-center">
+                    <img src="../uploads/<?= htmlspecialchars($admin_photo); ?>" alt="Admin" class="profile-pic me-3">
+                    <div>
+                        <h6 class="fw-bold mb-0"><?= htmlspecialchars($admin_name); ?></h6>
+                        <small class="text-success"><i class="bi bi-circle-fill" style="font-size: 0.6rem;"></i> Online</small>
                     </div>
                 </div>
-            <?php } ?>
-        </div>
-        <form method="POST">
-            <div class="input-group">
-                <input type="text" name="message" class="form-control" placeholder="Ketik pesan..." required>
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">Kirim</button>
+
+                <div class="chat-body" id="chat-box">
+                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                        <div class="message-row <?php echo $row['sender'] == 'user' ? 'sent' : 'received'; ?>">
+                            <div class="d-flex flex-column <?php echo $row['sender'] == 'user' ? 'align-items-end' : 'align-items-start'; ?>">
+                                <div class="message-bubble">
+                                    <?= nl2br(htmlspecialchars($row['message'])); ?>
+                                </div>
+                                <div class="message-time">
+                                    <?= date('H:i', strtotime($row['timestamp'])); ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                </div>
+
+                <div class="chat-footer">
+                    <form method="POST" action="chat.php" class="d-flex align-items-center">
+                        <input type="text" name="message" class="form-control" placeholder="Ketik pesan Anda..." required autocomplete="off">
+                        <button class="btn btn-primary btn-send ms-2 flex-shrink-0" type="submit">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
-        </form>
-    </div>
-</main>
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+        </section>
+    </main>
 
-<!-- Vendor JS Files -->
-<script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
-<script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="../assets/vendor/chart.js/chart.umd.js"></script>
-<script src="../assets/vendor/echarts/echarts.min.js"></script>
-<script src="../assets/vendor/quill/quill.min.js"></script>
-<script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-<script src="../assets/vendor/php-email-form/validate.js"></script>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-<!-- Template Main JS File -->
-<script src="../assets/js/main.js"></script>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatBox = document.getElementById('chat-box');
+            // Scroll ke pesan paling bawah saat halaman dimuat
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    </script>
 </body>
 </html>

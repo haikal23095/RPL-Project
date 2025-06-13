@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 13, 2025 at 10:08 AM
+-- Generation Time: Jun 13, 2025 at 02:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -111,14 +111,6 @@ CREATE TABLE `keranjang` (
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `keranjang`
---
-
-INSERT INTO `keranjang` (`id_keranjang`, `user_id`, `id_produk`, `jumlah`, `created_at`, `updated_at`) VALUES
-(79, 2, 2, 3, '2025-06-13 14:57:00', '2025-06-13 15:05:08'),
-(80, 2, 9, 3, '2025-06-13 14:57:03', '2025-06-13 15:05:05');
-
 -- --------------------------------------------------------
 
 --
@@ -219,7 +211,20 @@ INSERT INTO `messages` (`id_message`, `user_id`, `sender`, `message`, `timestamp
 (18, 2, 'user', 'Halo', '2024-12-15 08:13:16'),
 (19, 2, 'admin', 'Iya ada apa ya? apakah ada yang bisa kami bantu?', '2024-12-15 08:30:04'),
 (20, 7, 'user', 'tolong bantu saya', '2024-12-22 14:40:35'),
-(21, 7, 'admin', 'iya ada apa?', '2024-12-22 14:40:57');
+(21, 7, 'admin', 'iya ada apa?', '2024-12-22 14:40:57'),
+(22, 2, 'user', 'tes', '2025-06-13 11:38:14'),
+(23, 2, 'user', 'tes', '2025-06-13 11:38:17'),
+(24, 2, 'user', 'tes', '2025-06-13 11:42:56'),
+(25, 2, 'user', 'tes', '2025-06-13 11:43:01'),
+(26, 2, 'user', 'haloo', '2025-06-13 11:43:09'),
+(27, 2, 'user', 'test', '2025-06-13 11:43:15'),
+(28, 2, 'user', 'tes', '2025-06-13 11:46:02'),
+(29, 2, 'user', 'assalamualaikum masbro', '2025-06-13 11:46:10'),
+(30, 2, 'user', 'lah', '2025-06-13 11:46:18'),
+(31, 2, 'admin', 'kenapa yaa??', '2025-06-13 12:05:17'),
+(32, 2, 'admin', 'ada yang bisa dibantu?', '2025-06-13 12:05:24'),
+(33, 5, 'admin', 'hai juga', '2025-06-13 12:05:38'),
+(34, 7, 'admin', 'bantu apa kak?', '2025-06-13 12:05:47');
 
 -- --------------------------------------------------------
 
@@ -244,8 +249,6 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id`, `id_user`, `id_produk`, `type`, `title`, `message`, `image`, `created_at`, `is_read`) VALUES
-(323, 2, NULL, 'user', 'Promo Tersedia', 'Promo PC DENGAN BONUS MONITOR!!! sedang berlangsung! Dapatkan bonus 4. Beli PC dapat monitor gratis? kapan lagi? AYO SEGERA BELI SEKARANG!!!!', NULL, '2024-12-22 12:23:36', 1),
-(324, 2, NULL, 'user', 'Promo Tersedia', 'Promo Diskon Natal sedang berlangsung! Diskon hingga 20%. Mendekati Natal Ada Diskon', NULL, '2024-12-22 12:23:36', 1),
 (325, NULL, NULL, 'user', 'Promo Tersedia', 'Promo PC DENGAN BONUS MONITOR!!! sedang berlangsung! Dapatkan bonus 4. Beli PC dapat monitor gratis? kapan lagi? AYO SEGERA BELI SEKARANG!!!!', NULL, '2024-12-22 14:27:46', 0),
 (326, NULL, NULL, 'user', 'Promo Tersedia', 'Promo Diskon Natal sedang berlangsung! Diskon hingga 20%. Mendekati Natal Ada Diskon', NULL, '2024-12-22 14:27:46', 0),
 (327, NULL, NULL, 'user', 'Promo Tersedia', 'Promo PC DENGAN BONUS MONITOR!!! sedang berlangsung! Dapatkan bonus 4. Beli PC dapat monitor gratis? kapan lagi? AYO SEGERA BELI SEKARANG!!!!', NULL, '2024-12-22 14:27:49', 0),
@@ -301,33 +304,68 @@ INSERT INTO `notifications` (`id`, `id_user`, `id_produk`, `type`, `title`, `mes
 (408, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari coba123 dengan total Rp 1.720.000', NULL, '2025-05-27 23:20:49', 0),
 (409, 7, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 1.720.000', NULL, '2025-05-27 23:20:49', 0),
 (410, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:22:49', 0),
-(411, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:22:50', 1),
 (412, NULL, 8, 'admin', 'Review Baru', 'Review baru dari Tria Yunita Krismiyanto untuk produk PEES \r\n            dengan rating /5', NULL, '2025-06-09 06:22:50', 0),
 (413, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:23:41', 0),
-(414, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:23:41', 1),
 (415, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:23:53', 0),
-(416, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:23:53', 1),
 (417, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:23:57', 0),
-(418, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:23:57', 1),
 (419, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:23:57', 0),
-(420, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:23:57', 1),
 (421, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:23:58', 0),
-(422, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:24:00', 1),
 (423, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:24:01', 0),
-(424, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:24:01', 1),
 (425, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:24:03', 0),
-(426, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:24:03', 1),
-(427, 2, NULL, 'user', 'Pesanan Selesai', 'Pesanan #17 telah selesai. Terima kasih telah berbelanja!', NULL, '2025-06-09 07:06:45', 1),
 (428, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-09 07:06:45', 0),
-(429, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 6.020.000', NULL, '2025-06-09 07:06:45', 1),
 (430, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-09 07:06:53', 0),
-(431, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 6.020.000', NULL, '2025-06-09 07:06:53', 1),
 (432, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-09 07:06:53', 0),
-(433, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 6.020.000', NULL, '2025-06-09 07:06:53', 1),
 (434, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-09 07:06:57', 0),
-(435, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 6.020.000', NULL, '2025-06-09 07:06:58', 1),
 (436, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-09 07:06:58', 0),
-(437, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 6.020.000', NULL, '2025-06-09 07:06:58', 0);
+(438, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-13 09:33:29', 0),
+(440, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.760.000', NULL, '2025-06-13 09:33:30', 0),
+(442, NULL, 7, 'admin', 'Review Baru', 'Review baru dari Tria Yunita Krismiyanto untuk produk Meja Belajar Mini Kayu \r\n            dengan rating 5/5', NULL, '2025-06-13 09:33:30', 0),
+(443, NULL, 8, 'admin', 'Review Baru', 'Review baru dari Tria Yunita Krismiyanto untuk produk Meja Belajar Retractable \r\n            dengan rating 2/5', NULL, '2025-06-13 09:33:30', 0),
+(445, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-13 09:58:07', 0),
+(447, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.760.000', NULL, '2025-06-13 09:58:08', 0),
+(449, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 935.000', NULL, '2025-06-13 09:58:08', 0),
+(451, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-13 10:16:12', 0),
+(453, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.760.000', NULL, '2025-06-13 10:16:12', 0),
+(455, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 935.000', NULL, '2025-06-13 10:16:13', 0),
+(457, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 540.000', NULL, '2025-06-13 10:16:13', 0),
+(459, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.810.000', NULL, '2025-06-13 10:16:13', 0),
+(461, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-13 10:16:21', 0),
+(463, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.760.000', NULL, '2025-06-13 10:16:21', 0),
+(465, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 935.000', NULL, '2025-06-13 10:16:21', 0),
+(467, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 540.000', NULL, '2025-06-13 10:16:21', 0),
+(469, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.810.000', NULL, '2025-06-13 10:16:22', 0),
+(471, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-13 10:16:22', 0),
+(473, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.760.000', NULL, '2025-06-13 10:16:22', 0),
+(475, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 935.000', NULL, '2025-06-13 10:16:22', 0),
+(477, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 540.000', NULL, '2025-06-13 10:16:22', 0),
+(479, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.810.000', NULL, '2025-06-13 10:16:22', 0),
+(481, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-13 10:22:57', 0),
+(483, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.760.000', NULL, '2025-06-13 10:22:57', 0),
+(485, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 935.000', NULL, '2025-06-13 10:22:58', 0),
+(487, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 540.000', NULL, '2025-06-13 10:22:58', 0),
+(489, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.810.000', NULL, '2025-06-13 10:22:58', 0),
+(492, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-13 10:23:14', 0),
+(494, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.760.000', NULL, '2025-06-13 10:23:14', 0),
+(496, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 935.000', NULL, '2025-06-13 10:23:14', 0),
+(498, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 540.000', NULL, '2025-06-13 10:23:14', 0),
+(500, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.810.000', NULL, '2025-06-13 10:23:14', 0),
+(503, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-13 10:23:17', 0),
+(505, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.760.000', NULL, '2025-06-13 10:23:19', 0),
+(507, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 935.000', NULL, '2025-06-13 10:23:19', 0),
+(509, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 540.000', NULL, '2025-06-13 10:23:19', 0),
+(511, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.810.000', NULL, '2025-06-13 10:23:19', 0),
+(514, 2, NULL, 'user', 'Promo Tersedia', 'Promo DISKON 90% sedang berlangsung! Diskon hingga 90%. diskon 90% untuk membeli apapun yang anda inginkan', NULL, '2025-06-13 10:23:20', 0),
+(515, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-13 10:23:20', 0),
+(516, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 6.020.000', NULL, '2025-06-13 10:23:20', 0),
+(517, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.760.000', NULL, '2025-06-13 10:23:20', 0),
+(518, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 1.760.000', NULL, '2025-06-13 10:23:20', 0),
+(519, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 935.000', NULL, '2025-06-13 10:23:20', 0),
+(520, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 935.000', NULL, '2025-06-13 10:23:20', 0),
+(521, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 540.000', NULL, '2025-06-13 10:23:20', 0),
+(522, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 540.000', NULL, '2025-06-13 10:23:20', 0),
+(523, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 1.810.000', NULL, '2025-06-13 10:23:20', 0),
+(524, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 1.810.000', NULL, '2025-06-13 10:23:20', 0),
+(525, 2, NULL, 'user', 'Pesanan Dikirim', 'Pesanan #23 sedang dalam pengiriman. Mohon tunggu sampai pesanan tiba.', NULL, '2025-06-13 10:23:20', 0);
 
 -- --------------------------------------------------------
 
@@ -365,8 +403,12 @@ CREATE TABLE `pembayaran` (
 --
 
 INSERT INTO `pembayaran` (`id_pembayaran`, `id_pesanan`, `metode_pembayaran`, `status_pembayaran`, `tanggal_pembayaran`) VALUES
-(7, 17, 'Transfer Bank', 'Dibayar', '2025-06-08 23:35:18'),
-(8, 18, 'Transfer Bank', 'Dibayar', '2025-06-09 13:56:44');
+(9, 19, 'Transfer Bank', 'Dibayar', '2025-06-13 16:32:59'),
+(10, 20, 'Transfer Bank', 'Dibayar', '2025-06-13 16:54:32'),
+(11, 21, 'Transfer Bank', 'Dibayar', '2025-06-13 17:09:45'),
+(12, 22, 'Transfer Bank', 'Dibayar', '2025-06-13 17:11:14'),
+(13, 23, 'Transfer Bank', 'Dibayar', '2025-06-13 17:17:10'),
+(14, 24, 'Transfer Bank', 'Dibayar', '2025-06-13 17:35:57');
 
 -- --------------------------------------------------------
 
@@ -395,8 +437,12 @@ CREATE TABLE `pengiriman_pesanan` (
 --
 
 INSERT INTO `pengiriman_pesanan` (`id_pengiriman`, `id_pesanan`, `id_user`, `nomor_resi`, `nama_kurir`, `alamat_pengiriman`, `tanggal_kirim`, `perkiraan_tiba`, `tanggal_tiba`, `status_pengiriman`, `biaya_kirim`, `dibuat_pada`, `diperbarui_pada`) VALUES
-(7, 17, 2, 'RSI20250608183518287', 'SiCepat', 'Jalan wkwkwkw no 4', '2025-06-08 18:35:18', '2025-06-11 18:35:18', NULL, 'dalam_pengiriman', 20000.00, '2025-06-08 16:35:18', '2025-06-08 16:35:18'),
-(8, 18, 2, 'RSI20250609085644920', 'J&T', 'Koperindag Blok C No 3', '2025-06-09 08:56:44', '2025-06-12 08:56:44', NULL, 'dalam_pengiriman', 20000.00, '2025-06-09 06:56:44', '2025-06-09 06:56:44');
+(9, 19, 2, 'RSI20250613113259714', 'J&T', 'Bangkalan Halim Perdana Kusuma 2\r\n', '2025-06-13 16:32:59', '2025-06-16 16:32:59', NULL, 'dalam_pengiriman', 160000.00, '2025-06-13 09:32:59', '2025-06-13 09:32:59'),
+(10, 20, 2, 'RSI20250613115432815', 'Pos Indonesia', 'Bangkalan Halim Perdana Kusuma 2\r\n', '2025-06-13 16:54:32', '2025-06-16 16:54:32', NULL, 'dalam_pengiriman', 85000.00, '2025-06-13 09:54:32', '2025-06-13 09:54:32'),
+(11, 21, 2, 'RSI20250613120945721', 'Pos Indonesia', 'Bangkalan Halim Perdana Kusuma 2\r\n', '2025-06-13 17:09:45', '2025-06-16 17:09:45', NULL, 'dalam_pengiriman', 90000.00, '2025-06-13 10:09:45', '2025-06-13 10:09:45'),
+(12, 22, 2, 'RSI20250613121114157', 'J&T', 'Bangkalan Halim Perdana Kusuma 2\r\n', '2025-06-13 17:11:14', '2025-06-16 17:11:14', NULL, 'dalam_pengiriman', 210000.00, '2025-06-13 10:11:14', '2025-06-13 10:11:14'),
+(13, 23, 2, 'RSI20250613121710841', 'SiCepat', 'Bangkalan Halim Perdana Kusuma 2\r\n', '2025-06-13 17:17:10', '2025-06-16 17:17:10', NULL, 'dalam_pengiriman', 5000.00, '2025-06-13 10:17:10', '2025-06-13 10:17:10'),
+(14, 24, 2, 'RSI20250613123557574', 'J&T', 'Bangkalan Halim Perdana Kusuma 2\r\n', '2025-06-13 17:35:57', '2025-06-16 17:35:57', NULL, 'dalam_pengiriman', 20000.00, '2025-06-13 10:35:57', '2025-06-13 10:35:57');
 
 -- --------------------------------------------------------
 
@@ -410,6 +456,7 @@ CREATE TABLE `pesanan` (
   `tanggal_pesanan` date DEFAULT current_timestamp(),
   `status_pesanan` enum('Menunggu Pembayaran','Diproses','Dikirim','Selesai','Dibatalkan') DEFAULT 'Menunggu Pembayaran',
   `total_harga` decimal(10,2) NOT NULL,
+  `sudah_dinilai` int(11) DEFAULT NULL,
   `notifikasi_status` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -417,9 +464,13 @@ CREATE TABLE `pesanan` (
 -- Dumping data for table `pesanan`
 --
 
-INSERT INTO `pesanan` (`id_pesanan`, `id_user`, `tanggal_pesanan`, `status_pesanan`, `total_harga`, `notifikasi_status`) VALUES
-(17, 2, '2025-06-08', 'Selesai', 122000.00, 1),
-(18, 2, '2025-06-09', 'Diproses', 6020000.00, 0);
+INSERT INTO `pesanan` (`id_pesanan`, `id_user`, `tanggal_pesanan`, `status_pesanan`, `total_harga`, `sudah_dinilai`, `notifikasi_status`) VALUES
+(19, 2, '2025-06-13', 'Diproses', 1760000.00, NULL, 0),
+(20, 2, '2025-06-13', 'Diproses', 935000.00, NULL, 0),
+(21, 2, '2025-06-13', 'Diproses', 540000.00, NULL, 0),
+(22, 2, '2025-06-13', 'Diproses', 1810000.00, NULL, 0),
+(23, 2, '2025-06-13', 'Selesai', 30000.00, 1, 0),
+(24, 2, '2025-06-13', 'Diproses', 120000.00, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -440,9 +491,18 @@ CREATE TABLE `pesanan_detail` (
 --
 
 INSERT INTO `pesanan_detail` (`id_pesanan_detail`, `id_produk`, `jumlah`, `subtotal`, `id_pesanan`) VALUES
-(11, 7, 2, 2000, 17),
-(12, 8, 1, 100000, 17),
-(13, 2, 1, 6000000, 18);
+(14, 2, 2, 1200000, 19),
+(15, 9, 2, 400000, 19),
+(16, 9, 1, 200000, 20),
+(17, 12, 1, 50000, 20),
+(18, 2, 1, 600000, 20),
+(19, 2, 1, 600000, 21),
+(20, 3, 1, 300000, 21),
+(21, 2, 1, 600000, 22),
+(22, 3, 1, 300000, 22),
+(23, 8, 1, 1200000, 22),
+(24, 12, 1, 50000, 23),
+(25, 9, 1, 200000, 24);
 
 -- --------------------------------------------------------
 
@@ -467,15 +527,15 @@ CREATE TABLE `produk` (
 --
 
 INSERT INTO `produk` (`id_produk`, `nama_produk`, `deskripsi`, `harga`, `stok`, `id_kategori`, `created_at`, `updated_at`, `gambar`) VALUES
-(2, 'Kursi Sofa Pink Empuk', 'Sofa Mini Pink Empuk Lucu dan nyaman dengan cooling foam', 600000.00, 100, 8, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang A.png'),
-(3, 'Kursi Kantor Pink', 'Kursi kantor empuk pink dengan design ergonomis', 300000.00, 100, 8, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang B.png'),
+(2, 'Kursi Sofa Pink Empuk', 'Sofa Mini Pink Empuk Lucu dan nyaman dengan cooling foam', 600000.00, 95, 8, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang A.png'),
+(3, 'Kursi Kantor Pink', 'Kursi kantor empuk pink dengan design ergonomis', 300000.00, 98, 8, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang B.png'),
 (5, 'Kursi Kantor Hitam', 'Kursi Kantor Plastik Hitam Design Ergonomis', 300000.00, 100, 8, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang C.png'),
 (7, 'Meja Belajar Mini Kayu', 'meja belajar kayu berbentuk mini design minimalis', 700000.00, 200, 9, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang D.png'),
-(8, 'Meja Belajar Retractable', 'Meja Kerja Dengan Fitur Retractable', 1200000.00, 200, 9, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang E.png'),
-(9, 'Toples Kaca Imut', 'Toples kaca serbaguna dengan bentuk lucu', 200000.00, 300, 7, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd6eb2c152_barang F.png'),
+(8, 'Meja Belajar Retractable', 'Meja Kerja Dengan Fitur Retractable', 1200000.00, 199, 9, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang E.png'),
+(9, 'Toples Kaca Imut', 'Toples kaca serbaguna dengan bentuk lucu', 200000.00, 296, 7, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd6eb2c152_barang F.png'),
 (10, 'Kotak Pink', 'Kotak Pink serbaguna untuk menaruh alat tulis', 75000.00, 500, 10, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd75044aa3_barang G.png'),
 (11, 'Kursi Sofa Orange Empuk', 'Kursi Sofa Orange Empuk dengan teknologi cooling foam', 500000.00, 150, 8, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd790a19c0_barang H.png'),
-(12, 'Toples Kaca', 'Toples Kaca Serbaguna', 50000.00, 300, 7, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd8744531d_barang I.png'),
+(12, 'Toples Kaca', 'Toples Kaca Serbaguna', 50000.00, 298, 7, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd8744531d_barang I.png'),
 (13, 'Gantungan Serbaguna', 'Gantungan pakaian serbaguna yang bisa muat banyak pakaian', 20000.00, 1000, 11, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd89c59059_barang J.png');
 
 -- --------------------------------------------------------
@@ -499,13 +559,13 @@ CREATE TABLE `promo` (
 --
 
 INSERT INTO `promo` (`id`, `code`, `discount_type`, `discount_value`, `usage_limit`, `times_used`, `created_at`) VALUES
-(10, 'IVRKH', 'percentage', 50.00, 0, 20, '2024-12-17 06:17:10'),
+(10, 'IVRKH', 'percentage', 50.00, 996, 24, '2024-12-17 06:17:10'),
 (11, 'ESOUK', 'fixed', 15000.00, 0, 20, '2024-12-17 06:17:23'),
 (12, 'ACD5Y', 'fixed', 15000.00, 0, 20, '2024-12-17 06:28:02'),
-(13, '2HSLK', 'fixed', 300000.00, 105, 45, '2024-12-19 13:19:49'),
+(13, '2HSLK', 'fixed', 300000.00, 104, 46, '2024-12-19 13:19:49'),
 (14, '14J60', 'fixed', 200000.00, 0, 50, '2024-12-19 19:25:10'),
 (15, 'ITJW8', 'percentage', 50.00, 0, 50, '2024-12-22 12:22:41'),
-(16, 'DF918', 'fixed', 500000.00, 50, 0, '2024-12-22 14:45:50');
+(16, 'DF918', 'fixed', 500000.00, 49, 1, '2024-12-22 14:45:50');
 
 -- --------------------------------------------------------
 
@@ -533,8 +593,9 @@ CREATE TABLE `review_produk` (
 
 INSERT INTO `review_produk` (`id_review`, `id_user`, `id_produk`, `id_pesanan`, `rating_produk`, `rating_pelayanan`, `rating_pengiriman`, `komentar`, `komentar_admin`, `tanggal_review`, `notifikasi_status`) VALUES
 (1, 2, 8, 1, 1, 1, 1, 'wkwkwkwk', 'ada masalah apa ya kak? bisa chat sama customer service yaa kalau ada masalah', '2025-06-08 18:15:32', 1),
-(2, 2, 7, 17, 5, 5, 5, 'keren banget ini barangnya asli', 'terimakasihh, silahkan berbelanja lagi', '2025-06-09 14:03:35', 0),
-(3, 2, 8, 17, 2, 5, 4, 'dapet barang cacat pabrik payahhh', 'Maaf ya nanti bisa kita ganti kak kalau mau', '2025-06-09 14:03:35', 0);
+(2, 2, 7, 17, 5, 5, 5, 'keren banget ini barangnya asli', 'terimakasihh, silahkan berbelanja lagi', '2025-06-09 14:03:35', 1),
+(3, 2, 8, 17, 2, 5, 4, 'dapet barang cacat pabrik payahhh', 'Maaf ya nanti bisa kita ganti kak kalau mau', '2025-06-09 14:03:35', 1),
+(4, 2, 12, 23, 5, 5, 5, 'HEBAT', 'makasih yah', '2025-06-13 17:57:00', 0);
 
 -- --------------------------------------------------------
 
@@ -575,7 +636,7 @@ CREATE TABLE `user` (
   `password` varchar(255) NOT NULL,
   `no_tlp` varchar(50) DEFAULT NULL,
   `alamat` text DEFAULT NULL,
-  `level` enum('admin','user') NOT NULL,
+  `level` enum('admin','user','cs') NOT NULL,
   `foto` varchar(255) NOT NULL,
   `active` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -585,11 +646,12 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `nama`, `email`, `password`, `no_tlp`, `alamat`, `level`, `foto`, `active`) VALUES
-(1, 'Rafi Mumtaz Hajjid', 'rafimumtaz86@gmail.com', '123', '081513099954', 'Bekasi City', 'admin', '1734507173_messages-3.jpg', '2025-06-13 14:33:52'),
-(2, 'Tria Yunita Krismiyanto', 'triayunita07@gmail.com', '123', '0888883838383', 'Bangkalan Halim Perdana Kusuma 2\r\n', 'user', '1734507541_messages-2.jpg', '2025-06-13 14:52:09'),
+(1, 'Rafi Mumtaz Hajjid', 'rafimumtaz86@gmail.com', '123', '081513099954', 'Bekasi City', 'admin', '1734507173_messages-3.jpg', '2025-06-13 18:50:50'),
+(2, 'Tria Yunita Krismiyanto', 'triayunita07@gmail.com', '123', '0888883838383', 'Bangkalan Halim Perdana Kusuma 2\r\n', 'user', '1734507541_messages-2.jpg', '2025-06-13 18:55:30'),
 (5, 'Tria Krismiyanto Yunita', 'triayunita02@gmail.com', '123', '08587617989', 'Koperindag Blok C No 3', 'user', '', '2024-12-18 13:48:06'),
 (6, 'asep prayogi', 'asepyogi@gmail.com', '123', '123456', 'Medan', 'user', '', '2024-12-22 21:47:43'),
-(7, 'coba123', 'coba@gmail.com', '123', '123456098', 'coba233', 'user', '1734877511_1734507173_messages-3.jpg', '2024-12-22 22:04:01');
+(7, 'coba123', 'coba@gmail.com', '123', '123456098', 'coba233', 'user', '1734877511_1734507173_messages-3.jpg', '2024-12-22 22:04:01'),
+(8, 'Customer Service', 'cs@gmail.com', '123', '08587617989', 'Koperindag Blok C No 3', 'cs', '../uploads/profile-img.jpg', '2025-06-13 19:02:34');
 
 -- --------------------------------------------------------
 
@@ -810,7 +872,7 @@ ALTER TABLE `kategori`
 -- AUTO_INCREMENT for table `keranjang`
 --
 ALTER TABLE `keranjang`
-  MODIFY `id_keranjang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id_keranjang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT for table `komentar`
@@ -828,13 +890,13 @@ ALTER TABLE `komunitas`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id_message` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_message` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=438;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=526;
 
 --
 -- AUTO_INCREMENT for table `pembatalan_pesanan`
@@ -846,25 +908,25 @@ ALTER TABLE `pembatalan_pesanan`
 -- AUTO_INCREMENT for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `id_pembayaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_pembayaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `pengiriman_pesanan`
 --
 ALTER TABLE `pengiriman_pesanan`
-  MODIFY `id_pengiriman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_pengiriman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id_pesanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_pesanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `pesanan_detail`
 --
 ALTER TABLE `pesanan_detail`
-  MODIFY `id_pesanan_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_pesanan_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `produk`
@@ -882,7 +944,7 @@ ALTER TABLE `promo`
 -- AUTO_INCREMENT for table `review_produk`
 --
 ALTER TABLE `review_produk`
-  MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `topik`
@@ -894,7 +956,7 @@ ALTER TABLE `topik`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user_promo_codes`

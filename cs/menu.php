@@ -4,7 +4,7 @@
 
     <h5 class="text-center">MAIN MENU</h5>
       <li class="nav-item">
-        <a class="nav-link <?php if($page == "cs"){ echo "collapsed"; } ?>" href="index_admin.php">
+        <a class="nav-link <?php if($page == "cs"){ echo "collapsed"; } ?>" href="chat.php">
           <i class="bi bi-headset"></i>
           <span>CHAT CS</span>
         </a>

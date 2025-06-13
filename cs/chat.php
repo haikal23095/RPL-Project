@@ -1,137 +1,154 @@
-<?php 
+<?php
 session_start();
-include '../db.php';
+include '../db.php'; // Pastikan path ini benar
+$page = 'cs';
 
 if (!isset($_SESSION['cs'])) {
     header("Location: ../login.php");
     exit();
 }
-
-// Ambil user_id dari query string
-$user_id = $_GET['user_id'];
-
-// Ambil nama user berdasarkan user_id
-$user_query = "SELECT nama FROM user WHERE id_user='$user_id'";
-$user_result = mysqli_query($kon, $user_query);
-$user_data = mysqli_fetch_assoc($user_result);
-$user_name = $user_data['nama'] ?? 'Tidak Diketahui';
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $message = mysqli_real_escape_string($kon, $_POST['message']);
-    $query = "INSERT INTO messages (sender, user_id, message) VALUES ('admin', '$user_id', '$message')";
-    
-    if (!mysqli_query($kon, $query)) {
-        echo "Error: " . mysqli_error($kon);
-    }
-}
-
-$query = "SELECT * FROM messages WHERE user_id='$user_id' ORDER BY timestamp";
-$result = mysqli_query($kon, $query);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>CUSTOMER SERVICE</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
-
-    <!-- Favicons -->
+    <title>CUSTOMER SERVICE CHAT</title>
+    
     <link href="../assets/img/logo_CasaLuxe.png" rel="icon">
     <link href="../assets/img/logo_CasaLuxe.png" rel="apple-touch-icon">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
-    <!-- Vendor CSS Files -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Nunito|Poppins" rel="stylesheet">
     <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="../assets/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="../assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-    <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="../assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-    <!-- Template Main CSS File -->
+    
     <link href="../assets/css/style.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f5f5f5;
-        }
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom : 20px;
-            min-height: 450px; /* Ukuran kartu seragam */
-        }
-        .card-img-top {
-            height: 250px; /* Ukuran gambar seragam */
-            object-fit: cover; /* Memastikan gambar tidak terdistorsi */
-            border-radius: 15px 15px 0 0;
-        }
-        .card-body {
-            min-height: 150px; /* Menyesuaikan tinggi deskripsi produk agar seragam */
-        }
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-        }
-        .btn-wishlist {
-            margin-top: 10px;
-        }
+        .chat-container { display: flex; height: calc(100vh - 200px); }
+        .user-list { width: 30%; border-right: 1px solid #ddd; overflow-y: auto; }
+        .chat-area { width: 70%; display: flex; flex-direction: column; }
+        .chat-messages { flex-grow: 1; overflow-y: auto; padding: 20px; background-color: #f9f9f9; }
+        .message-input { padding: 15px; border-top: 1px solid #ddd; }
+        .user-item { cursor: pointer; transition: background-color 0.2s; }
+        .user-item.active, .user-item:hover { background-color: #e9ecef; }
+        .message { margin-bottom: 15px; display: flex; flex-direction: column; }
+        .message .bubble { padding: 10px 15px; border-radius: 20px; max-width: 75%; word-wrap: break-word; }
+        .message.sent .bubble { background-color: #0d6efd; color: white; align-self: flex-end; }
+        .message.received .bubble { background-color: #e9ecef; color: #333; align-self: flex-start; }
     </style>
-    <?php include 'aset.php'; ?>
 </head>
 
 <body>
-  <!-- ======= Header ======= -->
-  <?php require "atas.php"; ?>
-  <!-- End Header -->
-
-  <!-- ======= Sidebar ======= -->
-  <?php require "menu.php"; ?>
-  <!-- End Sidebar-->
-  <main id="main" class="main">
-    <div class="container mt-4">
-        <div class="mt-4">
-            <a href="index_admin.php" class="bi bi-caret-left"></i>Kembali</a>
-        </div>
-        <h2>Chat dengan <?php echo htmlspecialchars($user_name); ?> (User  ID: <?php echo htmlspecialchars($user_id); ?>)</h2>
-        <div class="border rounded p-3 mb-3" style="height: 400px; overflow-y: auto;">
-            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                <div class="d-flex <?php echo $row['sender'] == 'admin' ? 'justify-content-end' : 'justify-content-start'; ?> mb-2">
-                    <div class="p-2 <?php echo $row['sender'] == 'admin' ? 'bg-primary text-white' : 'bg-light'; ?> rounded" style="max-width: 70%;">
-                        <?php echo htmlspecialchars($row['message']); ?>
+    <?php require "atas.php"; ?>
+    <?php require "menu.php"; ?>
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Dashboard Chat</h1>
+        </div><section class="section">
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="chat-container">
+                        <div class="user-list list-group list-group-flush" id="user-list">
+                            <div class="p-3 text-center text-muted">Memuat percakapan...</div>
+                        </div>
+                        <div class="chat-area" id="chat-area" style="display: none;">
+                            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                <h5 class="m-0" id="chat-with-user">Pilih Percakapan</h5>
+                            </div>
+                            <div class="chat-messages" id="chat-messages"></div>
+                            <div class="message-input">
+                                <form id="chat-form">
+                                    <div class="input-group">
+                                        <input type="text" id="message-input-field" class="form-control" placeholder="Ketik pesan..." disabled>
+                                        <button class="btn btn-primary" type="submit" id="send-button" disabled>
+                                            <i class="bi bi-send"></i> Kirim
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="no-chat-selected text-center p-5" id="no-chat-selected">
+                            <h5 class="text-muted">Pilih pengguna untuk memulai percakapan</h5>
                     </div>
                 </div>
-            <?php } ?>
-        </div>
-        <form method="POST">
-            <div class="input-group">
-                <input type="text" name="message" class="form-control" placeholder="Ketik pesan...">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">Kirim</button>
-                </div>
             </div>
-        </form>
-    </div>
-  </main>
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+        </section>
+    </main>
 
-<!-- Vendor JS Files -->
-<script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
-<script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="../assets/vendor/chart.js/chart.umd.js"></script>
-<script src="../assets/vendor/echarts/echarts.min.js"></script>
-<script src="../assets/vendor/quill/quill.min.js"></script>
-<script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-<script src="../assets/vendor/php-email-form/validate.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
 
-<!-- Template Main JS File -->
-<script src="../assets/js/main.js"></script>
+    <script>
+    $(document).ready(function() {
+        let currentUserId = null;
+        let chatInterval = null;
+
+        function loadUsers() {
+            $.getJSON('api_get_users.php', function(data) {
+                const userList = $('#user-list');
+                userList.empty();
+                if (data.length === 0) {
+                    userList.html('<div class="p-3 text-center text-muted">Tidak ada percakapan.</div>');
+                    return;
+                }
+                data.forEach(user => {
+                    const userElement = `
+                        <a href="#" class="list-group-item list-group-item-action user-item" data-user-id="${user.id_user}" data-user-name="${user.nama}">
+                            <h6 class="mb-1">${user.nama}</h6>
+                            <small class="text-muted">User ID: ${user.id_user}</small>
+                        </a>`;
+                    userList.append(userElement);
+                });
+            });
+        }
+
+        function loadMessages() {
+            if (!currentUserId) return;
+            $.getJSON(`api_get_messages.php?user_id=${currentUserId}`, function(messages) {
+                const chatBox = $('#chat-messages');
+                chatBox.empty();
+                messages.forEach(msg => {
+                    const messageClass = msg.sender === 'admin' ? 'sent' : 'received';
+                    const messageElement = `<div class="message ${messageClass}"><div class="bubble">${msg.message}</div></div>`;
+                    chatBox.append(messageElement);
+                });
+                chatBox.scrollTop(chatBox[0].scrollHeight);
+            });
+        }
+        
+        $('#user-list').on('click', '.user-item', function(e) {
+            e.preventDefault();
+            
+            $('#no-chat-selected').hide();
+            $('#chat-area').show();
+            currentUserId = $(this).data('user-id');
+            const userName = $(this).data('user-name');
+            $('.user-item').removeClass('active');
+            $(this).addClass('active');
+            $('#chat-with-user').text(`Chat dengan ${userName}`);
+            $('#message-input-field, #send-button').prop('disabled', false);
+            
+            if (chatInterval) clearInterval(chatInterval);
+            loadMessages();
+            chatInterval = setInterval(loadMessages, 3000);
+        });
+
+        $('#chat-form').on('submit', function(e) {
+            e.preventDefault();
+            const message = $('#message-input-field').val().trim();
+            if (!message || !currentUserId) return;
+
+            $.post('api_send_message.php', { user_id: currentUserId, message: message }, function(response) {
+                if (response.status === 'success') {
+                    $('#message-input-field').val('');
+                    loadMessages();
+                }
+            }, 'json');
+        });
+        
+        loadUsers();
+    });
+    </script>
 </body>
 </html>

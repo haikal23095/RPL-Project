@@ -37,7 +37,7 @@ if (isset($_POST["login"])) {
                     exit;
                 case "cs":
                     $_SESSION["cs"] = $user_data["nama"];
-                    header("Location: cs/index_admin.php"); // Pastikan path ini benar
+                    header("Location: cs/chat.php"); 
                     exit;
                 case "user":
                     $_SESSION["user"] = $user_data["nama"];
