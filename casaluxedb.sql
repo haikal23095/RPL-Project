@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Waktu pembuatan: 08 Jun 2025 pada 18.39
--- Versi server: 10.4.32-MariaDB
--- Versi PHP: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Jun 13, 2025 at 10:08 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `gamify`
+-- Database: `casaluxedb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `feedback`
+-- Table structure for table `feedback`
 --
 
 CREATE TABLE `feedback` (
@@ -35,7 +35,7 @@ CREATE TABLE `feedback` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `feedback`
+-- Dumping data for table `feedback`
 --
 
 INSERT INTO `feedback` (`id`, `user_id`, `content`, `created_at`) VALUES
@@ -45,7 +45,7 @@ INSERT INTO `feedback` (`id`, `user_id`, `content`, `created_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `informasipromo`
+-- Table structure for table `informasipromo`
 --
 
 CREATE TABLE `informasipromo` (
@@ -64,17 +64,18 @@ CREATE TABLE `informasipromo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `informasipromo`
+-- Dumping data for table `informasipromo`
 --
 
 INSERT INTO `informasipromo` (`id`, `id_produk`, `title`, `description`, `photo_url`, `photo`, `promo_type`, `start_date`, `end_date`, `discount_percentage`, `bonus_item`, `created_at`) VALUES
 (44, 0, 'PC DENGAN BONUS MONITOR!!!', 'Beli PC dapat monitor gratis? kapan lagi? AYO SEGERA BELI SEKARANG!!!!', '../uploads/BG LOGIN 3.jpg', NULL, 'bonus', '2024-12-20', '2024-12-27', 0, 4, '2024-12-20 07:03:43'),
-(45, 0, 'Diskon Natal', 'Mendekati Natal Ada Diskon', '../uploads/profile-img.jpg', NULL, 'discount', '2024-12-21', '2024-12-28', 20, 0, '2024-12-21 03:05:17');
+(45, 0, 'Diskon Natal', 'Mendekati Natal Ada Diskon', '../uploads/profile-img.jpg', NULL, 'discount', '2024-12-21', '2024-12-28', 20, 0, '2024-12-21 03:05:17'),
+(48, 0, 'DISKON 90%', 'diskon 90% untuk membeli apapun yang anda inginkan', '../uploads/barang A.png', NULL, 'discount', '2025-06-13', '2025-06-20', 90, 0, '2025-06-13 07:33:10');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `kategori`
+-- Table structure for table `kategori`
 --
 
 CREATE TABLE `kategori` (
@@ -85,21 +86,20 @@ CREATE TABLE `kategori` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `kategori`
+-- Dumping data for table `kategori`
 --
 
 INSERT INTO `kategori` (`id_kategori`, `nama_kategori`, `deskripsi`, `created_at`) VALUES
-(1, 'CONTROLER', '', '2024-11-11 21:37:50'),
-(2, 'PC', '', '2024-11-11 21:38:00'),
-(3, 'AKSESORIS', '', '2024-11-11 21:38:01'),
-(4, 'GAMING', '', '2024-11-11 21:38:03'),
-(5, 'CONSOLE', '', '2024-12-09 13:29:15'),
-(6, 'test', '', '2024-12-22 21:37:29');
+(7, 'Alat Makan', '', '2025-06-13 14:35:33'),
+(8, 'Kursi', '', '2025-06-13 14:35:39'),
+(9, 'Meja', '', '2025-06-13 14:35:47'),
+(10, 'Aksesoris ', '', '2025-06-13 14:35:54'),
+(11, 'Alat Rumah Tangga', '', '2025-06-13 14:36:05');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `keranjang`
+-- Table structure for table `keranjang`
 --
 
 CREATE TABLE `keranjang` (
@@ -111,10 +111,18 @@ CREATE TABLE `keranjang` (
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `keranjang`
+--
+
+INSERT INTO `keranjang` (`id_keranjang`, `user_id`, `id_produk`, `jumlah`, `created_at`, `updated_at`) VALUES
+(79, 2, 2, 3, '2025-06-13 14:57:00', '2025-06-13 15:05:08'),
+(80, 2, 9, 3, '2025-06-13 14:57:03', '2025-06-13 15:05:05');
+
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `komentar`
+-- Table structure for table `komentar`
 --
 
 CREATE TABLE `komentar` (
@@ -126,7 +134,7 @@ CREATE TABLE `komentar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `komentar`
+-- Dumping data for table `komentar`
 --
 
 INSERT INTO `komentar` (`id_komentar`, `id_topik`, `id_user`, `isi_komentar`, `created_at`) VALUES
@@ -155,7 +163,7 @@ INSERT INTO `komentar` (`id_komentar`, `id_topik`, `id_user`, `isi_komentar`, `c
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `komunitas`
+-- Table structure for table `komunitas`
 --
 
 CREATE TABLE `komunitas` (
@@ -168,7 +176,7 @@ CREATE TABLE `komunitas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `komunitas`
+-- Dumping data for table `komunitas`
 --
 
 INSERT INTO `komunitas` (`id_komunitas`, `nama_komunitas`, `deskripsi`, `dibuat_oleh`, `created_at`, `gambar`) VALUES
@@ -180,7 +188,7 @@ INSERT INTO `komunitas` (`id_komunitas`, `nama_komunitas`, `deskripsi`, `dibuat_
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `messages`
+-- Table structure for table `messages`
 --
 
 CREATE TABLE `messages` (
@@ -192,7 +200,7 @@ CREATE TABLE `messages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `messages`
+-- Dumping data for table `messages`
 --
 
 INSERT INTO `messages` (`id_message`, `user_id`, `sender`, `message`, `timestamp`) VALUES
@@ -216,7 +224,7 @@ INSERT INTO `messages` (`id_message`, `user_id`, `sender`, `message`, `timestamp
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `notifications`
+-- Table structure for table `notifications`
 --
 
 CREATE TABLE `notifications` (
@@ -232,12 +240,12 @@ CREATE TABLE `notifications` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `notifications`
+-- Dumping data for table `notifications`
 --
 
 INSERT INTO `notifications` (`id`, `id_user`, `id_produk`, `type`, `title`, `message`, `image`, `created_at`, `is_read`) VALUES
-(323, 2, NULL, 'user', 'Promo Tersedia', 'Promo PC DENGAN BONUS MONITOR!!! sedang berlangsung! Dapatkan bonus 4. Beli PC dapat monitor gratis? kapan lagi? AYO SEGERA BELI SEKARANG!!!!', NULL, '2024-12-22 12:23:36', 0),
-(324, 2, NULL, 'user', 'Promo Tersedia', 'Promo Diskon Natal sedang berlangsung! Diskon hingga 20%. Mendekati Natal Ada Diskon', NULL, '2024-12-22 12:23:36', 0),
+(323, 2, NULL, 'user', 'Promo Tersedia', 'Promo PC DENGAN BONUS MONITOR!!! sedang berlangsung! Dapatkan bonus 4. Beli PC dapat monitor gratis? kapan lagi? AYO SEGERA BELI SEKARANG!!!!', NULL, '2024-12-22 12:23:36', 1),
+(324, 2, NULL, 'user', 'Promo Tersedia', 'Promo Diskon Natal sedang berlangsung! Diskon hingga 20%. Mendekati Natal Ada Diskon', NULL, '2024-12-22 12:23:36', 1),
 (325, NULL, NULL, 'user', 'Promo Tersedia', 'Promo PC DENGAN BONUS MONITOR!!! sedang berlangsung! Dapatkan bonus 4. Beli PC dapat monitor gratis? kapan lagi? AYO SEGERA BELI SEKARANG!!!!', NULL, '2024-12-22 14:27:46', 0),
 (326, NULL, NULL, 'user', 'Promo Tersedia', 'Promo Diskon Natal sedang berlangsung! Diskon hingga 20%. Mendekati Natal Ada Diskon', NULL, '2024-12-22 14:27:46', 0),
 (327, NULL, NULL, 'user', 'Promo Tersedia', 'Promo PC DENGAN BONUS MONITOR!!! sedang berlangsung! Dapatkan bonus 4. Beli PC dapat monitor gratis? kapan lagi? AYO SEGERA BELI SEKARANG!!!!', NULL, '2024-12-22 14:27:49', 0),
@@ -291,12 +299,40 @@ INSERT INTO `notifications` (`id`, `id_user`, `id_produk`, `type`, `title`, `mes
 (406, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari coba123 dengan total Rp 1.720.000', NULL, '2025-05-27 23:20:49', 0),
 (407, 7, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 1.720.000', NULL, '2025-05-27 23:20:49', 0),
 (408, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari coba123 dengan total Rp 1.720.000', NULL, '2025-05-27 23:20:49', 0),
-(409, 7, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 1.720.000', NULL, '2025-05-27 23:20:49', 0);
+(409, 7, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 1.720.000', NULL, '2025-05-27 23:20:49', 0),
+(410, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:22:49', 0),
+(411, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:22:50', 1),
+(412, NULL, 8, 'admin', 'Review Baru', 'Review baru dari Tria Yunita Krismiyanto untuk produk PEES \r\n            dengan rating /5', NULL, '2025-06-09 06:22:50', 0),
+(413, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:23:41', 0),
+(414, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:23:41', 1),
+(415, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:23:53', 0),
+(416, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:23:53', 1),
+(417, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:23:57', 0),
+(418, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:23:57', 1),
+(419, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:23:57', 0),
+(420, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:23:57', 1),
+(421, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:23:58', 0),
+(422, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:24:00', 1),
+(423, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:24:01', 0),
+(424, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:24:01', 1),
+(425, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 122.000', NULL, '2025-06-09 06:24:03', 0),
+(426, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 122.000', NULL, '2025-06-09 06:24:03', 1),
+(427, 2, NULL, 'user', 'Pesanan Selesai', 'Pesanan #17 telah selesai. Terima kasih telah berbelanja!', NULL, '2025-06-09 07:06:45', 1),
+(428, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-09 07:06:45', 0),
+(429, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 6.020.000', NULL, '2025-06-09 07:06:45', 1),
+(430, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-09 07:06:53', 0),
+(431, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 6.020.000', NULL, '2025-06-09 07:06:53', 1),
+(432, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-09 07:06:53', 0),
+(433, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 6.020.000', NULL, '2025-06-09 07:06:53', 1),
+(434, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-09 07:06:57', 0),
+(435, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 6.020.000', NULL, '2025-06-09 07:06:58', 1),
+(436, NULL, NULL, 'admin', 'Pesanan Baru', 'Pesanan baru dari Tria Yunita Krismiyanto dengan total Rp 6.020.000', NULL, '2025-06-09 07:06:58', 0),
+(437, 2, NULL, 'user', 'Pesanan Diterima', 'Pesanan Anda telah kami terima dan sedang diproses. Total pembayaran: Rp 6.020.000', NULL, '2025-06-09 07:06:58', 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pembatalan_pesanan`
+-- Table structure for table `pembatalan_pesanan`
 --
 
 CREATE TABLE `pembatalan_pesanan` (
@@ -313,7 +349,7 @@ CREATE TABLE `pembatalan_pesanan` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pembayaran`
+-- Table structure for table `pembayaran`
 --
 
 CREATE TABLE `pembayaran` (
@@ -325,16 +361,17 @@ CREATE TABLE `pembayaran` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `pembayaran`
+-- Dumping data for table `pembayaran`
 --
 
 INSERT INTO `pembayaran` (`id_pembayaran`, `id_pesanan`, `metode_pembayaran`, `status_pembayaran`, `tanggal_pembayaran`) VALUES
-(7, 17, 'Transfer Bank', 'Dibayar', '2025-06-08 23:35:18');
+(7, 17, 'Transfer Bank', 'Dibayar', '2025-06-08 23:35:18'),
+(8, 18, 'Transfer Bank', 'Dibayar', '2025-06-09 13:56:44');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pengiriman_pesanan`
+-- Table structure for table `pengiriman_pesanan`
 --
 
 CREATE TABLE `pengiriman_pesanan` (
@@ -354,16 +391,17 @@ CREATE TABLE `pengiriman_pesanan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `pengiriman_pesanan`
+-- Dumping data for table `pengiriman_pesanan`
 --
 
 INSERT INTO `pengiriman_pesanan` (`id_pengiriman`, `id_pesanan`, `id_user`, `nomor_resi`, `nama_kurir`, `alamat_pengiriman`, `tanggal_kirim`, `perkiraan_tiba`, `tanggal_tiba`, `status_pengiriman`, `biaya_kirim`, `dibuat_pada`, `diperbarui_pada`) VALUES
-(7, 17, 2, 'RSI20250608183518287', 'SiCepat', 'Jalan wkwkwkw no 4', '2025-06-08 18:35:18', '2025-06-11 18:35:18', NULL, 'dalam_pengiriman', 20000.00, '2025-06-08 16:35:18', '2025-06-08 16:35:18');
+(7, 17, 2, 'RSI20250608183518287', 'SiCepat', 'Jalan wkwkwkw no 4', '2025-06-08 18:35:18', '2025-06-11 18:35:18', NULL, 'dalam_pengiriman', 20000.00, '2025-06-08 16:35:18', '2025-06-08 16:35:18'),
+(8, 18, 2, 'RSI20250609085644920', 'J&T', 'Koperindag Blok C No 3', '2025-06-09 08:56:44', '2025-06-12 08:56:44', NULL, 'dalam_pengiriman', 20000.00, '2025-06-09 06:56:44', '2025-06-09 06:56:44');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pesanan`
+-- Table structure for table `pesanan`
 --
 
 CREATE TABLE `pesanan` (
@@ -376,16 +414,17 @@ CREATE TABLE `pesanan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `pesanan`
+-- Dumping data for table `pesanan`
 --
 
 INSERT INTO `pesanan` (`id_pesanan`, `id_user`, `tanggal_pesanan`, `status_pesanan`, `total_harga`, `notifikasi_status`) VALUES
-(17, 2, '2025-06-08', 'Diproses', 122000.00, 0);
+(17, 2, '2025-06-08', 'Selesai', 122000.00, 1),
+(18, 2, '2025-06-09', 'Diproses', 6020000.00, 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pesanan_detail`
+-- Table structure for table `pesanan_detail`
 --
 
 CREATE TABLE `pesanan_detail` (
@@ -397,17 +436,18 @@ CREATE TABLE `pesanan_detail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `pesanan_detail`
+-- Dumping data for table `pesanan_detail`
 --
 
 INSERT INTO `pesanan_detail` (`id_pesanan_detail`, `id_produk`, `jumlah`, `subtotal`, `id_pesanan`) VALUES
 (11, 7, 2, 2000, 17),
-(12, 8, 1, 100000, 17);
+(12, 8, 1, 100000, 17),
+(13, 2, 1, 6000000, 18);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `produk`
+-- Table structure for table `produk`
 --
 
 CREATE TABLE `produk` (
@@ -423,22 +463,25 @@ CREATE TABLE `produk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `produk`
+-- Dumping data for table `produk`
 --
 
 INSERT INTO `produk` (`id_produk`, `nama_produk`, `deskripsi`, `harga`, `stok`, `id_kategori`, `created_at`, `updated_at`, `gambar`) VALUES
-(2, 'XBOX Series X', 'Xbox ', 6000000.00, 100, 6, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'product-2.jpg'),
-(3, 'Dualshock Controller', 'Controller Dual Shock Terbaru', 500000.00, 49, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'BG LOGIN 3.jpg'),
-(4, 'PC Gaming Intel i9 gen 12 + Monitor', 'Pc Gaming spek gahar dan dapat bonus monitor gratis', 55000000.00, 0, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'profile-img.jpg'),
-(5, 'Headset Steelseries', 'Headset Gaming Steelseries', 1200000.00, 56, 3, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '6766b487cc0bf_product-5.jpg'),
-(6, 'CONTROLLER + FREE FIGURE', 'Produk Promo', 300000.00, 30, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '6768046350e23_BG LOGIN 3.jpg'),
-(7, 'Coba ', 'test', 1000.00, 46, 6, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '676825be062b9_product-2.jpg'),
-(8, 'PEES', 'test', 100000.00, 25, 5, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '6768279f47f17_6768046350e23_BG LOGIN 3.jpg');
+(2, 'Kursi Sofa Pink Empuk', 'Sofa Mini Pink Empuk Lucu dan nyaman dengan cooling foam', 600000.00, 100, 8, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang A.png'),
+(3, 'Kursi Kantor Pink', 'Kursi kantor empuk pink dengan design ergonomis', 300000.00, 100, 8, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang B.png'),
+(5, 'Kursi Kantor Hitam', 'Kursi Kantor Plastik Hitam Design Ergonomis', 300000.00, 100, 8, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang C.png'),
+(7, 'Meja Belajar Mini Kayu', 'meja belajar kayu berbentuk mini design minimalis', 700000.00, 200, 9, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang D.png'),
+(8, 'Meja Belajar Retractable', 'Meja Kerja Dengan Fitur Retractable', 1200000.00, 200, 9, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'barang E.png'),
+(9, 'Toples Kaca Imut', 'Toples kaca serbaguna dengan bentuk lucu', 200000.00, 300, 7, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd6eb2c152_barang F.png'),
+(10, 'Kotak Pink', 'Kotak Pink serbaguna untuk menaruh alat tulis', 75000.00, 500, 10, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd75044aa3_barang G.png'),
+(11, 'Kursi Sofa Orange Empuk', 'Kursi Sofa Orange Empuk dengan teknologi cooling foam', 500000.00, 150, 8, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd790a19c0_barang H.png'),
+(12, 'Toples Kaca', 'Toples Kaca Serbaguna', 50000.00, 300, 7, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd8744531d_barang I.png'),
+(13, 'Gantungan Serbaguna', 'Gantungan pakaian serbaguna yang bisa muat banyak pakaian', 20000.00, 1000, 11, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '684bd89c59059_barang J.png');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `promo`
+-- Table structure for table `promo`
 --
 
 CREATE TABLE `promo` (
@@ -452,7 +495,7 @@ CREATE TABLE `promo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `promo`
+-- Dumping data for table `promo`
 --
 
 INSERT INTO `promo` (`id`, `code`, `discount_type`, `discount_value`, `usage_limit`, `times_used`, `created_at`) VALUES
@@ -467,7 +510,7 @@ INSERT INTO `promo` (`id`, `code`, `discount_type`, `discount_value`, `usage_lim
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `review_produk`
+-- Table structure for table `review_produk`
 --
 
 CREATE TABLE `review_produk` (
@@ -485,16 +528,18 @@ CREATE TABLE `review_produk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `review_produk`
+-- Dumping data for table `review_produk`
 --
 
 INSERT INTO `review_produk` (`id_review`, `id_user`, `id_produk`, `id_pesanan`, `rating_produk`, `rating_pelayanan`, `rating_pengiriman`, `komentar`, `komentar_admin`, `tanggal_review`, `notifikasi_status`) VALUES
-(1, 2, 8, 1, 1, 1, 1, 'wkwkwkwk', NULL, '2025-06-08 18:15:32', 0);
+(1, 2, 8, 1, 1, 1, 1, 'wkwkwkwk', 'ada masalah apa ya kak? bisa chat sama customer service yaa kalau ada masalah', '2025-06-08 18:15:32', 1),
+(2, 2, 7, 17, 5, 5, 5, 'keren banget ini barangnya asli', 'terimakasihh, silahkan berbelanja lagi', '2025-06-09 14:03:35', 0),
+(3, 2, 8, 17, 2, 5, 4, 'dapet barang cacat pabrik payahhh', 'Maaf ya nanti bisa kita ganti kak kalau mau', '2025-06-09 14:03:35', 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `topik`
+-- Table structure for table `topik`
 --
 
 CREATE TABLE `topik` (
@@ -507,7 +552,7 @@ CREATE TABLE `topik` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `topik`
+-- Dumping data for table `topik`
 --
 
 INSERT INTO `topik` (`id_topik`, `id_komunitas`, `judul_topik`, `deskripsi_topik`, `dibuat_oleh`, `created_at`) VALUES
@@ -520,7 +565,7 @@ INSERT INTO `topik` (`id_topik`, `id_komunitas`, `judul_topik`, `deskripsi_topik
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -536,12 +581,12 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id_user`, `nama`, `email`, `password`, `no_tlp`, `alamat`, `level`, `foto`, `active`) VALUES
-(1, 'Rafi Mumtaz Hajjid', 'rafimumtaz86@gmail.com', '123', '081513099954', 'Bekasi City', 'admin', '1734507173_messages-3.jpg', '2025-05-28 07:05:06'),
-(2, 'Tria Yunita Krismiyanto', 'triayunita07@gmail.com', '123', '0888883838383', 'Bangkalan Halim Perdana Kusuma 2\r\n', 'user', '1734507541_messages-2.jpg', '2025-06-08 06:09:00'),
+(1, 'Rafi Mumtaz Hajjid', 'rafimumtaz86@gmail.com', '123', '081513099954', 'Bekasi City', 'admin', '1734507173_messages-3.jpg', '2025-06-13 14:33:52'),
+(2, 'Tria Yunita Krismiyanto', 'triayunita07@gmail.com', '123', '0888883838383', 'Bangkalan Halim Perdana Kusuma 2\r\n', 'user', '1734507541_messages-2.jpg', '2025-06-13 14:52:09'),
 (5, 'Tria Krismiyanto Yunita', 'triayunita02@gmail.com', '123', '08587617989', 'Koperindag Blok C No 3', 'user', '', '2024-12-18 13:48:06'),
 (6, 'asep prayogi', 'asepyogi@gmail.com', '123', '123456', 'Medan', 'user', '', '2024-12-22 21:47:43'),
 (7, 'coba123', 'coba@gmail.com', '123', '123456098', 'coba233', 'user', '1734877511_1734507173_messages-3.jpg', '2024-12-22 22:04:01');
@@ -549,7 +594,7 @@ INSERT INTO `user` (`id_user`, `nama`, `email`, `password`, `no_tlp`, `alamat`, 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `user_promo_codes`
+-- Table structure for table `user_promo_codes`
 --
 
 CREATE TABLE `user_promo_codes` (
@@ -566,7 +611,7 @@ CREATE TABLE `user_promo_codes` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `wishlist`
+-- Table structure for table `wishlist`
 --
 
 CREATE TABLE `wishlist` (
@@ -579,7 +624,7 @@ CREATE TABLE `wishlist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `wishlist`
+-- Dumping data for table `wishlist`
 --
 
 INSERT INTO `wishlist` (`id_wishlist`, `user_id`, `id_produk`, `created_at`, `updated_at`, `notifikasi_restock`) VALUES
@@ -591,27 +636,27 @@ INSERT INTO `wishlist` (`id_wishlist`, `user_id`, `id_produk`, `created_at`, `up
 --
 
 --
--- Indeks untuk tabel `feedback`
+-- Indexes for table `feedback`
 --
 ALTER TABLE `feedback`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indeks untuk tabel `informasipromo`
+-- Indexes for table `informasipromo`
 --
 ALTER TABLE `informasipromo`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_produk` (`id_produk`);
 
 --
--- Indeks untuk tabel `kategori`
+-- Indexes for table `kategori`
 --
 ALTER TABLE `kategori`
   ADD PRIMARY KEY (`id_kategori`);
 
 --
--- Indeks untuk tabel `keranjang`
+-- Indexes for table `keranjang`
 --
 ALTER TABLE `keranjang`
   ADD PRIMARY KEY (`id_keranjang`),
@@ -619,7 +664,7 @@ ALTER TABLE `keranjang`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indeks untuk tabel `komentar`
+-- Indexes for table `komentar`
 --
 ALTER TABLE `komentar`
   ADD PRIMARY KEY (`id_komentar`),
@@ -627,27 +672,27 @@ ALTER TABLE `komentar`
   ADD KEY `id_user` (`id_user`);
 
 --
--- Indeks untuk tabel `komunitas`
+-- Indexes for table `komunitas`
 --
 ALTER TABLE `komunitas`
   ADD PRIMARY KEY (`id_komunitas`),
   ADD KEY `dibuat_oleh` (`dibuat_oleh`);
 
 --
--- Indeks untuk tabel `messages`
+-- Indexes for table `messages`
 --
 ALTER TABLE `messages`
   ADD PRIMARY KEY (`id_message`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indeks untuk tabel `notifications`
+-- Indexes for table `notifications`
 --
 ALTER TABLE `notifications`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `pembatalan_pesanan`
+-- Indexes for table `pembatalan_pesanan`
 --
 ALTER TABLE `pembatalan_pesanan`
   ADD PRIMARY KEY (`id_pembatalan`),
@@ -655,14 +700,14 @@ ALTER TABLE `pembatalan_pesanan`
   ADD KEY `id_user` (`id_user`);
 
 --
--- Indeks untuk tabel `pembayaran`
+-- Indexes for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
   ADD PRIMARY KEY (`id_pembayaran`),
   ADD KEY `id_pesanan` (`id_pesanan`);
 
 --
--- Indeks untuk tabel `pengiriman_pesanan`
+-- Indexes for table `pengiriman_pesanan`
 --
 ALTER TABLE `pengiriman_pesanan`
   ADD PRIMARY KEY (`id_pengiriman`),
@@ -670,14 +715,14 @@ ALTER TABLE `pengiriman_pesanan`
   ADD KEY `id_user` (`id_user`);
 
 --
--- Indeks untuk tabel `pesanan`
+-- Indexes for table `pesanan`
 --
 ALTER TABLE `pesanan`
   ADD PRIMARY KEY (`id_pesanan`) USING BTREE,
   ADD KEY `id_user` (`id_user`) USING BTREE;
 
 --
--- Indeks untuk tabel `pesanan_detail`
+-- Indexes for table `pesanan_detail`
 --
 ALTER TABLE `pesanan_detail`
   ADD PRIMARY KEY (`id_pesanan_detail`),
@@ -685,21 +730,21 @@ ALTER TABLE `pesanan_detail`
   ADD KEY `id_pesanan` (`id_pesanan`);
 
 --
--- Indeks untuk tabel `produk`
+-- Indexes for table `produk`
 --
 ALTER TABLE `produk`
   ADD PRIMARY KEY (`id_produk`),
   ADD KEY `id_kategori` (`id_kategori`);
 
 --
--- Indeks untuk tabel `promo`
+-- Indexes for table `promo`
 --
 ALTER TABLE `promo`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `code` (`code`);
 
 --
--- Indeks untuk tabel `review_produk`
+-- Indexes for table `review_produk`
 --
 ALTER TABLE `review_produk`
   ADD PRIMARY KEY (`id_review`),
@@ -708,7 +753,7 @@ ALTER TABLE `review_produk`
   ADD KEY `id_pesanan` (`id_pesanan`);
 
 --
--- Indeks untuk tabel `topik`
+-- Indexes for table `topik`
 --
 ALTER TABLE `topik`
   ADD PRIMARY KEY (`id_topik`),
@@ -716,14 +761,14 @@ ALTER TABLE `topik`
   ADD KEY `dibuat_oleh` (`dibuat_oleh`);
 
 --
--- Indeks untuk tabel `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id_user`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indeks untuk tabel `user_promo_codes`
+-- Indexes for table `user_promo_codes`
 --
 ALTER TABLE `user_promo_codes`
   ADD PRIMARY KEY (`id_user_promo_code`),
@@ -732,7 +777,7 @@ ALTER TABLE `user_promo_codes`
   ADD KEY `promo_id` (`promo_id`);
 
 --
--- Indeks untuk tabel `wishlist`
+-- Indexes for table `wishlist`
 --
 ALTER TABLE `wishlist`
   ADD PRIMARY KEY (`id_wishlist`),
@@ -740,201 +785,201 @@ ALTER TABLE `wishlist`
   ADD KEY `id_produk` (`id_produk`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `feedback`
+-- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
   MODIFY `id` int(64) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `informasipromo`
+-- AUTO_INCREMENT for table `informasipromo`
 --
 ALTER TABLE `informasipromo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
--- AUTO_INCREMENT untuk tabel `kategori`
+-- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT untuk tabel `keranjang`
+-- AUTO_INCREMENT for table `keranjang`
 --
 ALTER TABLE `keranjang`
-  MODIFY `id_keranjang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id_keranjang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
--- AUTO_INCREMENT untuk tabel `komentar`
+-- AUTO_INCREMENT for table `komentar`
 --
 ALTER TABLE `komentar`
   MODIFY `id_komentar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
--- AUTO_INCREMENT untuk tabel `komunitas`
+-- AUTO_INCREMENT for table `komunitas`
 --
 ALTER TABLE `komunitas`
   MODIFY `id_komunitas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `messages`
+-- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
   MODIFY `id_message` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
--- AUTO_INCREMENT untuk tabel `notifications`
+-- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=410;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=438;
 
 --
--- AUTO_INCREMENT untuk tabel `pembatalan_pesanan`
+-- AUTO_INCREMENT for table `pembatalan_pesanan`
 --
 ALTER TABLE `pembatalan_pesanan`
   MODIFY `id_pembatalan` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `pembayaran`
+-- AUTO_INCREMENT for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `id_pembayaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_pembayaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT untuk tabel `pengiriman_pesanan`
+-- AUTO_INCREMENT for table `pengiriman_pesanan`
 --
 ALTER TABLE `pengiriman_pesanan`
-  MODIFY `id_pengiriman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_pengiriman` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT untuk tabel `pesanan`
+-- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id_pesanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_pesanan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT untuk tabel `pesanan_detail`
+-- AUTO_INCREMENT for table `pesanan_detail`
 --
 ALTER TABLE `pesanan_detail`
-  MODIFY `id_pesanan_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_pesanan_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT untuk tabel `produk`
+-- AUTO_INCREMENT for table `produk`
 --
 ALTER TABLE `produk`
-  MODIFY `id_produk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_produk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT untuk tabel `promo`
+-- AUTO_INCREMENT for table `promo`
 --
 ALTER TABLE `promo`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT untuk tabel `review_produk`
+-- AUTO_INCREMENT for table `review_produk`
 --
 ALTER TABLE `review_produk`
-  MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_review` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT untuk tabel `topik`
+-- AUTO_INCREMENT for table `topik`
 --
 ALTER TABLE `topik`
   MODIFY `id_topik` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `user_promo_codes`
+-- AUTO_INCREMENT for table `user_promo_codes`
 --
 ALTER TABLE `user_promo_codes`
   MODIFY `id_user_promo_code` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT untuk tabel `wishlist`
+-- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
   MODIFY `id_wishlist` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `keranjang`
+-- Constraints for table `keranjang`
 --
 ALTER TABLE `keranjang`
   ADD CONSTRAINT `keranjang_ibfk_1` FOREIGN KEY (`id_produk`) REFERENCES `produk` (`id_produk`),
   ADD CONSTRAINT `keranjang_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id_user`);
 
 --
--- Ketidakleluasaan untuk tabel `komunitas`
+-- Constraints for table `komunitas`
 --
 ALTER TABLE `komunitas`
   ADD CONSTRAINT `komunitas_ibfk_1` FOREIGN KEY (`dibuat_oleh`) REFERENCES `user` (`id_user`);
 
 --
--- Ketidakleluasaan untuk tabel `pembatalan_pesanan`
+-- Constraints for table `pembatalan_pesanan`
 --
 ALTER TABLE `pembatalan_pesanan`
   ADD CONSTRAINT `pembatalan_pesanan_ibfk_1` FOREIGN KEY (`id_pesanan`) REFERENCES `pesanan` (`id_pesanan`),
   ADD CONSTRAINT `pembatalan_pesanan_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 
 --
--- Ketidakleluasaan untuk tabel `pembayaran`
+-- Constraints for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
   ADD CONSTRAINT `pembayaran_ibfk_1` FOREIGN KEY (`id_pesanan`) REFERENCES `pesanan` (`id_pesanan`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `pengiriman_pesanan`
+-- Constraints for table `pengiriman_pesanan`
 --
 ALTER TABLE `pengiriman_pesanan`
   ADD CONSTRAINT `pengiriman_pesanan_ibfk_1` FOREIGN KEY (`id_pesanan`) REFERENCES `pesanan` (`id_pesanan`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `pengiriman_pesanan_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ketidakleluasaan untuk tabel `pesanan`
+-- Constraints for table `pesanan`
 --
 ALTER TABLE `pesanan`
   ADD CONSTRAINT `pesanan_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Ketidakleluasaan untuk tabel `pesanan_detail`
+-- Constraints for table `pesanan_detail`
 --
 ALTER TABLE `pesanan_detail`
   ADD CONSTRAINT `pesanan_detail_ibfk_1` FOREIGN KEY (`id_produk`) REFERENCES `produk` (`id_produk`),
   ADD CONSTRAINT `pesanan_detail_ibfk_2` FOREIGN KEY (`id_pesanan`) REFERENCES `pesanan` (`id_pesanan`);
 
 --
--- Ketidakleluasaan untuk tabel `produk`
+-- Constraints for table `produk`
 --
 ALTER TABLE `produk`
   ADD CONSTRAINT `produk_ibfk_1` FOREIGN KEY (`id_kategori`) REFERENCES `kategori` (`id_kategori`);
 
 --
--- Ketidakleluasaan untuk tabel `review_produk`
+-- Constraints for table `review_produk`
 --
 ALTER TABLE `review_produk`
   ADD CONSTRAINT `review_produk_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`),
   ADD CONSTRAINT `review_produk_ibfk_2` FOREIGN KEY (`id_produk`) REFERENCES `produk` (`id_produk`);
 
 --
--- Ketidakleluasaan untuk tabel `topik`
+-- Constraints for table `topik`
 --
 ALTER TABLE `topik`
   ADD CONSTRAINT `topik_ibfk_1` FOREIGN KEY (`id_komunitas`) REFERENCES `komunitas` (`id_komunitas`),
   ADD CONSTRAINT `topik_ibfk_2` FOREIGN KEY (`dibuat_oleh`) REFERENCES `user` (`id_user`);
 
 --
--- Ketidakleluasaan untuk tabel `wishlist`
+-- Constraints for table `wishlist`
 --
 ALTER TABLE `wishlist`
   ADD CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id_user`) ON DELETE CASCADE,
