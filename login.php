@@ -1,198 +1,168 @@
 <?php
 session_start();
-require "db.php";
-$error = "";
+require "db.php"; // Pastikan db.php ada dan berisi koneksi $kon
 
-if (isset($_POST["login"])){
-  // LOGIN USER
-  $email = mysqli_real_escape_string($kon, isset($_POST["email"]) ? $_POST["email"] : "");
-  $pwd  = mysqli_real_escape_string($kon, isset($_POST["pwd"]) ? $_POST["pwd"] : "");
+$msg = ""; // Variabel untuk pesan sukses/error
 
-  // CEK APAKAH MASIH KOSONG
-  if (empty($email) or empty($pwd))
-  {
-    $msg = '
-      <div class="alert alert-warning">
-              &nbsp; MAAF, EMAIL / PASSWORD ANDA MASIH KOSONG. SILAHKAN ISI DENGAN BENAR!
-      </div>
-    ';
-  } else {}
-    // PROSEDUR LOGIN BUAT ADMIN :
-    $kue_admin = mysqli_query($kon, "SELECT * FROM user WHERE email = '" . $email . "' AND password = '" . $pwd . "'");
-    $row_admin = mysqli_fetch_array($kue_admin);
-    
-    if (!($row_admin))
-    {
-      $msg = '
-        <div class="alert alert-danger">
-          &nbsp; MAAF, EMAIL / PASSWORD ANDA SALAH. SILAHKAN ULANGI LAGI !
-        </div>
-      ';
+// Fungsi untuk membersihkan input
+function sanitize_input($kon, $data) {
+    return mysqli_real_escape_string($kon, trim($data)); // Tambahkan trim() untuk menghapus spasi di awal/akhir
+}
+
+// Logika untuk proses LOGIN
+if (isset($_POST["login"])) {
+    $email = sanitize_input($kon, $_POST["email"] ?? "");
+    $pwd = sanitize_input($kon, $_POST["pwd"] ?? "");
+
+    if (empty($email) || empty($pwd)) {
+        $msg = '<div class="alert alert-warning">&nbsp; MAAF, EMAIL / PASSWORD ANDA MASIH KOSONG. SILAHKAN ISI DENGAN BENAR!</div>';
     } else {
-        if ($row_admin["level"] == "admin") {
-          // UPDATE ACTIVE FIELD
-          $update_admin_active = "UPDATE user SET active = NOW() WHERE email = '$email'";
-          mysqli_query($kon, $update_admin_active);
+        // Periksa user di database
+        // **KEAMANAN: Gunakan password_verify() jika password di-hash di DB**
+        $query_user = mysqli_query($kon, "SELECT * FROM user WHERE email = '$email'");
+        $user_data = mysqli_fetch_array($query_user);
 
-          // SET SESSION DAN REDIRECT
-          $_SESSION["admin"] = $row_admin["nama"];
-          header("Location: admin/index.php");
-          exit;
-      }
+        if (!$user_data || $user_data['password'] !== $pwd) { // Cek password plain text (GANTI DENGAN password_verify($pwd, $user_data['password_hash']))
+            $msg = '<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i>&nbsp; MAAF, EMAIL / PASSWORD ANDA SALAH. SILAHKAN ULANGI LAGI!</div>';
+        } else {
+            // Update active field
+            $update_active = "UPDATE user SET active = NOW() WHERE email = '$email'";
+            mysqli_query($kon, $update_active);
+
+            // Set session and redirect based on level
+            switch ($user_data["level"]) {
+                case "admin":
+                    $_SESSION["admin"] = $user_data["nama"];
+                    header("Location: admin/index.php");
+                    exit;
+                case "cs":
+                    $_SESSION["cs"] = $user_data["nama"];
+                    header("Location: cs/index_admin.php"); // Pastikan path ini benar
+                    exit;
+                case "user":
+                    $_SESSION["user"] = $user_data["nama"];
+                    header("Location: user/index.php");
+                    exit;
+                default:
+                    $msg = '<div class="alert alert-danger">&nbsp; ERROR: Level pengguna tidak dikenal.</div>';
+                    break;
+            }
+        }
     }
+}
 
-    // PROSEDUR LOGIN BUAT CS :
-    $kue_cs = mysqli_query($kon, "SELECT * FROM user WHERE email = '" . $email . "' AND password = '" . $pwd . "'");
-    $row_cs = mysqli_fetch_array($kue_cs);
-    
-    if (!($row_cs))
-    {
-      $msg = '
-        <div class="alert alert-danger">
-          &nbsp; MAAF, EMAIL / PASSWORD ANDA SALAH. SILAHKAN ULANGI LAGI !
-        </div>
-      ';
+// Logika untuk proses REGISTER
+if (isset($_POST["register"])) {
+    $nama_user = sanitize_input($kon, $_POST["nama_user"] ?? "");
+    $email = sanitize_input($kon, $_POST["email"] ?? "");
+    $password = sanitize_input($kon, $_POST["password"] ?? "");
+    $no_tlp = sanitize_input($kon, $_POST["no_tlp"] ?? "");
+    $alamat = sanitize_input($kon, $_POST["alamat"] ?? "");
+    $level = "user"; // Level untuk registrasi baru selalu 'user'
+
+    // Validasi field yang kosong (sesuai yang terlihat di gambar UI register)
+    if (empty($nama_user) || empty($email) || empty($password)) { // no_tlp dan alamat tidak wajib sesuai gambar UI
+        $msg = '<div class="alert alert-warning">&nbsp; MAAF, NAMA, EMAIL & PASSWORD HARUS DIISI. SILAHKAN ISI DENGAN BENAR!</div>';
     } else {
-        if ($row_cs["level"] == "cs") {
-          // UPDATE ACTIVE FIELD
-          $update_cs_active = "UPDATE user SET active = NOW() WHERE email = '$email'";
-          mysqli_query($kon, $update_cs_active);
+        // Cek apakah email sudah terdaftar
+        $check_email_query = mysqli_query($kon, "SELECT * FROM user WHERE email = '$email'");
+        if (mysqli_num_rows($check_email_query) > 0) {
+            $msg = '<div class="alert alert-danger">&nbsp; MAAF, EMAIL SUDAH TERDAFTAR. SILAKAN GUNAKAN EMAIL LAIN!</div>';
+        } else {
+            // **KEAMANAN: Hash password sebelum disimpan!**
+            // $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            // Ganti $password dengan $hashed_password di query INSERT
 
-          // SET SESSION DAN REDIRECT
-          $_SESSION["cs"] = $row_cs["nama"];
-          header("Location: cs/index_admin.php");
-          exit;
-      }
+            $insert_query = "INSERT INTO user (nama, email, password, no_tlp, alamat, level) VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt = mysqli_prepare($kon, $insert_query);
+            mysqli_stmt_bind_param($stmt, "ssssss", $nama_user, $email, $password, $no_tlp, $alamat, $level); // GANTI $password jika pakai hash
+            
+            if (mysqli_stmt_execute($stmt)) {
+                // Redirect ke halaman login dengan query parameter untuk menampilkan panel register
+                header("Location: login.php?show_register=true&reg_success=true");
+                exit();
+            } else {
+                $msg = '<div class="alert alert-danger">&nbsp; REGISTER GAGAL. SILAHKAN ULANGI LAGI! Error: ' . mysqli_error($kon) . '</div>';
+            }
+            mysqli_stmt_close($stmt);
+        }
     }
+}
 
-      // PROSEDUR LOGIN UNTUK USER
-      $kue_user = mysqli_query($kon, "SELECT * FROM user WHERE email = '$email' AND password = '$pwd'");
-      $row_user = mysqli_fetch_array($kue_user);
-
-      if (!$row_user) {
-          $msg = '
-              <div class="alert alert-danger">
-                  <i class="bi bi-exclamation-circle-fill"></i>&nbsp; MAAF, EMAIL / PASSWORD ANDA SALAH. SILAHKAN ULANGI LAGI!
-              </div>
-          ';
-      } else {
-          if ($row_user["level"] == "user") {
-              // UPDATE ACTIVE FIELD
-              $update_user_active = "UPDATE user SET active = NOW() WHERE email = '$email'";
-              mysqli_query($kon, $update_user_active);
-
-              // SET SESSION DAN REDIRECT
-              $_SESSION["user"] = $row_user["nama"];
-              header("Location: user/index.php");
-              exit;
-          }
-      }
-
-  }
-
-  $error = true;
-
-if (isset($_POST["register"])){
-  $nama_user = mysqli_real_escape_string($kon, isset($_POST["nama_user"]) ? $_POST["nama_user"] : "");
-  $email = mysqli_real_escape_string($kon, isset($_POST["email"]) ? $_POST["email"] : "");
-  $password = mysqli_real_escape_string($kon, isset($_POST["password"]) ? $_POST["password"] : "");
-  $no_tlp = mysqli_real_escape_string($kon, isset($_POST["no_tlp"]) ? $_POST["no_tlp"] : "");
-  $alamat = mysqli_real_escape_string($kon, isset($_POST["alamat"]) ? $_POST["alamat"] : "");
-  $level = mysqli_real_escape_string($kon, isset($_POST["level"]) ? $_POST["level"] : "");
-
-  if (empty($nama_user) or empty($email) or empty($password) or empty($no_tlp) or empty($alamat) or empty($level)){
-    $msg = '
-      <div class="alert alert-warning">
-        &nbsp; MAAF, SEMUA FIELD HARUS DIISI. SILAHKAN ISI DENGAN BENAR !
-      </div>
-    ';
-  } else {
-    $query = mysqli_query($kon, "INSERT INTO user (nama, email, password, no_tlp, alamat, level) VALUES ('$nama_user', '$email', '$password', '$no_tlp', '$alamat', '$level')");
-    if ($query){
-      $msg = '
-        <div class="alert alert-success">
-          &nbsp; REGISTER BERHASIL. SILAHKAN LOGIN !
-        </div>
-      ';
-      header("Location: login.php");
-      exit(); // Pastikan script berhenti setelah redirect
-    } else {
-      $msg = '
-        <div class="alert alert-danger">
-          &nbsp; REGISTER GAGAL. SILAHKAN ULANGI LAGI !
-        </div>
-      ';
-    }
-  }
-
-  $error = true;
+// Tampilkan pesan sukses reset password jika ada
+if (isset($_SESSION['reset_success'])) {
+    $msg = '<div class="alert alert-success">' . $_SESSION['reset_success'] . '</div>';
+    unset($_SESSION['reset_success']); // Hapus dari session agar tidak tampil lagi
 }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>CasaLuxe Login Page</title>
-	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/login.css">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
   <link href="https://code.iconify.design/3/3.1.0/iconify.min.css" rel="stylesheet">
   <!-- Favicons -->
   <link href="assets/img/LOGOCASALUXE2.png" rel="icon" sizes="48x48">
 </head>
 <body>
+  <header>
+            <a href="landing_page.php">
+                <img src="assets/img/logo_CasaLuxe.png" alt="Logo" class="logo">
+            </a>
+    </header>
 	<div class="container" id="main">
       <div class="sign-up">
         <form class="register" method="post">
-            <h1>Register</h1>
+            <h1>Daftar</h1>
             <div class="social-container">
                 <a href="#" class="social"><span class="grommet-icons--facebook-option"></span></a>
                 <a href="#" class="social"><span class="flat-color-icons--google"></span></a>
             </div>
-            <p>or create your new account</p>
+            <p>atau buat akun baru</p>
             <input type="text" name="nama_user" placeholder="Nama Lengkap" required="">
             <input type="email" name="email" placeholder="Email" required="">
             <input type="text" name="no_tlp" placeholder="Nomor Telepon" required="">
             <input type="text" name="alamat" placeholder="Alamat" required="">
-            <input type="password" name="password" placeholder="Password" required="">
+            <input type="password" name="password" placeholder="Kata Sandi" required="">
             <select name="level" class="form-control">
                 <option value="">Pilih Level Anda Sebagai User</option>
                 <option value="user">User</option>
             </select>            
-            <button name="register" type="submit">Register</button>
+            <button name="register" type="submit">Daftar</button>
         </form>
       </div>
 
       <div class="sign-in">
           <form class="login" method="post">
-              <h1>Login</h1>
+              <h1>Masuk</h1>
               <div class="social-container">
                   <a href="#" class="social"><span class="grommet-icons--facebook-option"></span></a>
                   <a href="#" class="social"><span class="flat-color-icons--google"></span></a>
               </div>
-              <p>or use your account</p>
+              <p>atau gunakan akunmu</p>
               <input type="email" name="email" placeholder="Email" required="">
-              <input type="password" name="pwd" placeholder="Password" required="">
-              <button name="login" type="submit">Login</button>
+              <input type="password" name="pwd" placeholder="Kata Sandi" required="">
+              <a href="forgot_password.php">Lupa kata sandimu?</a>
+              <button name="login" type="submit">Masuk</button>
           </form>
       </div>
 
       <div class="overlay-container">
         <div class="overlay">
           <div class="overlay-left">
-            <img src="assets/img/logo_CasaLuxe.png" alt="Logo Gameglee" class="logo">
-            <h1>Welcome Back!</h1>
-            <p>To keep connected with us please login with your personal account</p>
-            <button id="signIn">Login</button>
+            <h1>Selamat Datang Kembali!</h1>
+            <p>Untuk tetap terhubung dengan kami, silakan masuk dengan akun pribadi Anda</p>
+            <button id="signIn">Masuk</button>
           </div>
           <div class="overlay-right">
-            <img src="assets/img/logo_CasaLuxe.png" alt="Logo Gameglee" class="logo">
-            <h1>Hi, Friend</h1>
-            <p>Please enter your personal details and start to feel the glee with us.</p>
-            <button id="signUp">Register</button>
+            <h1>Hi, SoCa!</h1>
+            <p>Silakan masukkan data pribadi Anda dan mulailah merasakan kegembiraan bersama kami.</p>
+            <button id="signUp">Daftar</button>
           </div>
         </div>
       </div>
     </div>
     <script src="assets/js/login.js" type="text/javascript"></script>
-  </script>
 </body>
 </html>
