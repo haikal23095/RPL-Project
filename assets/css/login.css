@@ -137,29 +137,81 @@ a{
 	text-decoration: none;
 	margin: 15px 0;
 }
-button{
+button#signUp{
 	color: #fff;
-	background: #ff4b2b;
+	background: transparent;
 	font-size: 12px;
 	font-weight: bold;
 	font-family: 'Andika', sans-serif;
 	padding: 12px 35px;
 	margin-top: 10px;
-	border-radius: 19px;
-	border: 1px solid #ff4b2b;
+	border-radius: 10px;
+	border: 1px solid #fff;
 	outline: none;
 	letter-spacing: 1px;
 	text-transform: uppercase;
 	transition: transform 80ms ease-in;
 	cursor: pointer;
 }
+
+button#signUp:hover{
+    box-shadow: 0 0 10px #EFAA31,
+    0 0 10px #fff;
+}
+
+button#signIn{
+	color: #fff;
+	background: transparent;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: 'Andika', sans-serif;
+	padding: 12px 35px;
+	margin-top: 10px;
+	border-radius: 10px;
+	border: 1px solid #fff;
+	outline: none;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+	cursor: pointer;
+}
+
+button#signIn:hover{
+    box-shadow: 0 0 10px #EFAA31,
+    0 0 10px #fff;
+}
+
+
+button{
+	color: #EFAA31;
+	background: transparent;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: 'Andika', sans-serif;
+	padding: 6px 35px;
+	margin-top: 10px;
+	border-radius: 10px;
+	border: 2px solid #EFAA31;
+	outline: none;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+	cursor: pointer;
+}
+button i.bi {
+    font-size: 1em; /* Mengatur ukuran ikon relatif terhadap font teks tombol */
+    line-height: 1; /* Memastikan ikon sejajar dengan teks */
+}
+
 button:active{
 	transform: scale(0.90);   
 }
 
 button:hover{
-    box-shadow: 0 0 10px #f05c34,
-    0 0 10px #f05c34;
+    color: #fff;
+    background: #EFAA31;
+    box-shadow: 0 0 10px #EFAA31,
+    0 0 10px #EFAA31;
 }
 
 #signIn, #signUp{
