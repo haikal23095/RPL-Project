@@ -231,11 +231,7 @@ mysqli_stmt_close($stmt);
                                                 <?php if ($order['status_pesanan'] !== 'Selesai' AND $order['status_pesanan'] !== 'Dibatalkan'  AND $order['status_pesanan'] !== 'Diproses'): ?>
                                                     <button class="btn btn-warning btn-sm selesai-btn" data-id="<?= $order['id_pesanan']; ?>">Selesai</button>
                                                 <?php endif; ?>
-                                                <!-- Nilai Button -->
-                                                <?php if ($order['status_pesanan'] === 'Selesai' && empty($order['sudah_dinilai'])): ?>
-                                                    <a href="review.php?id=<?= $order['id_pesanan'] ?>" class="btn btn-primary btn-sm">Nilai</a>
-                                                <?php endif; ?>
-                                                <?php if ($order['status_pesanan'] === 'Selesai' && !empty($order['sudah_dinilai'])): ?>
+                                                <?php if ($order['status_pesanan'] === 'Selesai'): ?>
                                                     <a href="checkout.php?ulang=<?= $order['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
                                                 <?php endif; ?>
                                                 <?php if ($order['status_pesanan'] === 'Dibatalkan'): ?>
