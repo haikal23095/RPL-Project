@@ -54,7 +54,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
         @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background: #F8F7F1;
+            background: #F8F7F1 !important;
             font-family: 'Andika', sans-serif;
         }
         

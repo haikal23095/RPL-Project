@@ -107,8 +107,11 @@ if (isset($_SESSION['error'])) {
 </head>
 <body>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background-color: #F8F7F1; 
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
         }
          /* Styling untuk tombol kembali (baru) */
         .standalone-back-button-container {
@@ -151,7 +154,8 @@ if (isset($_SESSION['error'])) {
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
-                    <li class="breadcrumb-item active">INFORMASI PROMO</li>
+                    <li class="breadcrumb-item"><a href="informasipromo.php">INFORMASI PROMO</a></li>
+                    <li class="breadcrumb-item active">TAMBAH PROMO</li>
                 </ol>
             </nav>
         </div>

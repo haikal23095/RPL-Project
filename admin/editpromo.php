@@ -101,19 +101,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include 'aset.php'; ?>
 </head>
 <body>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+        }
+        .standalone-back-button-container {
+            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
+            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
+    </style>
     <div class="wrapper">
         <?php require "atas.php"; ?>
         <?php require "menu.php"; ?>
     </div>
 
     <main id="main" class="main">
+        <div class="standalone-back-button-container">
+            <a href="informasipromo.php" class="standalone-back-button">
+                <i class="bi bi-arrow-left"></i>
+                Kembali
+            </a>
+        </div>
         <div class="pagetitle">
             <h1><i class="bi bi-megaphone"></i>&nbsp; EDIT PROMO</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
-                    <li class="breadcrumb-item"><a href="admin_promos.php">PROMO</a></li>
-                    <li class="breadcrumb-item active">EDIT</li>
+                    <li class="breadcrumb-item"><a href="informasipromo.php">INFORMASI PROMO</a></li>
+                    <li class="breadcrumb-item active">EDIT PROMO</li>
                 </ol>
             </nav>
         </div>
