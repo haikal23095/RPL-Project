@@ -2,10 +2,31 @@
 session_start();
 require "db.php"; // Pastikan db.php ada dan berisi koneksi $kon
 require_once './vendor/autoload.php'; // pastikan path composer autoload benar
+
+
+use Dotenv\Dotenv;
 use Twilio\Rest\Client;
-$sid    = 'AC4fcb38388f5c58c449b150823cf9b4eb';
-$token  = 'cced338e264b32598d3adca6acdb624b';
-$verifySid = 'VA1c3e751033905756f2848f4aeb7f4b0c';
+
+
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+
+$sid = '';
+$token = '';
+$verifySid = '';
+
+// if (!$sid || !$token || !$verifySid) {
+//     echo "SID: " . $sid . "<br>";
+//     echo "TOKEN: " . $token . "<br>";
+//     echo "VERIFY SID: " . $verifySid . "<br>";
+//     exit("❌ Gagal load TWILIO ENV variables");
+// }
+
+// Debug sementara
+// echo "SID: " . ($sid ?? 'NULL') . "<br>";
+// echo "TOKEN: " . ($token ?? 'NULL') . "<br>";
+// echo "VERIFY SID: " . ($verifySid ?? 'NULL') . "<br>";
 
 $msg = ""; // Variabel untuk pesan sukses/error
 
@@ -37,26 +58,30 @@ if (isset($_POST["login"])) {
             $update_active = "UPDATE user SET active = NOW() WHERE email = '$email'";
             mysqli_query($kon, $update_active);
 
+            
             $login_berhasil = true;
             $user = $user_data; // Simpan user ke variabel session atau variabel lokal
-
+            
             $nomor = $user_data['no_tlp'];
             if (strpos($nomor, '0') === 0) {
                 $nomor = '+62' . substr($nomor, 1);
             }
-
+            
             // Kirim OTP via Twilio Verify
             try {
                 $twilio = new Client($sid, $token);
                 $verification = $twilio->verify->v2->services($verifySid)
                     ->verifications
                     ->create($nomor, "sms");
-
+                
+                
                 // Redirect ke halaman verifikasi jika OTP berhasil dikirim
                 header("Location: verification.php");
                 exit();
             } catch (Exception $e) {
+                // print_r($_SESSION);
                 $msg = '<div class="alert alert-danger">Gagal mengirim OTP: ' . $e->getMessage() . '</div>';
+                // exit();
             }
         }
 
@@ -131,6 +156,7 @@ if (isset($_SESSION['reset_success'])) {
     </header>
 	<div class="container" id="main">
       <div class="sign-up">
+        <?php if (!empty($msg) && isset($_POST['register'])) echo $msg; ?>
         <form class="register" method="post">
             <h1>Daftar</h1>
             <div class="social-container">
@@ -152,6 +178,7 @@ if (isset($_SESSION['reset_success'])) {
       </div>
 
       <div class="sign-in">
+        <?php if (!empty($msg) && isset($_POST['login'])) echo $msg; ?>
           <form class="login" method="post">
               <h1>Masuk</h1>
               <div class="social-container">

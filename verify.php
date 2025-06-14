@@ -16,9 +16,10 @@ $user_data = $_SESSION['user'];
 
 
 // 2. Setup Twilio client (lebih baik ambil dari config)
-$sid    = 'AC4fcb38388f5c58c449b150823cf9b4eb';
-$token  = 'cced338e264b32598d3adca6acdb624b';
-$verifySid = 'VA1c3e751033905756f2848f4aeb7f4b0c';
+$sid = '';
+$token = '';
+$verifySid = '';
+
 $twilio = new Client($sid, $token);
 
 // 3. Handle POST

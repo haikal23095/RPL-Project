@@ -2,11 +2,24 @@
 session_start();
 
 require_once './vendor/autoload.php';
-use Twilio\Rest\Client;
 
-$sid    = 'AC4fcb38388f5c58c449b150823cf9b4eb';
-$token  = 'cced338e264b32598d3adca6acdb624b';
-$verifySid = 'VA1c3e751033905756f2848f4aeb7f4b0c';
+use Twilio\Rest\Client;
+use Dotenv\Dotenv;
+
+
+// Load .env hanya sekali
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad(); // gunakan safeLoad agar tidak error fatal jika .env tidak ada
+
+// $sid        = getenv('TWILIO_SID');
+// $token      = getenv('TWILIO_AUTH_TOKEN');
+// $verifySid  = getenv('TWILIO_VERIFY_SID');
+
+$sid = '';
+$token = '';
+$verifySid = '';
+
+// Inisialisasi Twilio Client
 $twilio = new Client($sid, $token);
 
 // Redirect jika belum login (tidak ada data user)
