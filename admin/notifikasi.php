@@ -2,7 +2,7 @@
 session_start();
 include '../db.php';
 include '../notification_functions.php';
-
+$page = "notifikasi";
 // Fungsi untuk memeriksa stok produk
 function checkProductStock($kon) {
     $query = "SELECT id_produk, nama_produk, stok FROM produk WHERE stok < 15";
@@ -115,7 +115,63 @@ try {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        body { background-color: #F5F3EB; font-family: 'Poppins', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A;
+        }
+        .btn-outline-secondary {
+            color: #2D3A3A !important;
+            background-color: transparent !important;
+            border: 1px solid #2D3A3A !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 0.25rem 0.5rem; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #2D3A3A !important;
+            color: #fff !important;
+            border: 1px solid transparent !important;
+        }
+
+        /* Untuk tombol "Hapus Semua" */
+        .btn-outline-danger {
+            color: #763D2D !important;
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 0.25rem 0.5rem; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #763D2D !important;
+            color: #fff !important;
+            border: 1px solid transparent !important;
+        }
+
+        .btn-outline-primary {
+            color: #2D3A3A !important;
+            background-color: transparent !important;
+            border: 1px solid #2D3A3A !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 0.25rem 0.5rem; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #2D3A3A !important;
+            color: #fff !important;
+            border: 1px solid transparent !important;
+        }
+
+
         .notification-container {
             max-width: 1000px;
             margin: 30px auto;
@@ -129,7 +185,7 @@ try {
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
         .notification-card.unread {
-            background-color: #FFF8E7;
+            background-color:rgb(255, 255, 255);
         }
         .notification-icon {
             font-size: 2rem;
@@ -152,7 +208,8 @@ try {
         }
         .badge-new {
             background-color: #FFD700;
-            color: #000;
+            color: #ffffff;
+            font-weight: bold !important;
             font-size: 12px;
             padding: 4px 8px;
             border-radius: 6px;

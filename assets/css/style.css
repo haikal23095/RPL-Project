@@ -451,18 +451,18 @@ h6 {
 .nav-tabs-bordered .nav-link {
   margin-bottom: -2px;
   border: none;
-  color:  #2c384e;
+  color:  #2D3A3A;
 }
 
 .nav-tabs-bordered .nav-link:hover,
 .nav-tabs-bordered .nav-link:focus {
-  color: #2c384e;
+  color: #2D3A3A;
 }
 
 .nav-tabs-bordered .nav-link.active {
   background-color: #fff;
-  color: #2c384e;
-  border-bottom: 2px solid #2c384e;
+  color: #2D3A3A;
+  border-bottom: 2px solid #2D3A3A;
 }
 
 /*--------------------------------------------------------------
@@ -486,7 +486,7 @@ h6 {
 .logo span {
   font-size: 26px;
   font-weight: 700;
-  color: #2c384e;
+  color: #2D3A3A;
   font-family: "Andika", sans-serif;
 }
 
@@ -504,7 +504,7 @@ h6 {
   font-size: 32px;
   padding-left: 10px;
   cursor: pointer;
-  color: #2c384e;
+  color: #2D3A3A;
 }
 
 .header .search-bar {
@@ -665,7 +665,7 @@ h6 {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 5px;
-  color: #2c384e;
+  color: #2D3A3A;
 }
 
 .header-nav .messages .message-item p {
@@ -688,7 +688,7 @@ h6 {
   font-size: 18px;
   margin-bottom: 0;
   font-weight: 600;
-  color: #2c384e;
+  color: #2D3A3A;
 }
 
 .header-nav .profile .dropdown-header span {
@@ -1121,7 +1121,7 @@ h6 {
 .profile .profile-card h2 {
   font-size: 24px;
   font-weight: 700;
-  color: #2c384e;
+  color: #2D3A3A;
   margin: 10px 0 0 0;
 }
 

@@ -79,6 +79,23 @@ if ($result) {
 
     <link href="../assets/css/style.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A;
+        }
+        h2 {
+            font-size: 18px !important;
+            font-weight: bold !important;
+            color: #2D3A3A !important;
+        }
+        h5 {
+            font-size: 18px !important;
+            font-weight: bold !important;
+            color: #2D3A3A !important;
+        }
         .product-img {
             width: 60px;
             height: 60px;
@@ -103,11 +120,11 @@ if ($result) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-chat-square-dots-fill"></i> Ulasan Produk</h1>
+            <h1><i class="bi bi-chat-square-dots-fill"></i> ULASAN PRODUK</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item active">Ulasan</li>
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item active">ULASAN</li>
                 </ol>
             </nav>
         </div>
