@@ -1,22 +1,23 @@
 <?php
 session_start();
-include('../db.php'); 
+include('../db.php');
 $page = "produk";
 
 // --- SEMUA LOGIKA PHP TETAP SAMA, TIDAK DIUBAH ---
 
-// Pastikan pengguna sudah login
 if (!isset($_SESSION['user'])) {
     header("Location: ../login.php");
     exit();
 }
 
 $nama_user = $_SESSION['user'];
-$kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$nama_user'");
-$row_user = mysqli_fetch_array($kue_user);
+$kue_user_stmt = $kon->prepare("SELECT * FROM user WHERE nama = ?");
+$kue_user_stmt->bind_param("s", $nama_user);
+$kue_user_stmt->execute();
+$row_user = $kue_user_stmt->get_result()->fetch_assoc();
 $userId = $row_user['id_user'];
+$kue_user_stmt->close();
 
-// Ambil kategori dari database
 $sql_kategori = "SELECT id_kategori, nama_kategori FROM kategori ORDER BY nama_kategori ASC";
 $result_kategori = mysqli_query($kon, $sql_kategori);
 $categories = [];
@@ -24,7 +25,6 @@ while ($row = mysqli_fetch_assoc($result_kategori)) {
     $categories[] = $row;
 }
 
-// Ambil semua produk yang bukan item bonus promo
 $sql_produk = "SELECT p.*, k.nama_kategori 
                FROM produk p 
                JOIN kategori k ON p.id_kategori = k.id_kategori
@@ -35,31 +35,30 @@ while ($row = mysqli_fetch_assoc($result_produk)) {
     $products[] = [
         'id' => $row['id_produk'],
         'name' => $row['nama_produk'],
-        'category' => $row['nama_kategori'], 
-        'price' => $row['harga'], // Menggunakan harga_produk sesuai skema DB
+        'category' => $row['nama_kategori'],
+        'price' => $row['harga'],
         'stock' => $row['stok'],
         'image' => $row['gambar'],
-        'description' => $row['deskripsi'] 
+        'description' => $row['deskripsi']
     ];
 }
 
 $filteredProducts = $products;
 
-// Logika filter Kategori
 $selectedCategory = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['category'])) {
-    $selectedCategory = $_POST['category'];
+if (isset($_GET['category'])) {
+    $selectedCategory = $_GET['category'];
     if (!empty($selectedCategory)) {
-        $filteredProducts = array_filter($products, function($product) use ($selectedCategory) {
+        $filteredProducts = array_filter($products, function ($product) use ($selectedCategory) {
             return $product['category'] === $selectedCategory;
         });
     }
 }
 
-// Logika Wishlist
 if (isset($_POST['add_to_wishlist'])) {
     $productId = $_POST['product_id'];
-    
+    $currentCategory = $_GET['category'] ?? '';
+
     $checkSql = "SELECT * FROM wishlist WHERE id_user = ? AND id_produk = ?";
     $checkStmt = $kon->prepare($checkSql);
     $checkStmt->bind_param("ii", $userId, $productId);
@@ -75,12 +74,20 @@ if (isset($_POST['add_to_wishlist'])) {
     }
     $checkStmt->close();
     
-    header("Location: produk.php?wishlist_success=1&category=" . urlencode($selectedCategory));
+    $redirectUrl = "produk.php?wishlist_success=1";
+    if (!empty($currentCategory)) {
+        $redirectUrl .= "&category=" . urlencode($currentCategory);
+    }
+    header("Location: " . $redirectUrl);
     exit();
 }
 
 $wishlistSuccess = isset($_GET['wishlist_success']);
 $cartSuccess = isset($_GET['cart_success']);
+
+function formatCurrency($number) {
+    return 'Rp ' . number_format($number ?? 0, 0, ',', '.');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -105,7 +112,17 @@ $cartSuccess = isset($_GET['cart_success']);
             font-size: 1.1rem;
             color: #6c757d;
         }
-        
+        .btn-filter-dropdown {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            color: #333;
+            font-weight: 500;
+        }
+        .btn-filter-dropdown:hover, .btn-filter-dropdown:focus {
+            background-color: #f8f9fa;
+            border-color: #adb5bd;
+        }
+
         .product-card {
             background: #fff;
             border: 1px solid #e9ecef;
@@ -131,14 +148,15 @@ $cartSuccess = isset($_GET['cart_success']);
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(2px);
             border-radius: 50%;
             width: 35px;
             height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: none;
+            border: 1px solid #eee;
             color: #333;
             transition: all 0.2s ease;
         }
@@ -152,31 +170,55 @@ $cartSuccess = isset($_GET['cart_success']);
             display: flex;
             flex-direction: column;
         }
-        .product-card .card-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        .product-card .card-text {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #333;
+        
+        /* PERUBAHAN TAMPILAN NAMA PRODUK & HARGA */
+        .product-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 1rem;
         }
-        .product-card .btn-add-to-cart {
-            margin-top: auto; /* Mendorong tombol ke bawah */
-            width: 100%;
-            background-color: #fff;
-            color: #0d6efd;
-            border: 1px solid #0d6efd;
+        .product-name {
+            font-size: 1.05rem;
             font-weight: 600;
+            color: #212529;
+            flex-grow: 1;
+            padding-right: 10px;
         }
-        .product-card .btn-add-to-cart:hover {
-            background-color: #0d6efd;
+        .product-price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fd7e14; /* Warna orange */
+            white-space: nowrap;
+        }
+        
+        /* PERUBAHAN TAMPILAN GRUP TOMBOL */
+        .product-card .button-group {
+            margin-top: auto;
+            display: flex;
+            gap: 10px; /* Jarak antar tombol */
+        }
+        .product-card .btn {
+            font-weight: 600;
+            flex: 1; /* Membuat kedua tombol memiliki lebar yang sama */
+        }
+        .btn-buy-now {
+            background-color: #20c997; /* Warna hijau toska */
+            border-color: #20c997;
             color: #fff;
         }
-        .filter-form .form-select {
-            max-width: 200px;
+        .btn-buy-now:hover {
+            background-color: #1aae82;
+            border-color: #1aae82;
+        }
+        .btn-add-to-cart {
+            background-color: #ffc107; /* Warna kuning-oranye */
+            border-color: #ffc107;
+            color: #212529;
+        }
+        .btn-add-to-cart:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
         }
     </style>
 </head>
@@ -200,17 +242,22 @@ $cartSuccess = isset($_GET['cart_success']);
                     </div>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <form method="POST" class="filter-form d-inline-block">
-                        <select name="category" class="form-select" onchange="this.form.submit()">
-                            <option value="">Semua Kategori</option>
+                    <div class="dropdown">
+                        <button class="btn btn-filter-dropdown dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-tags-fill"></i>&nbsp;
+                            <?= htmlspecialchars(empty($selectedCategory) ? 'Semua Kategori' : $selectedCategory) ?>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="produk.php">Semua Kategori</a></li>
                             <?php foreach ($categories as $category): ?>
-                                <option value="<?= htmlspecialchars($category['nama_kategori']) ?>"
-                                    <?= ($selectedCategory == $category['nama_kategori']) ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($category['nama_kategori']) ?>
-                                </option>
+                                <li>
+                                    <a class="dropdown-item" href="produk.php?category=<?= urlencode($category['nama_kategori']) ?>">
+                                        <?= htmlspecialchars($category['nama_kategori']) ?>
+                                    </a>
+                                </li>
                             <?php endforeach; ?>
-                        </select>
-                    </form>
+                        </ul>
+                    </div>
                 </div>
             </div>
             
@@ -227,10 +274,10 @@ $cartSuccess = isset($_GET['cart_success']);
                         <div class="col-xl-3 col-lg-4 col-md-6">
                             <div class="card product-card h-100">
                                 <div class="card-img-container">
-                                    <a href="detail_produk.php?product_id=<?= urlencode($product['id']); ?>">
+                                    <a href="detail_produk.php?id=<?= $product['id']; ?>">
                                         <img src="../uploads/<?= htmlspecialchars($product['image']); ?>" class="card-img-top product-card-img-top" alt="<?= htmlspecialchars($product['name']); ?>">
                                     </a>
-                                    <form method="POST" class="d-inline">
+                                    <form method="POST">
                                         <input type="hidden" name="product_id" value="<?= $product['id']; ?>">
                                         <button type="submit" name="add_to_wishlist" class="btn btn-wishlist">
                                             <i class="bi bi-heart"></i>
@@ -238,17 +285,26 @@ $cartSuccess = isset($_GET['cart_success']);
                                     </form>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title"><?= htmlspecialchars($product['name']); ?></h5>
-                                    <p class="card-text">Rp <?= number_format($product['price'], 0, ',', '.'); ?></p>
+                                    <div class="product-info">
+                                        <div class="product-name"><?= htmlspecialchars($product['name']); ?></div>
+                                        <div class="product-price"><?= formatCurrency($product['price']); ?></div>
+                                    </div>
                                     
+                                    <div class="button-group">
                                     <?php if ($product['stock'] > 0): ?>
-                                        <form method="POST" action="add_to_cart.php" class="d-inline">
+                                        <form method="POST" action="checkout.php" class="w-50">
                                             <input type="hidden" name="product_id" value="<?= $product['id']; ?>">
-                                            <button type="submit" name="add_to_cart" class="btn btn-add-to-cart">Add to Cart</button>
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" name="buy_now" class="btn btn-buy-now w-100">Beli Sekarang</button>
+                                        </form>
+                                        <form method="POST" action="add_to_cart.php" class="w-50">
+                                            <input type="hidden" name="product_id" value="<?= $product['id']; ?>">
+                                            <button type="submit" name="add_to_cart" class="btn btn-add-to-cart w-100">Masuk Keranjang</button>
                                         </form>
                                     <?php else: ?>
                                         <button class="btn btn-secondary w-100" disabled>Stok Habis</button>
                                     <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -256,7 +312,7 @@ $cartSuccess = isset($_GET['cart_success']);
                 <?php else: ?>
                     <div class="col-12">
                         <div class="alert alert-warning text-center">
-                            Tidak ada produk yang ditemukan untuk kategori yang dipilih.
+                            Tidak ada produk yang ditemukan untuk kategori "<?= htmlspecialchars($selectedCategory) ?>".
                         </div>
                     </div>
                 <?php endif; ?>
