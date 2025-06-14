@@ -13,7 +13,7 @@
 }
 
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Andika", sans-serif;
   background: #F8F7F1;
   color: #2D3A3A;
 }
@@ -34,7 +34,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Nunito", sans-serif;
+  font-family: "Andika", sans-serif;
 }
 
 /*--------------------------------------------------------------
@@ -254,7 +254,7 @@ h6 {
   font-size: 14px;
   font-weight: 500;
   color: #EFAA31;
-  font-family: "Poppins", sans-serif;
+  font-family: "Andika", sans-serif;
 }
 
 .card-title span {
@@ -274,7 +274,7 @@ h6 {
 /* Alerts */
 .alert-heading {
   font-weight: 500;
-  font-family: "Poppins", sans-serif;
+  font-family: "Andika", sans-serif;
   font-size: 20px;
 }
 
@@ -420,7 +420,7 @@ h6 {
 /* Breadcrumbs */
 .breadcrumb {
   font-size: 14px;
-  font-family: "Nunito", sans-serif;
+  font-family: "Andika", sans-serif;
   color: #EFAA31;
   font-weight: 600;
 }
@@ -487,7 +487,7 @@ h6 {
   font-size: 26px;
   font-weight: 700;
   color: #2c384e;
-  font-family: "Nunito", sans-serif;
+  font-family: "Andika", sans-serif;
 }
 
 .header {
