@@ -151,15 +151,15 @@ $cartSuccess = isset($_GET['cart_success']);
                         <h2>AMBIL PROMO REDEEM-MU</h2>
                     </div> -->
 
-<<<<<<< HEAD
+
                     <div class="d-flex justify-content-center mb-4">
                         <img src="../assets/img/promo1.png" alt="promo1" style="width: 100%; max-width: 1500px;" class="">
                     </div>
                                         <!-- All Promo Section -->
-=======
+
                     <img src="../assets/img/promo1.png" alt="promo1" style="margin-bottom:40px; width: 1000px;">
                     <!-- All Promo Section -->
->>>>>>> d15aa31a08e261fa7b384db347fcb939c6297236
+
                     <div class="promo-section">
                         <h3 class="promo-section-title">SEMUA PROMO</h3>
                         <div class="row">
