@@ -242,22 +242,17 @@ function formatCurrency($number) {
                     </div>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <div class="dropdown">
-                        <button class="btn btn-filter-dropdown dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-tags-fill"></i>&nbsp;
-                            <?= htmlspecialchars(empty($selectedCategory) ? 'Semua Kategori' : $selectedCategory) ?>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="produk.php">Semua Kategori</a></li>
+                    <form method="POST" id="filter-form" class="filter-form d-inline-block">
+                        <select name="category" class="form-select" onchange="document.getElementById('filter-form').submit()">
+                            <option value="">Semua Kategori</option>
                             <?php foreach ($categories as $category): ?>
-                                <li>
-                                    <a class="dropdown-item" href="produk.php?category=<?= urlencode($category['nama_kategori']) ?>">
-                                        <?= htmlspecialchars($category['nama_kategori']) ?>
-                                    </a>
-                                </li>
+                                <option value="<?= htmlspecialchars($category['nama_kategori']) ?>"
+                                    <?= ($selectedCategory == $category['nama_kategori']) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($category['nama_kategori']) ?>
+                                </option>
                             <?php endforeach; ?>
-                        </ul>
-                    </div>
+                        </select>
+                    </form>
                 </div>
             </div>
             
