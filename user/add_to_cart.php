@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../db.php');
-
+$page = "keranjang";
 if (!isset($_SESSION['user'])) {
     header("Location: ../login.php");
     exit();
@@ -102,8 +102,11 @@ if (isset($_POST['checkout']) && isset($_POST['selected_items'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background-color: #f4f4f4;
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
         }
         .main {
             padding-bottom: 2rem;
@@ -152,6 +155,22 @@ if (isset($_POST['checkout']) && isset($_POST['selected_items'])) {
             color: #dc3545;
             font-weight: bold;
         }
+        
+        .btn-primary{
+            color: #1A877E !important;
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 10px 15px; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            background-color: #1A877E !important;
+            color: #fff !important;
+            border: 1px solid transparent !important;
+        }
     </style>
 </head>
 
@@ -161,11 +180,11 @@ if (isset($_POST['checkout']) && isset($_POST['selected_items'])) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-cart-check-fill"></i> Keranjang Belanja</h1>
+            <h1><i class="bi bi-cart"></i>&nbsp;KERANJANG</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item active">Keranjang Belanja</li>
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item active">KERANJANG</li>
                 </ol>
             </nav>
         </div>
