@@ -86,8 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['filter_category'])) {
 $cart = $_SESSION['cart'] ?? [];
 $wishlist = $_SESSION['wishlist'] ?? [];
 
-// Cek notifikasi sukses atau error
-$deleteSuccess = isset($_GET['delete_success']); // Cek apakah ada notifikasi sukses
+// Cek notifikasi suksess atau error
+$deleteSuccess = isset($_GET['delete_success']); // Cek apakah ada notifikasi suksess
 $deleteError = isset($_GET['delete_error']); // Cek apakah ada notifikasi error
 ?>
 
@@ -101,19 +101,21 @@ $deleteError = isset($_GET['delete_error']); // Cek apakah ada notifikasi error
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background-color: #FAF8F4;
-            font-family: 'Poppins', sans-serif;
+            background: #F8F7F1;
+            font-family: 'Andika', sans-serif;
         }
-        .btn-sukses {
+        .btn-suksess {
             background: linear-gradient(to right, #EFAA31, #FF8A0D);
             border: none;
             font-weight: 600;
-            color: #fff;
+            color: #ffffff;
             border-radius: 10px;
             padding: 10px 20px;
         }
-        .btn-sukses:hover {
+        .btn-suksess:hover {
             background: linear-gradient(to right, #FF8A0D, #EFAA31);
         }
         .card {
@@ -138,30 +140,27 @@ $deleteError = isset($_GET['delete_error']); // Cek apakah ada notifikasi error
             margin-bottom: 0;
         }
         .btn-outline-dark {
+            color: #2D3A3A !important;
             border-radius: 8px;
-            padding: 0;
-            font-size: 10px !important;
+            padding: 0 5px;
+            font-size: 11.3px !important;
             font-weight: bold !important;
             width: 100px;
             height: 46px;
-            position: relative;
-            display: inline-block;
             text-decoration: none;
             font-family: 'Andika', sans-serif !important;
-            border: 1px solid #000;
-            color: #000;
-            background: transparent;
+            border: 1px solid #2D3A3A !important;
+            background-color: transparent;
+            display: flex; 
+            align-items: center !important; 
+            justify-content: center !important;
+            transition:  background-color 0.7s ease;
         }
-        .btn-outline-dark::before {
-            content: "Detail Produk";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            white-space: nowrap;
-            font-size: 10px !important;
-            font-weight: bold !important;
-            font-family: 'Andika', sans-serif !important;
+
+        .btn-outline-dark:hover {
+            color: #ffffff !important;
+            background-color: #2D3A3A !important;
+            border: 1px solid transparent !important;
         }
         .btn-hapus {
             background-color: #763D2D !important;
@@ -257,7 +256,9 @@ $deleteError = isset($_GET['delete_error']); // Cek apakah ada notifikasi error
                 </nav>
             </div>
         </div>
-        <a href="tambah_produk.php" class="btn btn-sukses">+ Tambah Produk</a>
+        <a href="tambah_produk.php" class="btn-tambah">
+            <i class="bi bi-plus"></i>&nbsp; TAMBAH PRODUK
+        </a>
         <!-- Tampilkan Produk -->
         <div class="row mt-4 g-3">
             <?php if (count($filteredProducts) > 0): ?>
@@ -270,7 +271,7 @@ $deleteError = isset($_GET['delete_error']); // Cek apakah ada notifikasi error
                                 <p class="harga-text">IDR. <?= number_format($product['price'], 0, ',', '.'); ?></p>
                             </div>
                             <div class="card-buttons">
-                                <a href="detail_produk.php?product_id=<?= urlencode($product['id']); ?>" class="btn btn-outline-dark"></a>
+                               <a href="detail_produk.php?product_id=123" class="btn btn-outline-dark">Detail Produk</a>
                                 <button type="button" onclick="confirmDelete(<?= htmlspecialchars($product['id']); ?>)" class="btn btn-hapus"></button>
                             </div>
                         </div>
