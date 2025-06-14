@@ -1,14 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Slackey&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Smythe&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+
 
 body {
-    font-family: 'Slackey', sans-serif;
+    font-family: 'Andika', sans-serif;
     width: auto;
     height: auto    ;
 }
 
 h1 {
-    font-family: 'Slackey', sans-serif;
+    font-family: 'Andika', sans-serif;
     color: #FFFFFF;
     font-size: 45px;
     text-transform: uppercase;
@@ -19,7 +20,7 @@ h1 {
 }
 
 p {
-    font-family: 'Smythe', sans-serif;
+    font-family: 'Andika', sans-serif;
     color: #FFFFFF;
     font-size: 10px;
     font-weight: 500;

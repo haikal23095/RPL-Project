@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
 
 body {
   background-size: cover;
@@ -27,11 +29,11 @@ li span{
 .container-com h1 {
   padding-top: 80px;
   text-align: center;
-  font-family: "Smythe",sans-serif;
+  font-family: "Andika",sans-serif;
 }
 
 .container-com h4 {
-  font-family: "Smythe",sans-serif;
+  font-family: "Andika",sans-serif;
   letter-spacing: 2px;
 }
 
@@ -162,7 +164,7 @@ li span{
   font-size: 1rem;
   color: #495057; /* Warna teks deskripsi */
   margin: 0; /* Hilangkan margin default */
-  font-family: "Smythe", sans-serif;
+  font-family: "Andika", sans-serif;
   letter-spacing: 2px;
 }
 
@@ -246,7 +248,7 @@ li span{
 
 .container-card h5{
   font-size: 25px;
-  font-family: 'Smythe', sans-serif;
+  font-family: 'Andika', sans-serif;
   margin: 0px;
   color: #ffffff;
 }
@@ -286,7 +288,7 @@ li span{
 
 .container-detailcom h4{
   font-size: 35px;
-  font-family: 'Slackey', sans-serif;
+  font-family: 'Andika', sans-serif;
   margin: 0px;
   margin-right: 30px;
 }
@@ -294,7 +296,7 @@ li span{
 .container-detailcom h1 {
   font-size: 50px;
   padding: 0px 200px;
-  font-family: 'Smythe', sans-serif;
+  font-family: 'Andika', sans-serif;
   text-align: center;
 }
 
@@ -321,7 +323,7 @@ li span{
 
 p.card-text-d {
   font-size: 18px;
-  font-family: 'Smythe', sans-serif;
+  font-family: 'Andika', sans-serif;
   color: #ffffff;
 
 }
@@ -804,7 +806,7 @@ textarea {
 }
 
 .topbar p{
-  font-family: 'Smythe', sans-serif;  
+  font-family: 'Andika', sans-serif;  
   background-color: none;
   font-size: 55px;
   justify-content: center;
@@ -845,7 +847,7 @@ textarea {
 }
 
 .pagetitle h3{
-  font-family: 'Slackey', sans-serif;
+  font-family: 'Andika', sans-serif;
   margin: 0;
   font-size: 25px;
 }
@@ -853,7 +855,7 @@ textarea {
   padding: 0px 20px;
 }
 .pagetitle p{
-  font-family: 'Smythe', sans-serif;
+  font-family: 'Andika', sans-serif;
   margin: 0;
   color: #e69500;
   letter-spacing: 2px;
@@ -906,7 +908,7 @@ textarea {
 
 .card-body p{
   letter-spacing: 2px;
-  font-family: 'Smythe', sans-serif;
+  font-family: 'Andika', sans-serif;
 }
 
 /* end */
@@ -1007,7 +1009,7 @@ textarea {
   color: #ffffff;
   background: #ffcc00;
   border: none;
-  font-family: 'Slackey', sans-serif;
+  font-family: 'Andika', sans-serif;
   letter-spacing: 2px;
   border-radius: 5px;
   cursor: pointer;
@@ -1155,7 +1157,7 @@ textarea {
   color: #ffffff;
   background: #31313163;
   border: 3px solid #ffffff;
-  font-family: 'Slackey', sans-serif;
+  font-family: 'Andika', sans-serif;
   letter-spacing: 2px;
   border-radius: 10px;
   cursor: pointer;
@@ -1199,12 +1201,12 @@ textarea {
   }
 
   .container-topic p{
-    font-family: 'Smythe',sans-serif;
+    font-family: 'Andika',sans-serif;
     letter-spacing: 2px;
   }
 
   .container-topic h6{
-    font-family: 'Slackey',sans-serif;
+    font-family: 'Andika',sans-serif;
     letter-spacing: 2px;
     margin: 10px;
     font-size: 12px;

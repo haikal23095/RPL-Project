@@ -1,12 +1,13 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Slackey&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Smythe&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+
 
 *{
 	box-sizing: border-box;
 }
 body{
-    font-family: 'Smythe', sans-serif;
+    font-family: 'Andika', sans-serif;
     width: auto;
     height: auto;
 	align-items: center;
@@ -82,7 +83,7 @@ form {
 h1{
 	font-weight: bold;
 	margin: 0;
-    font-family: "Slackey", sans-serif;
+    font-family: "Andika", sans-serif;
     letter-spacing: 2px;
     text-shadow: 0px 0px 4px #00000043;
 }
@@ -92,7 +93,7 @@ p{
 	line-height: 20px;
 	letter-spacing: 0.5px;
 	margin: 15px 0 20px;
-    font-family: "Smythe", sans-serif;
+    font-family: "Andika", sans-serif;
 }
 input{
 	background: #eee;
@@ -124,7 +125,7 @@ button{
 	background: #ff4b2b;
 	font-size: 12px;
 	font-weight: bold;
-	font-family: 'Slackey', sans-serif;
+	font-family: 'Andika', sans-serif;
 	padding: 12px 35px;
 	margin: 10px;
 	border-radius: 19px;
