@@ -105,8 +105,8 @@ if (isset($_POST['add_to_cart'])) {
             <nav>
                 <ol class="breadcrumb">
 <<<<<<< HEAD
-                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
-                    <li class="breadcrumb-item active">DAFTAR KEINGINAN</li>
+                    <li class="breadcrumb-item"><a href="index.php">DASHBOARD</a></li>
+                    <li class="breadcrumb-item active">Daftar Keinginan</li>
 =======
                     <li class="breadcrumb-item"><a href="index.php">DASHBOARD</a></li>
                     <li class="breadcrumb-item active">Daftar Keinginan</li>
