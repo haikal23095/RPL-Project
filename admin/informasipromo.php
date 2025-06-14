@@ -51,7 +51,10 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
     <title>Manajemen Promo - Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /*  */
+        body {
+            background-color: #F8F7F1; 
+        }
+        
         .promo-card {
             margin-bottom: 20px;
             transition: transform 0.3s;
@@ -85,7 +88,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
         }
 
         .container {
-            background-color: #E9E7E4;
+            background-color: #fff;
             border-radius: 24px;
         }
         

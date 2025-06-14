@@ -106,12 +106,46 @@ if (isset($_SESSION['error'])) {
     <?php include 'aset.php'; ?>
 </head>
 <body>
+    <style>
+        body {
+            background-color: #F8F7F1; 
+        }
+         /* Styling untuk tombol kembali (baru) */
+        .standalone-back-button-container {
+            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
+            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
+    </style>
     <div class="wrapper">
         <?php require "atas.php"; ?>
         <?php require "menu.php"; ?>
     </div>
 
     <main id="main" class="main">
+        <div class="standalone-back-button-container">
+            <a href="informasipromo.php" class="standalone-back-button">
+                <i class="bi bi-arrow-left"></i>
+                Kembali
+            </a>
+        </div>
         <div class="pagetitle">
             <h1><i class="bi bi-megaphone"></i>&nbsp; MANAJEMEN PROMO</h1>
             <nav>
