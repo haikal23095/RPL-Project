@@ -74,11 +74,70 @@ function formatCurrency($number) {
 <body>
     <?php require "atas.php"; ?>
     <?php require "profil_menu.php"; ?>
-
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
+        h5{
+            font-size: 18px !important;
+            color: #2D3A3A !important;
+            font-weight: bold !important;
+        }
+        strong{
+            color: #ff771d;
+        }
+        .btn-primary {
+            background-color: #FFC300 !important;
+            border: 1px solid #FFC300 !important;
+        }
+        .badge{
+            background-color: #FFBB34 !important;
+        }
+        .btn-danger {
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            color: #763D2D !important;
+        }
+        .btn-danger:hover{
+            background-color: #763D2D !important;
+            color: #ffffff !important;
+        }
+        .btn-outline-secondary {
+            background-color: transparent !important;
+            border: 1px solid #FF8C12 !important;
+            color: #FF8C12 !important;
+        }
+        .btn-outline-secondary:hover{
+            background-color: #FF8C12 !important;
+            color: #ffffff !important;
+        }
+        .btn-outline-success {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-outline-success:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-success {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-success:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+    </style>
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-clock-history"></i> Histori Pembelian</h1>
-            <nav><ol class="breadcrumb"><li class="breadcrumb-item"><a href="index.php">Profil</a></li><li class="breadcrumb-item active">Histori Pembelian</li></ol></nav>
+            <h1><i class="bi bi-cash-stack"></i> RIWAYAT PEMBAYARAN</h1>
+            <nav><ol class="breadcrumb"><li class="breadcrumb-item"><a href="profil.php">PROFIL</a></li><li class="breadcrumb-item active">RIWAYAT PEMBAYARAN</li></ol></nav>
         </div>
 
         <section class="section">
