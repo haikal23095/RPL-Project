@@ -271,7 +271,7 @@ $deleteError = isset($_GET['delete_error']); // Cek apakah ada notifikasi error
                                 <p class="harga-text">IDR. <?= number_format($product['price'], 0, ',', '.'); ?></p>
                             </div>
                             <div class="card-buttons">
-                               <a href="detail_produk.php?product_id=123" class="btn btn-outline-dark">Detail Produk</a>
+                               <a href="detail_produk.php?product_id=<?= urlencode($product['id']); ?>" class="btn btn-outline-dark">Detail Produk</a>
                                 <button type="button" onclick="confirmDelete(<?= htmlspecialchars($product['id']); ?>)" class="btn btn-hapus"></button>
                             </div>
                         </div>
