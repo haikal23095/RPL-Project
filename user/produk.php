@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../db.php');
-$page = "produk";
+$page = "dashboard";
 
 // --- SEMUA LOGIKA PHP TETAP SAMA, TIDAK DIUBAH ---
 
@@ -99,9 +99,22 @@ function formatCurrency($number) {
     <?php include 'aset.php'; ?>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
+        div.product-name{
+            font-size: 14px;
+        }
+        main{
+            padding: 40px !important;
+        }
         .page-header {
-            padding: 2rem 0;
-            margin-bottom: 2rem;
+            padding: 0 0;
+            margin-bottom: 10px;
         }
         .page-header h2 {
             font-size: 2.5rem;
@@ -203,23 +216,54 @@ function formatCurrency($number) {
             flex: 1; /* Membuat kedua tombol memiliki lebar yang sama */
         }
         .btn-buy-now {
-            background-color: #20c997; /* Warna hijau toska */
-            border-color: #20c997;
+            background-color: #1A877E; /* Warna hijau toska */
+            border-color: #1A877E;
             color: #fff;
+            padding-top: 13px;
+            padding-bottom: 13px;
+            font-size: 12px;
         }
         .btn-buy-now:hover {
-            background-color: #1aae82;
-            border-color: #1aae82;
+            background-color: #1A877E;
+            border-color: #1A877E;
+            box-shadow: 0 0 12px rgba(26, 135, 126, 0.64);
+            color: #ffffff !important;
         }
         .btn-add-to-cart {
-            background-color: #ffc107; /* Warna kuning-oranye */
+            background-color:transparent; /* Warna kuning-oranye */
             border-color: #ffc107;
-            color: #212529;
+            font-size: 11.6px;
+            color: #ffc107;
         }
         .btn-add-to-cart:hover {
-            background-color: #e0a800;
-            border-color: #d39e00;
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #ffffff;
         }
+         /* Styling untuk tombol kembali (baru) */
+        .standalone-back-button-container {
+            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
+            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
+        
     </style>
 </head>
 
@@ -231,8 +275,14 @@ function formatCurrency($number) {
         <section class="section">
             <div class="page-header row align-items-center">
                 <div class="col-md-8">
+                            <div class="standalone-back-button-container">
+                    <a href="index.php" class="standalone-back-button">
+                        <i class="bi bi-arrow-left"></i>
+                        Kembali
+                    </a>
+                </div>
                     <div class="pagetitle">
-                      <h1><i class="bi bi-grid"></i>&nbsp;Produk</h1>
+                      <h1><i class="bi bi-grid"></i>&nbsp;PRODUK</h1>
                       <nav>
                         <ol class="breadcrumb">
                           <li class="breadcrumb-item"><a href="index.php">HOME</a></li>

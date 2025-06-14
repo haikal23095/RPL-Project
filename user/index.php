@@ -63,6 +63,9 @@ $row_user = mysqli_fetch_array($kue_user);
             font-family: 'Andika', sans-serif;
             color: #2D3A3A !important;
         }
+        main{
+          margin-left: 20px;
+        }
   </style>
   <main id="main" class="main">
 

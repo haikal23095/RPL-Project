@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../db.php');
-
+$page = "keranjang";
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
     if (!empty($_POST['selected_items'])) {
         $_SESSION['checkout_cart_ids'] = $_POST['selected_items'];
@@ -253,7 +253,13 @@ if (isset($_POST['confirm_order'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     
     <style>
-        body { background-color: #f8f9fa; }
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
         .product-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 0.375rem; }
         #summary-card { position: sticky; top: 80px; }
         .summary-card .list-group-item { border: none; padding-left: 0; padding-right: 0; }
@@ -269,8 +275,12 @@ if (isset($_POST['confirm_order'])) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>Checkout</h1>
-            <nav><ol class="breadcrumb"><li class="breadcrumb-item"><a href="add_to_cart.php">Keranjang</a></li><li class="breadcrumb-item active">Checkout</li></ol></nav>
+            <h1><i class="bi bi-cart"></i>&nbsp; PEMBAYARAN</h1>
+            <nav><ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                <li class="breadcrumb-item"><a href="produk.php">PRODUK</a></li>
+                <li class="breadcrumb-item"><a href="add_to_cart.php">KERANJANG</a></li>
+            <li class="breadcrumb-item active">PEMBAYARAN</li></ol></nav>
         </div>
 
         <section class="section">
