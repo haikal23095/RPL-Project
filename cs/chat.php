@@ -180,10 +180,10 @@ if (!isset($_SESSION['cs'])) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>Pelayanan Pelanggan</h1>
+            <h1><i class="bi bi-headset"></i> Pelayanan Pelanggan</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                    <li class="breadcrumb-item"><a href="chat.php">Home</a></li>
                     <li class="breadcrumb-item active">Pelayanan Pelanggan</li>
                 </ol>
             </nav>
