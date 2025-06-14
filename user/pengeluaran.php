@@ -157,10 +157,14 @@ $nama_bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "
             font-family: 'Andika', sans-serif;
             color: #2D3A3A !important;
         }
+        .btn-primary{
+            background-color: #FFBB34 !important;
+            border: 1px solid #FFBB34 !important;
+        }
     </style>
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-wallet2"></i>&nbsp; Riwayat Pengeluaran</h1>
+            <h1><i class="bi bi-wallet2"></i>&nbsp; RIWAYAT PENGELUARAN</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">PROFIL</a></li>
