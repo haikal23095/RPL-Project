@@ -44,8 +44,67 @@ function formatCurrency($number) {
     <?php include 'aset.php'; ?>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background-color: #f8f9fa;
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
+        
+        h5{
+            font-size: 18px !important;
+            color: #ff771d !important;
+            font-weight: bold !important;
+        }
+        strong{
+            color: #ff771d;
+        }
+        div.my-1 {
+            color: #FF8C12;
+        }
+        .btn-primary {
+            background-color: #FFC300 !important;
+            border: 1px solid #FFC300 !important;
+        }
+        .badge{
+            background-color: #FFBB34 !important;
+        }
+        .btn-danger {
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            color: #763D2D !important;
+        }
+        .btn-danger:hover{
+            background-color: #763D2D !important;
+            color: #ffffff !important;
+        }
+        .btn-outline-primary {
+            background-color: transparent !important;
+            border: 1px solid #FF8C12 !important;
+            color: #FF8C12 !important;
+        }
+        .btn-outline-primary:hover{
+            background-color: #FF8C12 !important;
+            color: #ffffff !important;
+        }
+        .btn-outline-success {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-outline-success:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-success {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-success:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
         }
         .pesanan-card {
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
@@ -98,11 +157,11 @@ function formatCurrency($number) {
 
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1><i class="bi bi-box-seam"></i> Pesanan Diproses</h1>
+        <h1><i class="bi bi-clock-history"></i> PESANAN DIPROSES</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="profil.php">Profil</a></li>
-                <li class="breadcrumb-item active">Pesanan Diproses</li>
+                <li class="breadcrumb-item"><a href="profil.php">PROFIL</a></li>
+                <li class="breadcrumb-item active">PESANAN DIPROSES</li>
             </ol>
         </nav>
     </div>
@@ -152,13 +211,11 @@ function formatCurrency($number) {
                                                 type="button" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#detailModal"
-                                                data-id="<?= $pesanan['id_pesanan'] ?>">
-                                            <i class="bi bi-eye"></i> Detail Pesanan
+                                                data-id="<?= $pesanan['id_pesanan'] ?>"> Detail Pesanan
                                         </button>
                                         <a href="form_pembatalan.php?id_pesanan=<?= $pesanan['id_pesanan'] ?>" 
                                            class="btn btn-danger btn-sm"
-                                           onclick="return confirm('Yakin ingin mengajukan pembatalan untuk pesanan ini?');">
-                                            <i class="bi bi-x-circle"></i> Batalkan
+                                           onclick="return confirm('Yakin ingin mengajukan pembatalan untuk pesanan ini?');">Batalkan
                                         </a>
                                     </div>
                                 </div>

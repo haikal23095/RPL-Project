@@ -90,14 +90,22 @@ if (isset($_POST['add_to_cart'])) {
 
     <!-- SIDEBAR -->
     <?php require "profil_menu.php"; ?>
-
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
+    </style>
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-heart"></i>&nbsp; Wishlist</h1>
+            <h1><i class="bi bi-heart"></i>&nbsp; DAFTAR KEINGINAN</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">DASHBOARD</a></li>
-                    <li class="breadcrumb-item active">Wishlist</li>
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item active">DAFTAR KEINGINAN</li>
                 </ol>
             </nav>
         </div>

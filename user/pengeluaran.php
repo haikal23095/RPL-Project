@@ -149,6 +149,15 @@ $nama_bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "
 <body>
     <?php require "atas.php"; ?>
     <?php require "profil_menu.php"; ?>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
+    </style>
     <main id="main" class="main">
         <div class="pagetitle">
             <h1><i class="bi bi-wallet2"></i>&nbsp; Riwayat Pengeluaran</h1>
