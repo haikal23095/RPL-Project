@@ -36,6 +36,13 @@ if (!$pesanan) {
     <title>Detail Pesanan Dikirim</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
         .pesanan-detail-card {
             border: 1px solid #ddd;
             border-radius: 8px;
