@@ -1,8 +1,7 @@
 <?php
+require_once '../db.php';
 session_start();
-include('../db.php'); // Koneksi ke database
 
-// Pastikan user login
 if (!isset($_SESSION['user'])) {
     header("Location: ../login.php");
     exit();
@@ -13,18 +12,15 @@ $kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$user'");
 $row_user = mysqli_fetch_array($kue_user);
 $userId = $row_user['id_user'];
 
-// Ambil ID pesanan dari parameter URL
 $orderId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-// Validasi ID pesanan
 if ($orderId <= 0) {
     die("ID pesanan tidak valid.");
 }
 
-// Ambil data pengiriman dari database
-$sql = "SELECT pg.nomor_resi, pg.nama_kurir, pg.alamat_pengiriman, 
-        pg.tanggal_kirim, pg.perkiraan_tiba, pg.tanggal_tiba, 
-        pg.status_pengiriman, pg.biaya_kirim
+$sql = "SELECT p.status_pesanan, pg.nomor_resi, pg.nama_kurir, pg.alamat_pengiriman, 
+               pg.tanggal_kirim, pg.perkiraan_tiba, pg.tanggal_tiba, 
+               pg.status_pengiriman, pg.biaya_kirim
         FROM pengiriman_pesanan pg
         JOIN pesanan p ON pg.id_pesanan = p.id_pesanan
         WHERE pg.id_pesanan = ? AND p.id_user = ?";
@@ -42,18 +38,21 @@ $shippingData = mysqli_fetch_assoc($result);
 
 mysqli_stmt_close($stmt);
 
-// Pastikan $shippingData tidak null
 if (!$shippingData) {
     die("Data pengiriman tidak ditemukan atau Anda tidak berhak mengakses pesanan ini.");
 }
 
-// Tentukan progress berdasarkan status pengiriman
-$statusMap = [
-    'dalam_pengiriman' => 2,
-    'sudah_sampai' => 3,
-    'terlambat' => 3,
-];
-$currentStep = isset($statusMap[$shippingData['status_pengiriman']]) ? $statusMap[$shippingData['status_pengiriman']] : 1;
+// Logika untuk menentukan step pada progress bar 4-langkah
+$currentStep = 1; // Step 1: Pesanan dibuat (selalu aktif)
+if ($shippingData['status_pesanan'] === 'Diproses' || $shippingData['status_pesanan'] === 'Dikirim' || $shippingData['status_pesanan'] === 'Selesai') {
+    $currentStep = 2; // Step 2: Pesanan diproses
+}
+if ($shippingData['status_pesanan'] === 'Dikirim' || $shippingData['status_pesanan'] === 'Selesai') {
+    $currentStep = 3; // Step 3: Pesanan dikirim
+}
+if ($shippingData['status_pesanan'] === 'Selesai') {
+    $currentStep = 4; // Step 4: Tiba di tujuan
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,95 +60,101 @@ $currentStep = isset($statusMap[$shippingData['status_pengiriman']]) ? $statusMa
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Detail Pengiriman</title>
+    <title>Lacak Pesanan Anda</title>
     
-    <!-- Favicons -->
-    <link href="../assets/img/favicon.png" rel="icon">
-    <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
-    <!-- Vendor CSS Files -->
-    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="../assets/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="../assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-    <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="../assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-    <!-- Template Main CSS File -->
-    <link href="../assets/css/style.css" rel="stylesheet">
+    <?php include 'aset.php'; ?>
     <style>
-        /* Timeline Styling */
-        .timeline {
-            position: relative;
-            margin: 20px 0;
-            padding: 0;
-            list-style: none;
+        .track-section {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.1);
         }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 20px;
-            bottom: 0;
-            width: 4px;
-            background: #ddd;
-        }
-
-        .timeline-step {
-            position: relative;
-            margin: 0 0 20px 50px;
-            padding: 0 0 0 20px;
-        }
-
-        .timeline-step.active .timeline-icon {
-            background: #007bff;
-            color: #fff;
-        }
-
-        .timeline-step .timeline-icon {
-            position: absolute;
-            top: 0;
-            left: -30px;
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
-            text-align: center;
-            border-radius: 50%;
-            background: #ddd;
-            color: #fff;
-        }
-
-        .timeline-step .timeline-content {
-            font-size: 14px;
-            color: #555;
-        }
-
-        .timeline-step .timeline-content strong {
-            font-size: 16px;
+        .track-header h2 {
+            font-weight: 700;
             color: #333;
         }
-
-        h2 {
-            font-size: 32px; /* Ukuran font untuk h2 yang lebih besar */
-            margin-bottom: 20px; /* Jarak bawah untuk h2 */
+        .track-header p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        .shipping-info-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: .5rem;
+            padding: 1rem;
+        }
+        
+        /* Progress Tracker */
+        .progress-tracker {
+            display: flex;
+            justify-content: space-between;
+            list-style: none;
+            padding: 0;
+            margin: 2.5rem 0;
+            position: relative;
+        }
+        .progress-tracker::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: #e9ecef;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        .progress-bar-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 4px;
+            background-color: #0d6efd;
+            transform: translateY(-50%);
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+        .progress-step {
+            position: relative;
+            text-align: center;
+            z-index: 3;
+            width: 25%;
+        }
+        .progress-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            color: #6c757d;
+            border: 4px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        .progress-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            font-weight: 600;
+        }
+        .progress-step.active .progress-icon {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+        .progress-step.active .progress-label {
+            color: #0d6efd;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <?php require "atas.php"; ?>
-    <!-- Sidebar -->
-    <?php require "menu.php"; ?>
+    <?php require "profil_menu.php"; ?>
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-truck"></i> Lacak Pesanan</h1>
+            <h1><i class="bi bi-geo-alt-fill"></i> Lacak Pesanan</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">Home</a></li>
@@ -159,75 +164,73 @@ $currentStep = isset($statusMap[$shippingData['status_pengiriman']]) ? $statusMa
         </div>
 
         <section class="section">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="card-title">Timeline Pengiriman</h2>
-                            <ul class="timeline">
-                                <li class="timeline-step <?= $currentStep >= 1 ? 'active' : ''; ?>">
-                                    <div class="timeline-icon"><i class="bi bi-box"></i></div>
-                                    <div class="timeline-content">
-                                        <strong>Dipesan</strong>
-                                        <p><?= isset($shippingData['tanggal_kirim']) ? date('d/m/Y H:i', strtotime($shippingData['tanggal_kirim'])) : 'Tidak tersedia'; ?></p>
-                                    </div>
-                                </li>
-                                <li class="timeline-step <?= $currentStep >= 2 ? 'active' : ''; ?>">
-                                    <div class="timeline-icon"><i class="bi bi-truck"></i></div>
-                                    <div class="timeline-content">
-                                        <strong>Dalam Pengiriman</strong>
-                                        <p><?= $currentStep >= 2 ? 'Sedang dalam perjalanan' : 'Belum dalam pengiriman'; ?></p>
-                                    </div>
-                                </li>
-                                <li class="timeline-step <?= $currentStep >= 3 ? 'active' : ''; ?>">
-                                    <div class="timeline-icon"><i class="bi bi-house-door"></i></div>
-                                    <div class="timeline-content">
-                                        <strong><?= isset($shippingData['status_pengiriman']) && $shippingData['status_pengiriman'] === 'terlambat' ? 'Terlambat' : 'Tiba di Tujuan'; ?></strong>
-                                        <p><?= isset($shippingData['tanggal_tiba']) ? ($shippingData['tanggal_tiba'] ? date('d/m/Y H:i', strtotime($shippingData['tanggal_tiba'])) : 'Belum tiba') : 'Tidak tersedia'; ?></p>
-                                    </div>
-                                </li>
-                            </ul>
-                            <h2 class="card-title mt-4">Detail Pengiriman</h2>
-                            <table class="table table-bordered">
-                                <tr>
-                                    <th>Nomor Resi</th>
-                                    <td><?= isset($shippingData['nomor_resi']) ? htmlspecialchars($shippingData['nomor_resi']) : 'Tidak tersedia'; ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Nama Kurir</th>
-                                    <td><?= isset($shippingData['nama_kurir']) ? htmlspecialchars($shippingData['nama_kurir']) : 'Tidak tersedia'; ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Alamat Pengiriman</th>
-                                    <td><?= isset($shippingData['alamat_pengiriman']) ? htmlspecialchars($shippingData['alamat_pengiriman']) : 'Tidak tersedia'; ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Estimasi Waktu Tiba</th>
-                                    <td><?= isset($shippingData['perkiraan_tiba']) ? ($shippingData['perkiraan_tiba'] ? date('d/m/Y H:i', strtotime($shippingData['perkiraan_tiba'])) : 'Tidak tersedia') : 'Tidak tersedia'; ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Biaya Kirim</th>
-                                    <td><?= isset($shippingData['biaya_kirim']) ? 'Rp ' . number_format($shippingData['biaya_kirim'], 0, ',', '.') : 'Tidak tersedia'; ?></td>
-                                </tr>
-                            </table>
-                            <a href="history_pembayaran.php" class="btn btn-secondary mt-3">Kembali</a>
+            <div class="track-section">
+                <div class="track-header text-center">
+                    <h2>Lacak Pesanan</h2>
+                    <p>Pesananmu sedang dalam perjalanan!</p>
+                </div>
+
+                <div class="shipping-info-box my-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-2 mb-md-0">
+                            <strong>Estimasi Tiba</strong>
+                            <p class="mb-0"><?= isset($shippingData['perkiraan_tiba']) ? date('d F Y', strtotime($shippingData['perkiraan_tiba'])) : 'Tidak tersedia'; ?></p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                             <strong><?= isset($shippingData['nama_kurir']) ? htmlspecialchars($shippingData['nama_kurir']) : 'Kurir'; ?></strong>
+                            <p class="mb-0"><?= isset($shippingData['nomor_resi']) ? htmlspecialchars($shippingData['nomor_resi']) : 'Tidak tersedia'; ?></p>
                         </div>
                     </div>
                 </div>
+
+                <div class="progress-tracker">
+                    <?php 
+                        $widthPercentage = ($currentStep - 1) * 33.33; 
+                    ?>
+                    <div class="progress-bar-line" style="width: <?= $widthPercentage ?>%;"></div>
+                    <div class="progress-step <?= $currentStep >= 1 ? 'active' : '' ?>">
+                        <div class="progress-icon"><i class="bi bi-journal-check"></i></div>
+                        <div class="progress-label">Pesanan Dibuat</div>
+                    </div>
+                    <div class="progress-step <?= $currentStep >= 2 ? 'active' : '' ?>">
+                        <div class="progress-icon"><i class="bi bi-box-seam"></i></div>
+                        <div class="progress-label">Pesanan Diproses</div>
+                    </div>
+                    <div class="progress-step <?= $currentStep >= 3 ? 'active' : '' ?>">
+                        <div class="progress-icon"><i class="bi bi-truck"></i></div>
+                        <div class="progress-label">Pesanan Dikirim</div>
+                    </div>
+                    <div class="progress-step <?= $currentStep >= 4 ? 'active' : '' ?>">
+                        <div class="progress-icon"><i class="bi bi-house-door-fill"></i></div>
+                        <div class="progress-label">Tiba di Tujuan</div>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+
+                <div class="card">
+                    <div class="card-header fw-bold">Rincian Pengiriman</div>
+                    <div class="card-body pt-3">
+                        <div class="row mb-2">
+                            <div class="col-sm-4 text-muted">Jasa Pengiriman</div>
+                            <div class="col-sm-8"><?= isset($shippingData['nama_kurir']) ? htmlspecialchars($shippingData['nama_kurir']) : '-'; ?></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4 text-muted">No. Resi</div>
+                            <div class="col-sm-8"><?= isset($shippingData['nomor_resi']) ? htmlspecialchars($shippingData['nomor_resi']) : '-'; ?></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4 text-muted">Alamat</div>
+                            <div class="col-sm-8"><?= isset($shippingData['alamat_pengiriman']) ? htmlspecialchars($shippingData['alamat_pengiriman']) : '-'; ?></div>
+                        </div>
+                    </div>
+                </div>
+                 <a href="history_pembayaran.php" class="btn btn-secondary mt-3"><i class="bi bi-arrow-left"></i> Kembali</a>
             </div>
         </section>
     </main>
-    <!-- Vendor JS Files -->
-    <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/vendor/chart.js/chart.min.js"></script>
-    <script src="../assets/vendor/echarts/echarts.min.js"></script>
-    <script src="../assets/vendor/quill/quill.min.js"></script>
-    <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="../assets/vendor/php-email-form/validate.js"></script>
 
-    <!-- Template Main JS File -->
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/main.js"></script>
 </body>
 </html>
