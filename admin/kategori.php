@@ -88,6 +88,21 @@ if (isset($_SESSION['products'])) {
             font-weight: bold !important;
             color: #2D3A3A !important;
         }
+        .btn-secondary {
+            color: #763D2D !important;
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 10px 15px; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-secondary:hover {
+            background-color: #763D2D !important;
+            color: #fff !important;
+            border: 1px solid transparent !important;
+        }
     </style>
 <div class="container mt-5">
     <?php require "atas.php"; ?>

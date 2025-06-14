@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../db.php';
+$page = "produk";
 
 // Jika produk belum ada di session, arahkan ke halaman utama
 if (!isset($_SESSION['products']) || !isset($_GET['product_id'])) {
@@ -81,6 +82,86 @@ if (isset($_POST['edit_product'])) {
     <link href="../assets/css/style.css" rel="stylesheet">
     
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+        }
+         /* Styling untuk tombol kembali (baru) */
+        .standalone-back-button-container {
+            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
+            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
+
+        .btn-secondary {
+            color: #763D2D !important;
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 10px 15px; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-secondary:hover {
+            background-color: #763D2D !important;
+            color: #fff !important;
+            border: 1px solid transparent !important;
+        }
+        
+        .btn-primary{
+            color: #1A877E !important;
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 10px 15px; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            background-color: #1A877E !important;
+            color: #fff !important;
+            border: 1px solid transparent !important;
+        }
+
+        .btn-warning{
+            color: #ffffff !important;
+            background-color: #EFAA31 !important;
+            border: 1px solid #EFAA31 !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 10px 15px; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            box-shadow: 0 0 15px transparent !important;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-warning:hover {
+            background-color: #EFAA31 !important;
+            color: #ffffff !important;
+            border: 1px solid transparent !important;
+            box-shadow:0 0 15px rgba(239, 169, 49, 0.66) !important;
+        }
+
         .product-image {
             max-height: 500px;
             width: 100%;
@@ -97,6 +178,17 @@ if (isset($_POST['edit_product'])) {
         .btn-custom:hover {
             transform: scale(1.05);
         }
+
+        .badge.bg-primary {
+            background-color: #FF8C12 !important;
+            color: #ffffff;
+            font-weight: bold !important;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-left: 10px;
+        }
+
         .edit-product-form {
             position: fixed;
             top: 0;
@@ -127,6 +219,22 @@ if (isset($_POST['edit_product'])) {
     <?php include 'menu.php'; ?>
     
     <main id="main" class="main">
+        <div class="standalone-back-button-container">
+            <a href="produk.php" class="standalone-back-button">
+                <i class="bi bi-arrow-left"></i>
+                Kembali
+            </a>
+        </div>
+        <div class="pagetitle">
+            <h1><i class="bi bi-megaphone"></i>&nbsp; DETAIL PRODUK</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item"><a href="produk.php">DATA PRODUK</a></li>
+                    <li class="breadcrumb-item active">DETAIL PRODUK</li>
+                </ol>
+            </nav>
+        </div>
         <div class="container mt-5">
             <?php if (isset($_GET['success'])): ?>
                 <div class="alert alert-success">
@@ -218,7 +326,7 @@ if (isset($_POST['edit_product'])) {
                                         <img src="../uploads/<?= htmlspecialchars($product['gambar']); ?>" alt="Gambar Produk" class="mt-3" style="max-width: 200px;">
                                     </div>
 
-                                    <button type="submit" name="edit_product" class="btn btn-primary">Update Produk</button>
+                                    <button type="submit" name="edit_product" class="btn btn-primary">Simpan</button>
                                     <button type="button" class="btn btn-secondary" id="close-edit-form">Batal</button>
                                 </form>
                             </div>
@@ -228,10 +336,6 @@ if (isset($_POST['edit_product'])) {
             </div>
         </div>
     </main>
-    
-    <div class="text-center mt-4">
-        <a href="produk.php" class="btn btn-secondary">Kembali ke Daftar Produk</a>
-    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

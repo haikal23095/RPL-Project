@@ -130,6 +130,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 1.1em;
             margin-right: 8px; 
         }
+        .btn-primary{
+            color: #1A877E !important;
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 10px 15px; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            background-color: #1A877E !important;
+            color: #fff !important;
+            border: 1px solid transparent !important;
+        }
     </style>
     <div class="wrapper">
         <?php require "atas.php"; ?>
@@ -209,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Update Promo</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
                             </form>
                         </div>
                     </div>
