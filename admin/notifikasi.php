@@ -224,14 +224,21 @@ try {
     require "menu.php"; 
     ?>    
     <main id="main" class="main">
+        
         <div class="container notification-container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>
-                    Notifikasi
-                    <?php if ($unread > 0): ?>
-                        <span class="badge bg-danger"><?= $unread ?></span>
-                    <?php endif; ?>
-                </h2>
+            <div class=" justify-content-between align-items-center mb-4">
+                <div class=" pagetitle">
+                    <h1><i class="bi bi-bell"></i>&nbsp; NOTIFIKASI <?php if ($unread > 0): ?>
+                            <span class="badge bg-danger"><?= $unread ?></span>
+                        <?php endif; ?></h1>
+                    <nav class="justify-content-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                            <li class="breadcrumb-item active">NOTIFIKASI</li>
+                        </ol>
+                    </nav>
+                </div>
+                
                 
                 <?php if ($result_notif && mysqli_num_rows($result_notif) > 0): ?>
                     <div class="btn-group">
