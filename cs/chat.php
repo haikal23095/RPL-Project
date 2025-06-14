@@ -24,7 +24,17 @@ if (!isset($_SESSION['cs'])) {
     
     <link href="../assets/css/style.css" rel="stylesheet">
     <style>
-        /* Custom Styles for New Chat UI */
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
+        .btn-primary{
+            background-color: #FFBB34 !important;
+            border: 1px solid #FFBB34 !important;
+        }
         .main-chat-wrapper {
             position: relative;
             height: calc(100vh - 150px);
@@ -180,11 +190,11 @@ if (!isset($_SESSION['cs'])) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-headset"></i> Pelayanan Pelanggan</h1>
+            <h1><i class="bi bi-headset"></i> PELAYANAN PELANGGAN</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="chat.php">Home</a></li>
-                    <li class="breadcrumb-item active">Pelayanan Pelanggan</li>
+                    <li class="breadcrumb-item"><a href="chat.php">HOME</a></li>
+                    <li class="breadcrumb-item active">PELAYANAN PELANGGAN</li>
                 </ol>
             </nav>
         </div><section class="section">

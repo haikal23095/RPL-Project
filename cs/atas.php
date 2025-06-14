@@ -4,7 +4,8 @@
 
     <div class="d-flex align-items-center">
       <a href="index.php" class="logo d-flex align-items-center">
-        <span class="d-none d-lg-block"></i>&nbsp; CasaLuxe</span>
+        <img src="../assets/img/LOGOCASALUXE2.png" alt="logo">
+        <span class="d-none d-lg-block"></i>&nbsp; Casaluxe</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn ms-3"></i>
     </div><!-- End Logo -->
