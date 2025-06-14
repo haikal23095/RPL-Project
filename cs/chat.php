@@ -197,9 +197,6 @@ if (!isset($_SESSION['cs'])) {
                                 <i class="bi bi-headset me-2"></i>
                                 <h5 class="flex-grow-1">Pelayanan Pelanggan</h5>
                             </div>
-                            <div class="p-2">
-                                <input type="text" class="form-control" placeholder="Cari...">
-                            </div>
                             <div class="user-list-container" id="user-list">
                                 </div>
                         </div>
