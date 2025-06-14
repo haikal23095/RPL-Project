@@ -2,7 +2,7 @@
 session_start();
 include '../db.php';
 include '../notification_functions.php'; // Include the notification functions
-
+$page ="notifikasi";
 // Validasi Login User
 if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
     echo "<script>
@@ -116,8 +116,8 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifikasi Pengguna</title>
 
-    <!-- Favicon -->
-    <link href="../assets/img/favicon.png" rel="icon">
+    <!-- Favicons -->
+    <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- CSS Dependencies -->
@@ -144,8 +144,59 @@ try {
     
     <!-- Custom Styles -->
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background-color: #f4f6f9;
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+        }
+        .btn-outline-secondary {
+            color: #2D3A3A !important;
+            background-color: transparent !important;
+            border: 1px solid #2D3A3A !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 0.25rem 0.5rem; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #2D3A3A !important;
+            color: #fff !important;
+            border: 1px solid transparent !important;
+        }
+
+        /* Untuk tombol "Hapus Semua" */
+        .btn-outline-danger {
+            color: #763D2D !important;
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 0.25rem 0.5rem; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #763D2D !important;
+            color: #fff !important;
+            border: 1px solid transparent !important;
+        }
+
+        .btn-outline-primary {
+            color: #2D3A3A !important;
+            background-color: transparent !important;
+            border: 1px solid #2D3A3A !important;
+            border-radius: 0.375rem; /* Bootstrap default for btn-sm */
+            padding: 0.25rem 0.5rem; /* Bootstrap default for btn-sm */
+            font-size: 0.875rem; /* Bootstrap default for btn-sm */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #2D3A3A !important;
+            color: #fff !important;
+            border: 1px solid transparent !important;
         }
         .notification-container {
             max-width: 800px;
@@ -163,7 +214,7 @@ try {
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         .notification-card.unread {
-            border-left: 4px solid #007bff;
+            border-left: 4px solid #FF9900;
             background-color: #f1f7ff;
         }
         .notification-icon {
@@ -171,7 +222,7 @@ try {
             top: 15px;
             left: 15px;
             font-size: 2rem;
-            color: #007bff;
+            color: #FF9900;
         }
         .notification-content {
             margin-left: 70px;
@@ -182,10 +233,20 @@ try {
             right: 20px;
             z-index: 9999;
         }
+        .badge-bg-primary {
+            background-color: #FFD700;
+            color: #ffffff !important;
+            font-weight: bold !important;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-left: 10px;
+        }
     </style>
 
     <!-- Additional Assets -->
     <?php include 'aset.php'; ?>
+    
 </head>
 
 <body>
@@ -199,13 +260,18 @@ try {
     <main id="main" class="main">
         <div class="container notification-container">
             <!-- Notification Header -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>
-                    Notifikasi <?= htmlspecialchars($user_name) ?>
-                    <?php if ($unread > 0): ?>
-                        <span class="badge bg-danger"><?= $unread ?></span>
-                    <?php endif; ?>
-                </h2>
+            <div class=" justify-content-between align-items-center mb-4">
+                <div class=" pagetitle">
+                    <h1><i class="bi bi-bell"></i>&nbsp; NOTIFIKASI <?php if ($unread > 0): ?>
+                            <span class="badge bg-danger"><?= $unread ?></span>
+                        <?php endif; ?></h1>
+                    <nav class="justify-content-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                            <li class="breadcrumb-item active">NOTIFIKASI</li>
+                        </ol>
+                    </nav>
+                </div>
                 
                 <!-- Notification Actions -->
                 <?php if ($result_notif && mysqli_num_rows($result_notif) > 0): ?>
@@ -259,7 +325,7 @@ try {
                                     <h5 class="card-title mb-0">
                                         <?= htmlspecialchars($notif['title']) ?>
                                         <?php if($notif['is_read'] == 0): ?>
-                                            <span class="badge bg-primary ms-2">Baru</span>
+                                            <span class="badge-bg-primary ms-2">Baru</span>
                                         <?php endif; ?>
                                     </h5>
                                     <small class="text-muted">
