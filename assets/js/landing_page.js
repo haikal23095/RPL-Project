@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', function() {
+
+        document.addEventListener('DOMContentLoaded', function() {
             const carouselContainer = document.querySelector('.carousel-container');
             const carouselWrapper = document.querySelector('.carousel-wrapper');
             const leftArrow = document.getElementById('leftArrow');
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Indeks awal: 1 (item asli pertama setelah kloning terakhir)
             let currentIndex = 1; 
+            let autoSlideInterval; // Variabel untuk menyimpan interval auto-slide
 
             // Fungsi untuk memperbarui tampilan carousel (ukuran, opacity, grayscale, dan posisi)
             function updateCarouselDisplay(smooth = true) {
@@ -88,20 +90,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
             carouselWrapper.addEventListener('transitionend', handleTransitionEnd);
 
+            // Fungsi untuk memulai auto-slide
+            function startAutoSlide() {
+                // Hentikan interval sebelumnya jika ada
+                clearInterval(autoSlideInterval); 
+                // Mulai interval baru, ganti setiap 3 detik (sesuaikan kecepatan)
+                autoSlideInterval = setInterval(() => {
+                    currentIndex++;
+                    updateCarouselDisplay();
+                }, 1800); 
+            }
+
+            // Fungsi untuk menghentikan auto-slide
+            function stopAutoSlide() {
+                clearInterval(autoSlideInterval);
+            }
+
             // Event listener untuk panah kiri
             leftArrow.addEventListener('click', function() {
+                stopAutoSlide(); // Hentikan auto-slide saat navigasi manual
                 currentIndex--;
                 updateCarouselDisplay();
+                startAutoSlide(); // Mulai kembali auto-slide setelah jeda
             });
 
             // Event listener untuk panah kanan
             rightArrow.addEventListener('click', function() {
+                stopAutoSlide(); // Hentikan auto-slide saat navigasi manual
                 currentIndex++;
                 updateCarouselDisplay();
+                startAutoSlide(); // Mulai kembali auto-slide setelah jeda
             });
+
+            // Hentikan auto-slide saat mouse di atas carousel
+            carouselContainer.addEventListener('mouseenter', stopAutoSlide);
+            // Mulai auto-slide saat mouse keluar dari carousel
+            carouselContainer.addEventListener('mouseleave', startAutoSlide);
 
             // Tampilan awal (langsung ke item asli pertama tanpa transisi)
             updateCarouselDisplay(false);
+            startAutoSlide(); // Mulai auto-slide saat halaman dimuat
 
             // Sesuaikan carousel saat ukuran jendela berubah
             window.addEventListener('resize', function() {
