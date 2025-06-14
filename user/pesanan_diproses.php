@@ -155,7 +155,7 @@ function formatCurrency($number) {
                                                 data-id="<?= $pesanan['id_pesanan'] ?>">
                                             <i class="bi bi-eye"></i> Detail Pesanan
                                         </button>
-                                        <a href="form_pembatalan.php?id=<?= $pesanan['id_pesanan'] ?>" 
+                                        <a href="form_pembatalan.php?id_pesanan=<?= $pesanan['id_pesanan'] ?>" 
                                            class="btn btn-danger btn-sm"
                                            onclick="return confirm('Yakin ingin mengajukan pembatalan untuk pesanan ini?');">
                                             <i class="bi bi-x-circle"></i> Batalkan
