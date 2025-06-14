@@ -93,11 +93,11 @@ if (isset($_POST['add_to_cart'])) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-heart"></i>&nbsp; Wishlist</h1>
+            <h1><i class="bi bi-heart"></i>&nbsp; DAFTAR KEINGINAN</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">DASHBOARD</a></li>
-                    <li class="breadcrumb-item active">Wishlist</li>
+                    <li class="breadcrumb-item active">Daftar Keinginan</li>
                 </ol>
             </nav>
         </div>
@@ -132,10 +132,6 @@ if (isset($_POST['add_to_cart'])) {
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
-
-            <div class="text-center mt-4">
-                <a href="produk.php" class="btn btn-secondary">Lihat Produk Lainnya</a>
-            </div>
         </div>
     </main><!-- End #main -->
 
