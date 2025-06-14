@@ -69,10 +69,12 @@ if (isset($_SESSION['products'])) {
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>DASHBOARD</title>
+    <title>Kategori</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/style.css" rel="stylesheet">
     <?php include 'aset.php'; ?>
+    <!-- Favicons -->
+    <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
 </head>
 <body>
     <style>

@@ -63,7 +63,6 @@ if ($result) {
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Ulasan Produk</title>
-    <link href="../assets/img/favicon.png" rel="icon">
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -76,7 +75,8 @@ if ($result) {
     <link href="../assets/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="../assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
+    <!-- Favicons -->
+    <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
     <link href="../assets/css/style.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
@@ -120,7 +120,7 @@ if ($result) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-chat-square-dots-fill"></i> ULASAN PRODUK</h1>
+            <h1><i class="bi bi-chat-quote"></i> ULASAN PRODUK</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
