@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
 require "../db.php";
 $page = "penjualan";
@@ -14,32 +16,49 @@ $total_products_query = mysqli_query($kon, "SELECT COUNT(id_produk) as total_pro
 $total_products = mysqli_fetch_assoc($total_products_query)['total_produk'];
 
 // Produk Terjual
-$total_sold_query = mysqli_query($kon, "SELECT SUM(jumlah) as total_terjual FROM pesanan WHERE status_pesanan != 'Dibatalkan'");
+$total_sold_query = mysqli_query($kon, "
+    SELECT SUM(pd.jumlah) as total_terjual 
+    FROM pesanan_detail pd
+    JOIN pesanan p ON pd.id_pesanan = p.id_pesanan
+    WHERE p.status_pesanan != 'Dibatalkan'
+");
 $total_sold = mysqli_fetch_assoc($total_sold_query)['total_terjual'];
 
 // Grafik Data (X: Semua Produk, Y: Total Penjualan per Produk)
 $chart_data_query = mysqli_query($kon, "
-    SELECT produk.nama_produk, SUM(pesanan.jumlah) as jumlah_terjual 
+    SELECT 
+        produk.nama_produk, 
+        SUM(pesanan_detail.jumlah) as jumlah_terjual 
     FROM produk 
-    LEFT JOIN pesanan ON produk.id_produk = pesanan.id_produk AND pesanan.status_pesanan != 'Dibatalkan'
-    GROUP BY produk.id_produk
+    LEFT JOIN pesanan_detail ON produk.id_produk = pesanan_detail.id_produk
+    LEFT JOIN pesanan ON pesanan_detail.id_pesanan = pesanan.id_pesanan AND pesanan.status_pesanan != 'Dibatalkan'
+    GROUP BY produk.id_produk, produk.nama_produk
     ORDER BY jumlah_terjual DESC
 ");
 
 $chart_labels = [];
 $chart_values = [];
-while ($row = mysqli_fetch_assoc($chart_data_query)) {
-    $chart_labels[] = $row['nama_produk'];
-    $chart_values[] = $row['jumlah_terjual'];
+if ($chart_data_query) { // Pastikan query berhasil sebelum fetch
+    while ($row = mysqli_fetch_assoc($chart_data_query)) {
+        $chart_labels[] = $row['nama_produk'];
+        $chart_values[] = $row['jumlah_terjual'];
+    }
+} else {
+    // Log error jika query gagal
+    error_log("Error fetching chart data: " . mysqli_error($kon));
 }
 
 // Produk Paling Laris
 $top_products_query = mysqli_query($kon, "
-    SELECT produk.nama_produk, produk.harga, SUM(pesanan.jumlah) as jumlah_terjual
-    FROM produk
-    JOIN pesanan ON produk.id_produk = pesanan.id_produk
-    WHERE pesanan.status_pesanan != 'Dibatalkan'
-    GROUP BY produk.id_produk
+    SELECT 
+        p.nama_produk, 
+        p.harga, 
+        SUM(pd.jumlah) as jumlah_terjual
+    FROM produk p
+    JOIN pesanan_detail pd ON p.id_produk = pd.id_produk
+    JOIN pesanan ps ON pd.id_pesanan = ps.id_pesanan
+    WHERE ps.status_pesanan != 'Dibatalkan'
+    GROUP BY p.id_produk, p.nama_produk, p.harga
     ORDER BY jumlah_terjual DESC
     LIMIT 5
 ");
@@ -61,6 +80,43 @@ $top_products = mysqli_fetch_all($top_products_query, MYSQLI_ASSOC);
     <?php include "aset.php"; ?>
 </head>
 <body>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A;
+        }
+        h5{
+            color: #2D3A3A !important;
+            font-weight: bold !important;
+            font-size: 18px !important;
+        }
+         /* Styling untuk tombol kembali (baru) */
+        .standalone-back-button-container {
+            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
+            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
+    </style>
     <!-- HEADER -->
     <?php require "atas.php"; ?>
 
@@ -68,13 +124,20 @@ $top_products = mysqli_fetch_all($top_products_query, MYSQLI_ASSOC);
     <?php require "menu.php"; ?>
 
     <main id="main" class="main">
-        <div class="container">
+            <div class="container">
+                <div class="standalone-back-button-container">
+                <a href="penjualan.php" class="standalone-back-button">
+                    <i class="bi bi-arrow-left"></i>
+                    Kembali
+                </a>
+            </div>
             <div class="pagetitle">
-                <h1><i class="bi bi-bar-chart"></i>&nbsp; Grafik Total Penjualan</h1>
+                <h1><i class="bi bi-bar-chart"></i>&nbsp; GRAFIK TOTAL PENJUALAN</h1>
                 <nav>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Grafik Penjualan</li>
+                        <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                        <li class="breadcrumb-item"><a href="penjualan.php">PENJUALAN</a></li>
+                        <li class="breadcrumb-item active">GRAFIK TOTAL PENJUALAN</li>
                     </ol>
                 </nav>
             </div>

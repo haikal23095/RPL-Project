@@ -56,10 +56,16 @@ $products = mysqli_fetch_all($resultProducts, MYSQLI_ASSOC);
         include 'aset.php';
     ?>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background-color: #f5f5f5;
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
         }
 
+        h4 {
+            font-size: 20px;
+        }
         .card {
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -101,7 +107,7 @@ $products = mysqli_fetch_all($resultProducts, MYSQLI_ASSOC);
             <div class="col-12">
                 <div class="card">
                     <div class="card-header bg-light text-black">
-                        <h4>Product Statistics</h4>
+                        <h4>Statistika Produk</h4>
                     </div>
                     <br>
                     <div class="card-body">
@@ -111,7 +117,7 @@ $products = mysqli_fetch_all($resultProducts, MYSQLI_ASSOC);
                                 <p class="h3"><?= $stats['total_produk'] ?></p>
                             </div>
                             <div class="col-md-4">
-                                <h5>Unavailable Produk</h5>
+                                <h5>Produk Tidak Tersedia</h5>
                                 <p class="h3 text-danger"><?= $stats['unavailable_produk'] ?></p>
                             </div>
                             <div class="col-md-4">
@@ -137,7 +143,7 @@ $products = mysqli_fetch_all($resultProducts, MYSQLI_ASSOC);
                             <thead class="table-light">
                                 <tr>
                                     <th>Nama Produk</th>
-                                    <th>Performance</th>
+                                    <th>Performa</th>
                                     <th>Stok</th>
                                     <th>Status</th>
                                 </tr>
@@ -153,9 +159,9 @@ $products = mysqli_fetch_all($resultProducts, MYSQLI_ASSOC);
                                         <td><?= $product['stok'] ?></td>
                                         <td>
                                             <?php if ($product['stok'] > 0): ?>
-                                                <span class="text-success">Available</span>
+                                                <span class="text-success">Tersedia</span>
                                             <?php else: ?>
-                                                <span class="text-danger">Unavailable</span>
+                                                <span class="text-danger">Tak Tersedia</span>
                                             <?php endif; ?>
                                         </td>
                                     </tr>

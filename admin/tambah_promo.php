@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../db.php');
-
+$page = "info";
 // Function to handle file upload
 function uploadFile($file) {
     $target_dir = __DIR__ . "../uploads/"; // Pastikan path absolut

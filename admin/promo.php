@@ -40,8 +40,8 @@ if (isset($_POST['generate_promo'])) {
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Apply Promo Code</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <title>Kode Promo</title>
+    <!-- <link rel="stylesheet" href="assets/css/styles.css"> -->
 
     <!-- Favicons -->
     <link href="assets/img/favicon.png" rel="icon">
@@ -57,10 +57,25 @@ if (isset($_POST['generate_promo'])) {
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="assets/css/style.css" rel="stylesheet">
+    <!--     -->
     <?php include 'aset.php'; ?>
 </head>
 <body>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+        }
+        h5 {
+            font-weight: bold !important;
+            padding-top: 0px !important;
+            margin: 0px!important;
+            margin-top: 0px !important;
+            font-size: 18px !important;
+        }
+    </style>
     <?php include 'atas.php'; ?>
     <?php include 'menu.php'; ?>
 
@@ -80,35 +95,35 @@ if (isset($_POST['generate_promo'])) {
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title mt-5">Generate Promo Code</h5>
+                            <h5 class="card-title mt-5">Generate Kode Promo</h5>
                             <form method="post">
                                 <div class="mb-3">
-                                    <label for="discount_type" class="form-label">Discount Type</label>
+                                    <label for="discount_type" class="form-label">Tipe Diskon</label>
                                     <select class="form-select" id="discount_type" name="discount_type" required>
-                                        <option value="fixed">Fixed Amount</option>
-                                        <option value="percentage">Percentage</option>
+                                        <option value="fixed">Jumlah Tetap</option>
+                                        <option value="percentage">Persentase</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="discount_value" class="form-label">Discount Value</label>
+                                    <label for="discount_value" class="form-label">Nilai Diskon</label>
                                     <input type="number" class="form-control" id="discount_value" name="discount_value" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="usage_limit" class="form-label">Usage Limit</label>
+                                    <label for="usage_limit" class="form-label">Batas Penggunaan</label>
                                     <input type="number" class="form-control" id="usage_limit" name="usage_limit" required>
                                 </div>
-                                <button type="submit" name="generate_promo" class="btn btn-generate">Generate Promo Code</button>
+                                <button type="submit" name="generate_promo" class="btn btn-generate">GENERATE KODE PROMO</button>
                             </form>
 
-                            <h5 class="card-title mt-5">Available Promo Codes</h5>
+                            <h5 class="card-title mt-5">Kode Promo yang Tersedia</h5>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Promo Code</th>
-                                        <th>Discount Type</th>
-                                        <th>Discount Value</th>
-                                        <th>Usage Limit</th>
-                                        <th>Times Used</th>
+                                        <th>Kode Promo</th>
+                                        <th>Tipe Diskon</th>
+                                        <th>Nilai Diskon</th>
+                                        <th>Batas Penggunaan</th>
+                                        <th>Waktu Penggunaan</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>

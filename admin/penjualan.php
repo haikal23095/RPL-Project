@@ -67,6 +67,24 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php include 'aset.php'; ?>
 </head>
 <body>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A;
+        }
+        h5{
+            font-size: 20px !important;
+            color: #2D3A3A !important;
+            font-weight: bold !important;
+        }
+        h3{
+            font-size: 30px !important;
+            color: #efaa31 !important;
+        }
+    </style>
 <?php include 'atas.php'; ?>
 <?php include 'menu.php'; ?>
 
