@@ -161,6 +161,15 @@ $nama_bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "
             background-color: #FFBB34 !important;
             border: 1px solid #FFBB34 !important;
         }
+        .sidebar {
+            width: auto; /* Equivalent to w-64 in Tailwind */
+            background-color: #F8F7F1;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+        }
     </style>
     <main id="main" class="main">
         <div class="pagetitle">

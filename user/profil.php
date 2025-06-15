@@ -166,6 +166,15 @@ if (isset($_POST['delete_profile_photo'])) {
             font-family: 'Andika', sans-serif;
             color: #2D3A3A !important;
         }
+        .sidebar {
+            width: auto !important; /* Equivalent to w-64 in Tailwind */
+            background-color: #F8F7F1 !important;
+            padding: 1rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            height: 100vh !important;
+        }
         /* Style untuk pagetitle yang dikomentari di kode Anda, tapi penting untuk konsistensi */
         .pagetitle {
             margin-bottom: 25px;

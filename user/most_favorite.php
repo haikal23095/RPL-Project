@@ -31,7 +31,16 @@ $result = mysqli_query($kon, $query);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f5f5f5;
+            background-color: #F8F7F1;
+        }
+        .sidebar {
+            width: auto !important; /* Equivalent to w-64 in Tailwind */
+            background-color: #F8F7F1 !important;
+            padding: 1rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            height: 100vh !important;
         }
         .card {
             border-radius: 15px;
