@@ -133,6 +133,8 @@ $cartSuccess = isset($_GET['cart_success']);
             border-top: 2px dashed #4154f1;
             margin: 2rem 0;
         }
+
+        
     </style>
     <?php include 'aset.php'; ?>
 </head>
@@ -162,21 +164,15 @@ $cartSuccess = isset($_GET['cart_success']);
         <section class="section">
             <div class="row">
                 <div class="col-lg-12">
-                    <!-- Promo Header Section -->
-                    <!-- <div class="promo-header">
-                        <h1>DAPATKAN DISKON SAMPAI 100%</h1>
-                        <h2>AMBIL PROMO REDEEM-MU</h2>
-                    </div> -->
-
 
                     <div class="d-flex justify-content-center mb-4">
                         <img src="../assets/img/promo1.png" alt="promo1" style="width: 100%; max-width: 1500px;" class="">
                     </div>
-                                        <!-- All Promo Section -->
+                    <div class="d-flex justify-content-center mb-4">
+                        <img src="../assets/img/promo1.png" alt="promo1" style="width: 100%; max-width: 1500px;" class="">
+                    </div>
 
-                    <img src="../assets/img/promo1.png" alt="promo1" style="margin-bottom:40px; width: 1000px;">
                     <!-- All Promo Section -->
-
                     <div class="promo-section">
                         <h3 class="promo-section-title">SEMUA PROMO</h3>
                         <div class="row">
@@ -192,7 +188,7 @@ $cartSuccess = isset($_GET['cart_success']);
                                 <div class="promo-card">
                                     <div class="card-body text-center">
                                         <h4 class="card-title">PROMO BONUS</h4>
-                                        <p class="card-text">Dapatkan bonus menarik dengan pembelian produk tertentu</p>
+                                        <p class="card-text">Dapatkan bonus menarik dengan pembelian produk tertentu, buruan</p>
                                     </div>
                                 </div>
                             </div>
@@ -215,49 +211,52 @@ $cartSuccess = isset($_GET['cart_success']);
                                 Saat ini tidak ada promo yang tersedia. Silakan cek kembali nanti!
                             </div>
                         <?php else: ?>
-                            <div class="row" id="promoContainer">
-                                <?php foreach ($informasipromo as $promo): ?>
-                                    <div class="col-md-3 promo-card" data-type="<?= htmlspecialchars($promo['promo_type']) ?>">
-                                        <div class="card">
-                                            <?php if (!empty($promo['photo_url'])): ?>
-                                                <img src="../admin/uploads/<?= htmlspecialchars($promo['photo_url']); ?>" class="card-img-top" alt="<?= htmlspecialchars($promo['title']) ?>">
-                                            <?php else: ?>
-                                                <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">No Image</div>
-                                            <?php endif; ?>
-                                            <div class="card-body">
-                                                <?php if ($promo['promo_type'] === 'discount'): ?>
-                                                    <span class="discount-badge">Diskon <?= $promo['discount_percentage'] ?>%</span>
-                                                    <h5 class="card-title mt-2"><?= htmlspecialchars($promo['title']) ?></h5>
-                                                <?php elseif ($promo['promo_type'] === 'bonus'): ?>
-                                                    <h5 class="card-title"><?= htmlspecialchars($promo['title']) ?></h5>
+                            <div class="promo-scroll-container">
+                                <div class="row promo-row" id="promoContainer" style="margin-left: 40px;">
+                                    <?php foreach ($informasipromo as $promo): ?>
+                                        <div class="col-md-3 promo-card pt-3" href="promo.php?" data-type="<?= htmlspecialchars($promo['promo_type']) ?>">
+                                            <div class="card">
+                                                <?php if (!empty($promo['photo_url'])): ?>
+                                                    <img src="../admin/uploads/<?= htmlspecialchars($promo['photo_url']); ?>" class="card-img-top" alt="<?= htmlspecialchars($promo['title']) ?>">
+                                                <?php else: ?>
+                                                    <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">No Image</div>
                                                 <?php endif; ?>
-                                                <p class="card-text"><?= htmlspecialchars($promo['description']) ?></p>
-                                                <p class="card-text">
-                                                    <small class="text-muted">Berlaku sampai: <?= htmlspecialchars($promo['end_date']) ?></small>
-                                                </p>
-                                                <div class="countdown mt-3">
-                                                    <i class="bi bi-clock me-2"></i>
-                                                    <span class="days-left">
-                                                        <?php
-                                                        $end = new DateTime($promo['end_date']);
-                                                        $now = new DateTime();
-                                                        $interval = $end->diff($now);
-                                                        echo $interval->days . ' hari tersisa';
-                                                        ?>
-                                                    </span>
-                                                </div>
-                                                <div class="d-flex mt-3">
-                                                    <?php if ($promo['promo_type'] === 'bonus'): ?>
-                                                        <form method="POST" action="add_to_cart.php" class="d-inline">
-                                                            <input type="hidden" name="product_id" value="<?= $promo['bonus_item']; ?>">
-                                                            <button type="submit" name="add_to_cart" class="btn btn-success">Add to Cart</button>
-                                                        </form>
+                                                <div class="card-body">
+                                                    <?php if ($promo['promo_type'] === 'discount'): ?>
+                                                        <span class="discount-badge">Diskon <?= $promo['discount_percentage'] ?>%</span>
+                                                        <h5 class="card-title mt-2"><?= htmlspecialchars($promo['title']) ?></h5>
+                                                    <?php elseif ($promo['promo_type'] === 'bonus'): ?>
+                                                        <h5 class="card-title"><?= htmlspecialchars($promo['title']) ?></h5>
                                                     <?php endif; ?>
+                                                    <p class="card-text"><?= htmlspecialchars($promo['description']) ?></p>
+                                                    <p class="card-text">
+                                                        <small class="text-muted">Berlaku sampai: <?= htmlspecialchars($promo['end_date']) ?></small>
+                                                    </p>
+                                                    <div class="countdown mt-3">
+                                                        <i class="bi bi-clock me-2"></i>
+                                                        <span class="days-left">
+                                                            <?php
+                                                            $end = new DateTime($promo['end_date']);
+                                                            $now = new DateTime();
+                                                            $interval = $end->diff($now);
+                                                            echo $interval->days . ' hari tersisa';
+                                                            ?>
+                                                            <a href="promo.php?id=<?= $promo['id'] ?>" class="btn btn-primary" style="margin-top: 20px;">Lihat Promo</a>
+                                                        </span>
+                                                    </div>
+                                                    <div class="d-flex mt-3">
+                                                        <?php if ($promo['promo_type'] === 'bonus'): ?>
+                                                            <form method="POST" action="add_to_cart.php" class="d-inline">
+                                                                <input type="hidden" name="product_id" value="<?= $promo['bonus_item']; ?>">
+                                                                <button type="submit" name="add_to_cart" class="btn btn-success">Add to Cart</button>
+                                                            </form>
+                                                        <?php endif; ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                         <?php endif; ?>
                     </div>
