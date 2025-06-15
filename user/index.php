@@ -12,6 +12,8 @@ $user = $_SESSION["user"];
 $kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$user'");
 $row_user = mysqli_fetch_array($kue_user);
 
+$cartSuccess = isset($_GET['cart_success']);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,24 +57,22 @@ $row_user = mysqli_fetch_array($kue_user);
             padding: 1.5rem;
         }
 
-        /* --- PERBAIKAN TOTAL CSS CAROUSEL DIMULAI DI SINI --- */
-
         #featuredProductCarousel {
-            height: 350px; /* KUNCI PERBAIKAN: Memberi tinggi yang pasti */
+            height: 350px;
             border-radius: 0.5rem;
             overflow: hidden;
-            background-color: #e9ecef; /* Warna latar jika gambar gagal dimuat */
+            background-color: #e9ecef;
         }
 
         #featuredProductCarousel .carousel-inner,
         #featuredProductCarousel .carousel-item {
-            height: 100%; /* Mengisi tinggi dari #featuredProductCarousel */
+            height: 100%;
         }
 
         #featuredProductCarousel .featured-image {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Membuat gambar mengisi area tanpa merusak aspek rasio */
+            object-fit: contain; /* Menggunakan 'contain' sesuai kode terakhir Anda */
             object-position: center;
         }
 
@@ -90,8 +90,6 @@ $row_user = mysqli_fetch_array($kue_user);
             border-bottom-left-radius: 0.5rem;
             border-bottom-right-radius: 0.5rem;
         }
-
-        /* --- AKHIR PERBAIKAN CSS CAROUSEL --- */
 
         .product-card {
             border-radius: 0.5rem;
@@ -147,6 +145,10 @@ $row_user = mysqli_fetch_array($kue_user);
                     </ol>
                 </nav>
             </div>
+
+            <?php if ($cartSuccess): ?>
+                <div class="alert alert-success">Produk berhasil ditambahkan ke keranjang!</div>
+            <?php endif; ?>
             
             <section class="row g-4 mb-4"> 
                 <div class="col-lg-8">
@@ -172,12 +174,10 @@ $row_user = mysqli_fetch_array($kue_user);
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#featuredProductCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>
                         </button>
                         <button class="carousel-control-next" type="button" data-bs-target="#featuredProductCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span>
                         </button>
                     </div>
                 </div>
@@ -199,7 +199,10 @@ $row_user = mysqli_fetch_array($kue_user);
                 </div>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
                     <?php
-                        $query = "SELECT p.nama_produk, p.harga, k.nama_kategori, p.gambar FROM produk p JOIN kategori k ON p.id_kategori = k.id_kategori LIMIT 4";
+                        $query = "SELECT p.id_produk, p.nama_produk, p.harga, p.stok, k.nama_kategori, p.gambar 
+                                  FROM produk p 
+                                  JOIN kategori k ON p.id_kategori = k.id_kategori 
+                                  LIMIT 4";
                         $result = mysqli_query($kon, $query);
 
                         while ($product = mysqli_fetch_assoc($result)) {
@@ -212,19 +215,38 @@ $row_user = mysqli_fetch_array($kue_user);
                             echo '            <p class="card-text mb-1 small text-muted">Kategori: ' . htmlspecialchars($product['nama_kategori']) . '</p>';
                             echo '            <p class="card-text fw-semibold">Harga: Rp ' . number_format($product['harga'], 0, ',', '.') . '</p>';
                             echo '        </div>';
-                            echo '        <div class="d-flex gap-2 mt-auto pt-3">'; 
-                            echo '            <button class="btn btn-casaluxe-primary btn-sm fw-semibold w-100">BELI SEKARANG</button>';
-                            echo '            <button class="btn btn-outline-casaluxe-primary btn-sm fw-semibold w-100">MASUK KERANJANG</button>';
-                            echo '        </div>';
-                            echo '      </div>';
-                            echo '  </div>';
-                            echo '</div>';
+                            echo '        <div class="d-flex gap-2 mt-auto pt-3">';
+                            
+                            if ($product['stok'] > 0) {
+                    ?>
+                                <form method="POST" action="checkout.php">
+                                    <input type="hidden" name="product_id" value="<?= $product['id_produk']; ?>">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" name="buy_now" class="btn btn-casaluxe-primary btn-sm fw-semibold w-100">Beli Sekarang</button>
+                                </form>
+                                <form method="POST" action="add_to_cart.php">
+                                    <input type="hidden" name="product_id" value="<?= $product['id_produk']; ?>">
+                                    <button type="submit" name="add_to_cart" class="btn btn-outline-casaluxe-primary btn-sm fw-semibold w-100">Masuk Keranjang</button>
+                                </form>
+                    <?php
+                            } else {
+                    ?>
+                                <button class="btn btn-secondary w-100" disabled>Stok Habis</button>
+                    <?php
+                            }
+                            
+                            echo '        </div>'; // End d-flex
+                            echo '      </div>'; // End card-body
+                            echo '  </div>'; // End card
+                            echo '</div>'; // End col
                         }
                     ?>
                 </div>
             </section>
         </div>
-    </main><a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    </main>
+    
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/main.js"></script>

@@ -242,10 +242,9 @@ function formatCurrency($number) {
             border-color: #ffc107;
             color: #ffffff;
         }
-         /* Styling untuk tombol kembali (baru) */
         .standalone-back-button-container {
-            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
-            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+            margin-bottom: 15px; 
+            padding-left: 0px; 
         }
         .standalone-back-button {
             display: inline-flex;
