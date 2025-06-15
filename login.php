@@ -8,20 +8,15 @@ use Dotenv\Dotenv;
 use Twilio\Rest\Client;
 
 
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+// $dotenv = Dotenv::createImmutable(__DIR__);
+// $dotenv->load();
 
 
 $sid = '';
 $token = '';
 $verifySid = '';
 
-// if (!$sid || !$token || !$verifySid) {
-//     echo "SID: " . $sid . "<br>";
-//     echo "TOKEN: " . $token . "<br>";
-//     echo "VERIFY SID: " . $verifySid . "<br>";
-//     exit("❌ Gagal load TWILIO ENV variables");
-// }
+
 
 // Debug sementara
 // echo "SID: " . ($sid ?? 'NULL') . "<br>";
