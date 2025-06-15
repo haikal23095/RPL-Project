@@ -145,7 +145,9 @@ $cartSuccess = isset($_GET['cart_success']);
         color: #EFAA31 !important;
         font-weight: 600;
         }
-
+        .card-text {
+            color: #ff771d;
+        }
         .breadcrumb a {
         color: #EFAA31 !important;
         transition: 0.3s;
@@ -246,7 +248,7 @@ $cartSuccess = isset($_GET['cart_success']);
                             echo '        <div>';
                             echo '            <h5 class="card-title fs-6 fw-bold mb-1">' . htmlspecialchars($product['nama_produk']) . '</h5>';
                             echo '            <p class="card-text mb-1 small text-muted">Kategori: ' . htmlspecialchars($product['nama_kategori']) . '</p>';
-                            echo '            <p class="card-text fw-semibold">Harga: Rp ' . number_format($product['harga'], 0, ',', '.') . '</p>';
+                            echo '            <p class="card-text fw-semibold">Rp ' . number_format($product['harga'], 0, ',', '.') . '</p>';
                             echo '        </div>';
                             echo '        <div class="d-flex gap-2 mt-auto pt-3">';
                             
