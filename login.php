@@ -57,6 +57,7 @@ if (isset($_POST["login"])) {
             $login_berhasil = true;
             $user = $user_data; // Simpan user ke variabel session atau variabel lokal
             
+            // mengganti depan nomor telepon jika diawali dengan 0
             $nomor = $user_data['no_tlp'];
             if (strpos($nomor, '0') === 0) {
                 $nomor = '+62' . substr($nomor, 1);
