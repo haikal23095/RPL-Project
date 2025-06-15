@@ -170,6 +170,28 @@ $wishlistSuccess = isset($_GET['wishlist_success']);
         .btn-wishlist:hover {
             color: #e74c3c; 
         }
+        .standalone-back-button-container {
+            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
+            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
          @media (max-width: 991px) {
             .main-product-image {
                  border-radius: 1rem 1rem 0 0;
@@ -182,6 +204,26 @@ $wishlistSuccess = isset($_GET['wishlist_success']);
     <?php require "menu.php"; ?>
 
     <main id="main" class="main">
+        <div class="pagetitle">
+            <div class="col-md-8">
+                <div class="standalone-back-button-container">
+                    <a href="produk.php" class="standalone-back-button">
+                        <i class="bi bi-arrow-left"></i>
+                        Kembali
+                    </a>
+                </div>
+                <div class="pagetitle">
+                    <h1><i class="bi bi-box"></i>&nbsp;DETAIL PRODUK</h1>
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                            <li class="breadcrumb-item"><a href="produk.php">PRODUK</a></li>
+                            <li class="breadcrumb-item active">DETAIL PRODUK</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
         <div class="container my-5">
             <div class="card product-detail-card border-0">
                 <div class="row g-0">
