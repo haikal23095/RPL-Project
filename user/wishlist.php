@@ -6,7 +6,7 @@ $page = "wishlist";
 // --- SEMUA LOGIKA PHP TETAP SAMA, TIDAK DIUBAH ---
 
 if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 $user = $_SESSION["user"];
@@ -65,7 +65,14 @@ $cartSuccess = isset($_GET['cart_success']);
             font-family: 'Andika', sans-serif;
             color: #2D3A3A !important;
         }
-        
+
+        /* --- PERUBAHAN CSS DIMULAI DI SINI --- */
+
+        .main {
+            /* Memberikan padding yang konsisten di sekitar konten utama */
+            padding: 40px !important;
+        }
+
         .product-card {
             background: #fff;
             border: 1px solid #e9ecef;
@@ -76,6 +83,7 @@ $cartSuccess = isset($_GET['cart_success']);
             display: flex;
             flex-direction: column;
             height: 100%;
+            margin-bottom: 24px;
         }
         .product-card:hover {
             transform: translateY(-5px);
@@ -90,58 +98,76 @@ $cartSuccess = isset($_GET['cart_success']);
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            justify-content: space-between; /* Mendorong tombol ke bawah */
         }
         .product-info {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1rem;
+            margin-bottom: 1rem; /* Memberi jarak ke tombol */
             flex-grow: 1;
         }
+
         .product-name {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: #212529;
-            padding-right: 10px;
+            padding-right: 10px; /* Jarak antara nama dan harga */
+            flex-grow: 1; /* Memastikan nama produk mengambil ruang yang tersedia */
         }
+
         .product-price {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             color: #fd7e14;
             white-space: nowrap;
+            flex-shrink: 0; /* Mencegah harga menyusut */
         }
+
         .button-group {
             display: flex;
             gap: 10px;
+            margin-top: auto; /* Mendorong grup tombol ke bagian bawah card */
         }
-        .button-group .btn {
-        flex: 1;
-        font-weight: 600;
-        padding: 0.6rem 0.5rem; 
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
 
-    .btn-add-cart-wishlist {
-        background-color: #FFBB34;
-        border-color: #FFBB34;
-        color: #fff;
-    }
-    .btn-add-cart-wishlist:hover {
-        background-color: #e9a92d; 
-        border-color: #e9a92d;
-    }
-    .btn-remove-wishlist {
-        background-color: #763D2D;
-        border: 1px solid #763D2D;
-        color: #fff;
-    }
-     .btn-remove-wishlist:hover {
-        background-color: #5c2e22; 
-        border-color: #5c2e22;
-        color: #fff;
-    }
+        .button-group > form, .button-group > a {
+            flex: 1;
+        }
+
+        .button-group .btn {
+            width: 100%;
+            font-weight: 600;
+            padding: 0.5rem 0.5rem; /* Ukuran padding disesuaikan */
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-add-cart-wishlist {
+            background-color: #FFBB34;
+            border-color: #FFBB34;
+            color: #fff;
+        }
+        .btn-add-cart-wishlist:hover {
+            background-color: #e9a92d; 
+            border-color: #e9a92d;
+        }
+        .btn-remove-wishlist {
+            background-color: #763D2D;
+            border: 1px solid #763D2D;
+            color: #fff;
+        }
+        .btn-remove-wishlist:hover {
+            background-color: #5c2e22; 
+            border-color: #5c2e22;
+            color: #fff;
+        }
+        /* --- AKHIR PERUBAHAN CSS --- */
+
     </style>
 </head>
 <body>
@@ -161,51 +187,60 @@ $cartSuccess = isset($_GET['cart_success']);
         </div>
 
         <section class="section">
-            <div class="row gy-4">
-                <?php if (empty($wishlistItems)): ?>
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body text-center p-5">
-                                <i class="bi bi-heart fs-1 text-muted"></i>
-                                <h5 class="mt-3">Wishlist Anda Kosong</h5>
-                                <p class="text-muted">Simpan produk yang Anda sukai di sini untuk dilihat kembali nanti.</p>
-                                <a href="produk.php" class="btn btn-primary">Mulai Belanja</a>
-                            </div>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <?php if ($cartSuccess): ?>
-                        <div class="alert alert-success">Produk berhasil ditambahkan ke keranjang!</div>
-                    <?php endif; ?>
-                    <?php foreach ($wishlistItems as $item): ?>
-                        <div class="col-xl-3 col-lg-4 col-md-6">
-                             <div class="card product-card">
-                                <a href="detail_produk.php?product_id=<?= $item['id_produk']; ?>">
-                                    <img src="../uploads/<?= htmlspecialchars($item['gambar']); ?>" class="card-img-top" alt="<?= htmlspecialchars($item['nama_produk']); ?>">
-                                </a>
-                                <div class="card-body">
-                                    <div class="product-info">
-                                        <div class="product-name"><?= htmlspecialchars($item['nama_produk']); ?></div>
-                                        <div class="product-price">Rp <?= number_format($item['harga'], 0, ',', '.'); ?></div>
-                                    </div>
-                                    <div class="button-group">
-                                        <a href="wishlist.php?remove=<?= $item['wishlist_id']; ?>" class="btn btn-remove-wishlist" onclick="return confirm('Yakin ingin menghapus item ini dari wishlist?');">Hapus</a>
-                                        <?php if (checkProductStock($kon, $item['id_produk'])): ?>
-                                            <form action="add_to_cart.php" method="POST" class="me-3">
-                                                <input type="hidden" name="product_id" value="<?= $item['id_produk']; ?>">
-                                                <button type="submit" name="add_to_cart" class="btn btn-add-cart-wishlist btn-sm">
-                                                    <i></i> Masuk Keranjang
-                                                </button>
-                                            </form>
-                                        <?php else: ?>
-                                            <button class="btn btn-secondary w-100" disabled>Stok Habis</button>
-                                        <?php endif; ?>
-                                    </div>
+            <div class="container-fluid px-0">
+                <div class="row gy-4">
+                    <?php if (empty($wishlistItems)): ?>
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body text-center p-5">
+                                    <i class="bi bi-heart fs-1 text-muted"></i>
+                                    <h5 class="mt-3">Wishlist Anda Kosong</h5>
+                                    <p class="text-muted">Simpan produk yang Anda sukai di sini untuk dilihat kembali nanti.</p>
+                                    <a href="produk.php" class="btn btn-primary">Mulai Belanja</a>
                                 </div>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                    <?php else: ?>
+                        <?php if ($cartSuccess): ?>
+                            <div class="col-12">
+                                <div class="alert alert-success">Produk berhasil ditambahkan ke keranjang!</div>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <?php foreach ($wishlistItems as $item): ?>
+                            <div class="col-xxl-3 col-xl-4 col-lg-6 col-md-6">
+                                 <div class="card product-card h-100">
+                                     <a href="detail_produk.php?product_id=<?= $item['id_produk']; ?>">
+                                         <img src="../uploads/<?= htmlspecialchars($item['gambar']); ?>" class="card-img-top" alt="<?= htmlspecialchars($item['nama_produk']); ?>">
+                                     </a>
+                                     <div class="card-body">
+                                        <div>
+                                            <div class="product-info">
+                                                <div class="product-name"><?= htmlspecialchars($item['nama_produk']); ?></div>
+                                                <div class="product-price">Rp <?= number_format($item['harga'], 0, ',', '.'); ?></div>
+                                            </div>
+                                        </div>
+                                         <div class="button-group">
+                                             <a href="wishlist.php?remove=<?= $item['wishlist_id']; ?>" class="btn btn-remove-wishlist" onclick="return confirm('Yakin ingin menghapus item ini dari wishlist?');">
+                                                 <i class="bi bi-trash3"></i> Hapus
+                                             </a>
+                                              <?php if (checkProductStock($kon, $item['id_produk'])): ?>
+                                                  <form action="add_to_cart.php" method="POST" class="w-100 mb-0">
+                                                      <input type="hidden" name="product_id" value="<?= $item['id_produk']; ?>">
+                                                      <button type="submit" name="add_to_cart" class="btn btn-add-cart-wishlist">
+                                                          <i class="bi bi-cart-plus"></i> Keranjang
+                                                      </button>
+                                                  </form>
+                                              <?php else: ?>
+                                                  <button class="btn btn-secondary w-100" disabled>Stok Habis</button>
+                                              <?php endif; ?>
+                                         </div>
+                                     </div>
+                                 </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
             </div>
         </section>
     </main>
