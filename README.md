@@ -10,3 +10,7 @@ Ini adalah repository untuk Proyek RPL WebApp Casaluxe
 2. lakukan composer install
 
 ``composer install``
+
+3. ambil key nya di sini:
+
+`https://drive.google.com/file/d/1f4hsGzDGKmcH3PB1jHyRZbo5K2tl7jvy/view?usp=sharing'`
