@@ -221,7 +221,7 @@ function formatCurrency($number) {
             color: #fff;
             padding-top: 13px;
             padding-bottom: 13px;
-            font-size: 12px;
+            font-size: 10px;
         }
         .btn-buy-now:hover {
             background-color: #1A877E;
@@ -234,7 +234,7 @@ function formatCurrency($number) {
             border-color: #ffc107;
             padding-top: 13px;
             padding-bottom: 13px;
-            font-size: 12px;
+            font-size: 10px;
             color: #ffc107;
         }
         .btn-add-to-cart:hover {
