@@ -54,10 +54,6 @@ $cartSuccess = isset($_GET['cart_success']);
             color: #2D3A3A !important;
         }
 
-        .main-content {
-            padding: 1.5rem;
-        }
-
         #featuredProductCarousel {
             height: 350px;
             border-radius: 0.5rem;
