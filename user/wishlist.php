@@ -194,7 +194,7 @@ $cartSuccess = isset($_GET['cart_success']);
                                             <form action="add_to_cart.php" method="POST" class="me-3">
                                                 <input type="hidden" name="product_id" value="<?= $item['id_produk']; ?>">
                                                 <button type="submit" name="add_to_cart" class="btn btn-add-cart-wishlist btn-sm">
-                                                    <i class="bi bi-cart-plus-fill"></i> Masuk Keranjang
+                                                    <i></i> Masuk Keranjang
                                                 </button>
                                             </form>
                                         <?php else: ?>
