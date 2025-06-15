@@ -32,7 +32,6 @@ if ($start_date && $end_date && strtotime($start_date) <= strtotime($end_date)) 
     $end_date = null;
 }
 
-// --- PERBAIKAN: Menghapus kolom ongkir dan diskon dari query utama ---
 $sql = "SELECT p.id_pesanan, p.total_harga, p.status_pesanan, p.tanggal_pesanan, p.sudah_dinilai,
         pb.metode_pembayaran, pb.status_pembayaran,
         pg.alamat_pengiriman, pg.nomor_resi, pg.nama_kurir, pg.tanggal_kirim, pg.perkiraan_tiba
@@ -81,6 +80,15 @@ function formatCurrency($number) {
             background: #F8F7F1 !important;
             font-family: 'Andika', sans-serif;
             color: #2D3A3A !important;
+        }
+        .sidebar {
+            width: auto; /* Equivalent to w-64 in Tailwind */
+            background-color: #F8F7F1;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
         }
         h5{
             font-size: 18px !important;
@@ -176,22 +184,18 @@ function formatCurrency($number) {
                             $id_pesanan = $order['id_pesanan'];
                             $produkQ = mysqli_query($kon, "SELECT pd.*, pr.nama_produk, pr.gambar, pr.harga FROM pesanan_detail pd JOIN produk pr ON pd.id_produk = pr.id_produk WHERE pd.id_pesanan = $id_pesanan");
                             
-                            // Hitung subtotal produk dari query detail
                             $subtotal_produk = 0;
                             while ($produk_row = mysqli_fetch_assoc($produkQ)) {
                                 $subtotal_produk += $produk_row['subtotal'];
                             }
                             
-                            // --- PERBAIKAN: Hitung ongkir dan diskon secara dinamis ---
                             $ongkir_dihitung = $subtotal_produk * 0.10;
                             $total_seharusnya = $subtotal_produk + $ongkir_dihitung;
                             $diskon_dihitung = $total_seharusnya - $order['total_harga'];
-                            // Pastikan diskon tidak negatif
                             if ($diskon_dihitung < 0) {
                                 $diskon_dihitung = 0;
                             }
                             
-                            // Reset pointer query untuk loop tampilan
                             mysqli_data_seek($produkQ, 0); 
                             
                             while ($produk = mysqli_fetch_assoc($produkQ)):
@@ -240,7 +244,10 @@ function formatCurrency($number) {
                                         <a href="form_pembatalan.php?id_pesanan=<?= urlencode($order['id_pesanan']); ?>" class="btn btn-danger btn-sm">Batalkan</a>
                                     <?php elseif ($order['status_pesanan'] === 'Dibatalkan'): ?>
                                          <a href="checkout.php?ulang=<?= $order['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
-                                    <?php else: ?>
+                                    <?php elseif ($order['status_pesanan'] !== 'Selesai' AND $order['status_pesanan'] !== 'Dibatalkan'  AND $order['status_pesanan'] !== 'Diproses'): ?>
+                                        <button class="btn btn-warning btn-sm selesai-btn" data-id="<?= $order['id_pesanan']; ?>">Selesai</button>
+                                        <a href="lacak.php?id=<?= $order['id_pesanan'] ?>" class="btn btn-info btn-sm">Lacak</a>
+                                        <?php else: ?>
                                         <a href="lacak.php?id=<?= $order['id_pesanan'] ?>" class="btn btn-info btn-sm">Lacak</a>
                                     <?php endif; ?>
                                 </div>
@@ -288,6 +295,7 @@ function formatCurrency($number) {
         });
 
         // --- LOGIKA MODAL REVIEW (Tidak Diubah) ---
+        // (Kode modal review yang sudah ada tetap di sini)
         const reviewModal = new bootstrap.Modal(document.getElementById('reviewModal'));
         const modalBody = document.getElementById('review-product-list');
         const modalOrderIdSpan = document.getElementById('modal-order-id');
@@ -342,6 +350,40 @@ function formatCurrency($number) {
         function showAlert(message, type) {
             modalAlertPlaceholder.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show">${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`;
         }
+        
+        // --- KODE BARU UNTUK TOMBOL SELESAI ---
+        document.querySelectorAll('.selesai-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const orderId = this.dataset.id;
+                
+                if (confirm(`Apakah Anda yakin ingin menyelesaikan pesanan #${orderId}? Tindakan ini tidak dapat diurungkan.`)) {
+                    // Siapkan data untuk dikirim
+                    const formData = new FormData();
+                    formData.append('id_pesanan', orderId);
+                    formData.append('status', 'selesai');
+                    
+                    // Kirim request ke backend
+                    fetch('update_status.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Status pesanan berhasil diubah menjadi Selesai.');
+                            location.reload(); // Muat ulang halaman untuk melihat perubahan
+                        } else {
+                            alert('Gagal memperbarui status: ' + (data.message || 'Error tidak diketahui.'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan jaringan saat mencoba memperbarui status.');
+                    });
+                }
+            });
+        });
+        // --- AKHIR KODE BARU ---
     });
     </script>
 </body>

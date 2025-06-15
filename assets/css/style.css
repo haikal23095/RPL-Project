@@ -41,8 +41,9 @@ h6 {
 # Main
 --------------------------------------------------------------*/
 #main {
-  margin-top: 70px;
-  padding: 10px 0px;
+  margin-top: 70px !important;
+  padding-left: 40px !important;
+  padding: 10px 0px; 
   transition: all 0.3s;
 }
 

@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "db.php"; // Pastikan db.php ada dan berisi koneksi $kon
+date_default_timezone_set('Asia/Jakarta');
 require_once './vendor/autoload.php'; // PASTIkan path Composer autoload benar!
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -42,7 +43,7 @@ if (isset($_POST["submit_email"])) {
             mysqli_stmt_bind_param($stmt, "sss", $email, $token, $expires_at);
 
             if (mysqli_stmt_execute($stmt)) {
-                $reset_link = "http://" . $_SERVER['HTTP_HOST'] . "/reset_password.php?token=" . $token;
+                $reset_link = "http://" . $_SERVER['HTTP_HOST'] . "/RPL-Project/reset_password.php?token=" . $token;
 
                 // Mulai menggunakan PHPMailer
                 $mail = new PHPMailer(true); // true enables exceptions
@@ -83,9 +84,6 @@ if (isset($_POST["submit_email"])) {
         }
     }
 }
-// --- HAPUS LOGIKA RESET PASSWORD DARI SINI ---
-// Semua kode yang berkaitan dengan `$token_valid`, `$new_password`,
-// update password, dan delete token, HARUS DIPINDAHKAN ke reset_password.php
 
 ?>
 <!DOCTYPE html>
@@ -97,28 +95,6 @@ if (isset($_POST["submit_email"])) {
     <link rel="stylesheet" type="text/css" href="assets/css/login.css"> <!-- Re-use login.css for styling -->
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <link href="assets/img/LOGOCASALUXE2.png" rel="icon" sizes="48x48">
-</head>
-<body>
-    <!-- Logo GALeri -->
-    <header>
-            <a href="#">
-                <img src="assets/img/logo_CasaLuxe.png" alt="Logo" class="logo">
-            </a>
-    </header>
-
-    <div class="container" id="forgot-password-main">
-        <div class="form-container">
-            <form method="post" action="forgot_password.php">
-                <h1>Lupa Kata Sandi?</h1>
-                <p>Masukkan alamat email Anda yang terdaftar dan kami akan mengirimkan link untuk mereset kata sandi Anda.</p>
-                <?php if (!empty($msg)) echo $msg; ?>
-                <input type="email" name="email" placeholder="Alamat Email" required="">
-                <button type="submit" name="submit_email">Kirim Link Reset</button>
-                <a href="login.php" style="margin-top: 20px;">Kembali ke Halaman Masuk</a>
-            </form>
-        </div>
-    </div>
-
     <style>
         body {
             display: flex;
@@ -178,5 +154,28 @@ if (isset($_POST["submit_email"])) {
             }
         }
     </style>
+</head>
+<body>
+    <!-- Logo GALeri -->
+    <header>
+            <a href="#">
+                <img src="assets/img/logo_CasaLuxe.png" alt="Logo" class="logo">
+            </a>
+    </header>
+
+    <div class="container" id="forgot-password-main">
+        <div class="form-container">
+            <form method="post" action="forgot_password.php">
+                <h1>Lupa Kata Sandi?</h1>
+                <p>Masukkan alamat email Anda yang terdaftar dan kami akan mengirimkan link untuk mereset kata sandi Anda.</p>
+                <?php if (!empty($msg)) echo $msg; ?>
+                <input type="email" name="email" placeholder="Alamat Email" required="">
+                <button type="submit" name="submit_email">Kirim Link Reset</button>
+                <a href="login.php" style="margin-top: 20px;">Kembali ke Halaman Masuk</a>
+            </form>
+        </div>
+    </div>
+
+    
 </body>
 </html>

@@ -2,6 +2,9 @@
 session_start();
 require "db.php"; // Pastikan db.php ada dan berisi koneksi $kon
 
+date_default_timezone_set('Asia/Jakarta');
+echo "PHP Time (Forgot Password): " . date('Y-m-d H:i:s') . "<br>";
+
 $msg = "";
 $token_valid = false;
 $email_from_token = ""; // Akan diisi dengan email dari token yang valid
@@ -15,9 +18,13 @@ function sanitize_input($kon, $data) {
 if (isset($_GET['token']) && !empty($_GET['token'])) {
     $token = sanitize_input($kon, $_GET['token']);
 
-    // Cek token di database, pastikan belum kadaluarsa
-    $query_token = mysqli_query($kon, "SELECT * FROM password_resets WHERE token = '$token' AND expires_at > NOW()");
-    $token_data = mysqli_fetch_array($query_token);
+    // --- PERBAIKAN: Gunakan Prepared Statements untuk SELECT token ---
+    $stmt_token_check = mysqli_prepare($kon, "SELECT email FROM password_resets WHERE token = ? AND expires_at > NOW()");
+    mysqli_stmt_bind_param($stmt_token_check, "s", $token);
+    mysqli_stmt_execute($stmt_token_check);
+    $result_token_check = mysqli_stmt_get_result($stmt_token_check);
+    $token_data = mysqli_fetch_array($result_token_check);
+    mysqli_stmt_close($stmt_token_check); // Tutup statement
 
     if ($token_data) {
         $token_valid = true;
@@ -25,6 +32,7 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
     } else {
         $msg = '<div class="alert alert-danger">Link reset kata sandi tidak valid atau sudah kadaluarsa.</div>';
     }
+
 } else if (isset($_POST['reset_password'])) {
     // 2. Logika saat form reset password disubmit
     $token = sanitize_input($kon, $_POST['token'] ?? "");
@@ -32,8 +40,13 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
     $confirm_password = sanitize_input($kon, $_POST['confirm_password'] ?? "");
 
     // Verifikasi ulang token (penting untuk keamanan)
-    $query_token = mysqli_query($kon, "SELECT * FROM password_resets WHERE token = '$token' AND expires_at > NOW()");
-    $token_data = mysqli_fetch_array($query_token);
+    // --- PERBAIKAN: Gunakan Prepared Statements untuk SELECT token (ulang) ---
+    $stmt_token_verify = mysqli_prepare($kon, "SELECT email FROM password_resets WHERE token = ? AND expires_at > NOW()");
+    mysqli_stmt_bind_param($stmt_token_verify, "s", $token);
+    mysqli_stmt_execute($stmt_token_verify);
+    $result_token_verify = mysqli_stmt_get_result($stmt_token_verify);
+    $token_data = mysqli_fetch_array($result_token_verify);
+    mysqli_stmt_close($stmt_token_verify); // Tutup statement
 
     if (!$token_data) {
         $msg = '<div class="alert alert-danger">Link reset kata sandi tidak valid atau sudah kadaluarsa. Silakan coba lagi.</div>';
@@ -60,7 +73,15 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
 
         if (mysqli_stmt_execute($stmt)) {
             // Hapus token dari tabel password_resets setelah berhasil digunakan
-            mysqli_query($kon, "DELETE FROM password_resets WHERE email = '$email_to_reset'");
+            $delete_token_stmt = mysqli_prepare($kon, "DELETE FROM password_resets WHERE email = ?");
+            if (!$delete_token_stmt) {
+                // Log error ini, tapi jangan tampilkan ke pengguna untuk keamanan
+                error_log("Gagal menyiapkan DELETE token: " . mysqli_error($kon));
+            } else {
+                mysqli_stmt_bind_param($delete_token_stmt, "s", $email_to_reset);
+                mysqli_stmt_execute($delete_token_stmt);
+                mysqli_stmt_close($delete_token_stmt); // Tutup statement
+            }
 
             $_SESSION['reset_success'] = "Kata sandi Anda berhasil direset. Silakan masuk dengan kata sandi baru Anda.";
             header("Location: login.php");
@@ -106,7 +127,7 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
                     <button type="submit" name="reset_password">Reset Kata Sandi</button>
                     <a href="login.php" style="margin-top: 20px;">Kembali ke Halaman Masuk</a>
                 </form>
-            <?php else: // Tampilkan pesan error jika token tidak valid ?>
+            <?php else:  ?>
                 <p>Silakan kembali ke halaman lupa kata sandi untuk meminta link baru.</p>
                 <a href="forgot_password.php">Lupa Kata Sandi?</a>
             <?php endif; ?>

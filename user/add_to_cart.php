@@ -111,6 +111,15 @@ if (isset($_POST['checkout']) && isset($_POST['selected_items'])) {
         .main {
             padding-bottom: 2rem;
         }
+        .sidebar {
+            width: auto !important; /* Equivalent to w-64 in Tailwind */
+            background-color: #F8F7F1 !important;
+            padding: 1rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            height: 100vh !important;
+        }
         .cart-item-card {
             display: flex;
             align-items: center;
