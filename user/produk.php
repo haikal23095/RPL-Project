@@ -59,14 +59,14 @@ if (isset($_POST['add_to_wishlist'])) {
     $productId = $_POST['product_id'];
     $currentCategory = $_GET['category'] ?? '';
 
-    $checkSql = "SELECT * FROM wishlist WHERE id_user = ? AND id_produk = ?";
+    $checkSql = "SELECT * FROM wishlist WHERE user_id = ? AND id_produk = ?";
     $checkStmt = $kon->prepare($checkSql);
     $checkStmt->bind_param("ii", $userId, $productId);
     $checkStmt->execute();
     $checkResult = $checkStmt->get_result();
 
     if ($checkResult->num_rows == 0) {
-        $insertSql = "INSERT INTO wishlist (id_user, id_produk) VALUES (?, ?)";
+        $insertSql = "INSERT INTO wishlist (user_id, id_produk) VALUES (?, ?)";
         $insertStmt = $kon->prepare($insertSql);
         $insertStmt->bind_param("ii", $userId, $productId);
         $insertStmt->execute();
@@ -221,7 +221,7 @@ function formatCurrency($number) {
             color: #fff;
             padding-top: 13px;
             padding-bottom: 13px;
-            font-size: 12px;
+            font-size: 10px;
         }
         .btn-buy-now:hover {
             background-color: #1A877E;
@@ -232,7 +232,9 @@ function formatCurrency($number) {
         .btn-add-to-cart {
             background-color:transparent; /* Warna kuning-oranye */
             border-color: #ffc107;
-            font-size: 11.6px;
+            padding-top: 13px;
+            padding-bottom: 13px;
+            font-size: 10px;
             color: #ffc107;
         }
         .btn-add-to-cart:hover {
@@ -319,7 +321,7 @@ function formatCurrency($number) {
                         <div class="col-xl-3 col-lg-4 col-md-6">
                             <div class="card product-card h-100">
                                 <div class="card-img-container">
-                                    <a href="detail_produk.php?id=<?= $product['id']; ?>">
+                                    <a href="detail_produk.php?product_id=<?= urlencode($product['id']); ?>">
                                         <img src="../uploads/<?= htmlspecialchars($product['image']); ?>" class="card-img-top product-card-img-top" alt="<?= htmlspecialchars($product['name']); ?>">
                                     </a>
                                     <form method="POST">
