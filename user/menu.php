@@ -1,7 +1,6 @@
 <aside id="sidebar" class="sidebar">
 
-    <ul class="sidebar-nav" id="sidebar-nav">
-
+  <ul class="sidebar-nav" id="sidebar-nav">
     <h5 class="text-center"></h5>
       <li class="nav-item">
         <a class="nav-link <?php if($page == "dashboard"){ echo "collapsed"; } ?>" href="index.php">
@@ -41,6 +40,5 @@
           <span>PELAYANAN PELANGGAN</span>
         </a>
       </li> 
-    </ul>
-
+  </ul>
 </aside>
