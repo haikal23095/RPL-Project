@@ -130,7 +130,15 @@ $cartSuccess = isset($_GET['cart_success']);
 <body>
     <?php require "atas.php"; ?>
     <?php require "menu.php"; ?>
-
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
+    </style>
     <main id="main" class="main">
         <div class="pagetitle">
             <h1><i class="bi bi-megaphone"></i>&nbsp;INFORMASI PROMO</h1>
@@ -151,15 +159,15 @@ $cartSuccess = isset($_GET['cart_success']);
                         <h2>AMBIL PROMO REDEEM-MU</h2>
                     </div> -->
 
-<<<<<<< HEAD
+
                     <div class="d-flex justify-content-center mb-4">
                         <img src="../assets/img/promo1.png" alt="promo1" style="width: 100%; max-width: 1500px;" class="">
                     </div>
                                         <!-- All Promo Section -->
-=======
+
                     <img src="../assets/img/promo1.png" alt="promo1" style="margin-bottom:40px; width: 1000px;">
                     <!-- All Promo Section -->
->>>>>>> d15aa31a08e261fa7b384db347fcb939c6297236
+
                     <div class="promo-section">
                         <h3 class="promo-section-title">SEMUA PROMO</h3>
                         <div class="row">

@@ -1,9 +1,31 @@
 <?php
 session_start();
 require "db.php"; // Pastikan db.php ada dan berisi koneksi $kon
+require_once './vendor/autoload.php'; // pastikan path composer autoload benar
+
+
+use Dotenv\Dotenv;
+use Twilio\Rest\Client;
+
+
+// $dotenv = Dotenv::createImmutable(__DIR__);
+// $dotenv->load();
+
+
+$sid = '';
+$token = '';
+$verifySid = '';
+
+
+
+// Debug sementara
+// echo "SID: " . ($sid ?? 'NULL') . "<br>";
+// echo "TOKEN: " . ($token ?? 'NULL') . "<br>";
+// echo "VERIFY SID: " . ($verifySid ?? 'NULL') . "<br>";
 
 $msg = ""; // Variabel untuk pesan sukses/error
 
+$login_berhasil = false;
 // Fungsi untuk membersihkan input
 function sanitize_input($kon, $data) {
     return mysqli_real_escape_string($kon, trim($data)); // Tambahkan trim() untuk menghapus spasi di awal/akhir
@@ -25,31 +47,44 @@ if (isset($_POST["login"])) {
         if (!$user_data || $user_data['password'] !== $pwd) { // Cek password plain text (GANTI DENGAN password_verify($pwd, $user_data['password_hash']))
             $msg = '<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i>&nbsp; MAAF, EMAIL / PASSWORD ANDA SALAH. SILAHKAN ULANGI LAGI!</div>';
         } else {
+            // simpan session
+            $_SESSION['user'] = $user_data;
             // Update active field
             $update_active = "UPDATE user SET active = NOW() WHERE email = '$email'";
             mysqli_query($kon, $update_active);
 
-            // Set session and redirect based on level
-            switch ($user_data["level"]) {
-                case "admin":
-                    $_SESSION["admin"] = $user_data["nama"];
-                    header("Location: admin/index.php");
-                    exit;
-                case "cs":
-                    $_SESSION["cs"] = $user_data["nama"];
-                    header("Location: cs/chat.php"); 
-                    exit;
-                case "user":
-                    $_SESSION["user"] = $user_data["nama"];
-                    header("Location: user/index.php");
-                    exit;
-                default:
-                    $msg = '<div class="alert alert-danger">&nbsp; ERROR: Level pengguna tidak dikenal.</div>';
-                    break;
+            
+            $login_berhasil = true;
+            $user = $user_data; // Simpan user ke variabel session atau variabel lokal
+            
+            $nomor = $user_data['no_tlp'];
+            if (strpos($nomor, '0') === 0) {
+                $nomor = '+62' . substr($nomor, 1);
+            }
+            
+            // Kirim OTP via Twilio Verify
+            try {
+                $twilio = new Client($sid, $token);
+                $verification = $twilio->verify->v2->services($verifySid)
+                    ->verifications
+                    ->create($nomor, "sms");
+                
+                
+                // Redirect ke halaman verifikasi jika OTP berhasil dikirim
+                header("Location: verification.php");
+                exit();
+            } catch (Exception $e) {
+                // print_r($_SESSION);
+                $msg = '<div class="alert alert-danger">Gagal mengirim OTP: ' . $e->getMessage() . '</div>';
+                // exit();
             }
         }
+
+            
     }
 }
+
+
 
 // Logika untuk proses REGISTER
 if (isset($_POST["register"])) {
@@ -95,6 +130,9 @@ if (isset($_SESSION['reset_success'])) {
     unset($_SESSION['reset_success']); // Hapus dari session agar tidak tampil lagi
 }
 ?>
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -113,6 +151,7 @@ if (isset($_SESSION['reset_success'])) {
     </header>
 	<div class="container" id="main">
       <div class="sign-up">
+        <?php if (!empty($msg) && isset($_POST['register'])) echo $msg; ?>
         <form class="register" method="post">
             <h1>Daftar</h1>
             <div class="social-container">
@@ -134,6 +173,7 @@ if (isset($_SESSION['reset_success'])) {
       </div>
 
       <div class="sign-in">
+        <?php if (!empty($msg) && isset($_POST['login'])) echo $msg; ?>
           <form class="login" method="post">
               <h1>Masuk</h1>
               <div class="social-container">

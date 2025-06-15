@@ -1,8 +1,13 @@
 <?php
 session_start();
 require "db.php"; // Pastikan db.php ada dan berisi koneksi $kon
+require_once './vendor/autoload.php'; // PASTIkan path Composer autoload benar!
 
-$msg = ""; // Untuk pesan sukses/error
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+
+$msg = "";
 
 // Fungsi untuk membersihkan input
 function sanitize_input($kon, $data) {
@@ -15,65 +20,73 @@ if (isset($_POST["submit_email"])) {
     if (empty($email)) {
         $msg = '<div class="alert alert-warning">Mohon masukkan alamat email Anda.</div>';
     } else {
-        // 1. Cek apakah email terdaftar di database
+        // --- PERBAIKAN PENTING: Cek apakah email terdaftar di database ---
+        // Ini adalah langkah keamanan untuk mencegah enumerasi email.
         $check_email_query = mysqli_query($kon, "SELECT * FROM user WHERE email = '$email'");
+
+        // Jika email tidak terdaftar, tampilkan pesan sukses umum.
+        // Ini mencegah penyerang mengetahui email mana yang terdaftar.
         if (mysqli_num_rows($check_email_query) == 0) {
-            // Penting: Untuk keamanan, jangan beritahu apakah email terdaftar atau tidak.
-            // Selalu tampilkan pesan sukses yang sama, meskipun email tidak ditemukan.
-            // Ini mencegah enumerasi email.
             $msg = '<div class="alert alert-success">Jika email Anda terdaftar, link reset kata sandi telah dikirim ke email Anda. Silakan cek kotak masuk Anda.</div>';
         } else {
-            // 2. Hasilkan token unik dan aman
-            // random_bytes() lebih kuat dari rand()
-            $token = bin2hex(random_bytes(32)); // Token acak 64 karakter heksadesimal
-            $expires_at = date('Y-m-d H:i:s', strtotime('+1 hour')); // Token berlaku 1 jam
+            // Email terdaftar, lanjutkan proses pembuatan dan pengiriman token
+            $token = bin2hex(random_bytes(32));
+            $expires_at = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
-            // 3. Simpan token ke tabel password_resets
-            // Hapus token lama yang mungkin ada untuk email ini
+            // Hapus token lama untuk email ini (jika ada)
             mysqli_query($kon, "DELETE FROM password_resets WHERE email = '$email'");
-            
-            // Masukkan token baru
+
+            // Masukkan token baru ke tabel password_resets
             $insert_token_query = "INSERT INTO password_resets (email, token, expires_at) VALUES (?, ?, ?)";
             $stmt = mysqli_prepare($kon, $insert_token_query);
             mysqli_stmt_bind_param($stmt, "sss", $email, $token, $expires_at);
-            
+
             if (mysqli_stmt_execute($stmt)) {
-                // 4. Kirim email berisi link reset kata sandi
-                // GANTI DENGAN URL ASLI DOMAIN ANDA UNTUK PRODUKSI
-                // Contoh: $reset_link = "https://www.casaluxe.com/reset_password.php?token=" . $token;
-                $reset_link = "http://" . $_SERVER['HTTP_HOST'] . "/reset_password.php?token=" . $token; // Menggunakan host saat ini
+                $reset_link = "http://" . $_SERVER['HTTP_HOST'] . "/reset_password.php?token=" . $token;
 
-                $subject = "Reset Kata Sandi Anda - CasaLuxe";
-                $headers = "From: no-reply@casaluxe.com\r\n";
-                $headers .= "Reply-To: no-reply@casaluxe.com\r\n";
-                $headers .= "MIME-Version: 1.0\r\n";
-                $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+                // Mulai menggunakan PHPMailer
+                $mail = new PHPMailer(true); // true enables exceptions
+                try {
+                    // Server settings untuk Mailtrap.io
+                    $mail->isSMTP();
+                    $mail->Host       = 'sandbox.smtp.mailtrap.io'; // Host Mailtrap.io
+                    $mail->SMTPAuth   = true;
+                    $mail->Username   = '026240b5e6188a'; // Username Mailtrap.io Anda
+                    $mail->Password   = '28b86404d4487d';   // Password Mailtrap.io Anda
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Biasanya ENCRYPTION_STARTTLS
+                    $mail->Port       = 587; // Atau 2525 atau 465, sesuai Mailtrap.io
 
-                $message = "Halo,\n\n"
-                         . "Anda menerima email ini karena ada permintaan reset kata sandi untuk akun Anda.\n"
-                         . "Silakan klik link berikut untuk mereset kata sandi Anda:\n\n"
-                         . $reset_link . "\n\n"
-                         . "Link ini akan kadaluarsa dalam 1 jam.\n"
-                         . "Jika Anda tidak meminta reset kata sandi, abaikan email ini.\n\n"
-                         . "Terima kasih,\nTim CasaLuxe";
+                    // Recipients
+                    $mail->setFrom('no-reply@casaluxe.com', 'CasaLuxe'); // Pengirim
+                    $mail->addAddress($email); // Penerima
 
-                // --- PENTING: Konfigurasi Pengiriman Email ---
-                // Fungsi mail() PHP membutuhkan konfigurasi server (misal: sendmail, Postfix di Linux, atau SMTP server)
-                // DI LINGKUNGAN LOKAL (XAMPP/WAMPServer), Anda mungkin perlu mengkonfigurasi php.ini atau menggunakan library SMTP (PHPMailer).
-                // Jika tidak terkonfigurasi, fungsi mail() akan gagal diam-diam atau pesan tidak terkirim.
-                // Untuk produksi, SANGAT disarankan menggunakan library seperti PHPMailer atau layanan email API (SendGrid, Mailgun, dll.)
-                
-                // mail($email, $subject, $message, $headers); // Uncomment ini setelah konfigurasi email
+                    // Content
+                    $mail->isHTML(false); // Set email format to plain text
+                    $mail->Subject = 'Reset Kata Sandi Anda - CasaLuxe';
+                    $mail->Body    = "Halo,\n\n"
+                                   . "Anda menerima email ini karena ada permintaan reset kata sandi untuk akun Anda.\n"
+                                   . "Silakan klik link berikut untuk mereset kata sandi Anda:\n\n"
+                                   . $reset_link . "\n\n"
+                                   . "Link ini akan kadaluarsa dalam 1 jam.\n"
+                                   . "Jika Anda tidak meminta reset kata sandi, abaikan email ini.\n\n"
+                                   . "Terima kasih,\nTim CasaLuxe";
 
-                $msg = '<div class="alert alert-success">Link reset kata sandi telah dikirim ke email Anda. Silakan cek kotak masuk Anda.</div>';
-
+                    $mail->send();
+                    $msg = '<div class="alert alert-success">Link reset kata sandi telah dikirim ke email Anda. Silakan cek kotak masuk Anda di Mailtrap.io.</div>';
+                } catch (Exception $e) {
+                    $msg = '<div class="alert alert-danger">Gagal mengirim email reset kata sandi. Mailer Error: ' . $mail->ErrorInfo . '</div>';
+                }
             } else {
                 $msg = '<div class="alert alert-danger">Terjadi kesalahan saat membuat token reset. Mohon coba lagi. Error: ' . mysqli_error($kon) . '</div>';
             }
-            mysqli_stmt_close($stmt);
+            mysqli_stmt_close($stmt); // Tutup statement setelah selesai
         }
     }
 }
+// --- HAPUS LOGIKA RESET PASSWORD DARI SINI ---
+// Semua kode yang berkaitan dengan `$token_valid`, `$new_password`,
+// update password, dan delete token, HARUS DIPINDAHKAN ke reset_password.php
+
 ?>
 <!DOCTYPE html>
 <html>

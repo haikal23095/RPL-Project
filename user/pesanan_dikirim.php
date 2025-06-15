@@ -53,9 +53,13 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
     <link href="../assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background-color: #f5f5f5;
-        }
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }   
         .pesanan-card {
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -71,6 +75,7 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
             border: none !important;
             color: white !important;
         }
+        
     </style>
     <?php include 'aset.php'; ?>
 </head>

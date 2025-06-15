@@ -54,6 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_review'])) {
     <?php include "aset.php"; ?>
     
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
         .table th, .table td {
             vertical-align: middle;
         }
@@ -74,11 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_review'])) {
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-chat-square-quote-fill"></i> Riwayat Ulasan</h1>
+            <h1><i class="bi bi-chat-quote"></i> RIWAYAT ULASAN</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Profil</a></li>
-                    <li class="breadcrumb-item active">Riwayat Ulasan</li>
+                    <li class="breadcrumb-item"><a href="index.php">PROFIL</a></li>
+                    <li class="breadcrumb-item active">RIWAYAT ULASAN</li>
                 </ol>
             </nav>
         </div>

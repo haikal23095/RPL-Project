@@ -13,13 +13,15 @@
     <nav class="header-nav">
       <ul class="d-flex align-items-center mb-0">
         <li class="nav-item pe-4">
-          <a class="nav-link nav-profile d-flex align-items-center pe-1" href="notifikasi.php">
-            <span class="d-none d-md-block ps-2"><i style="font-size: 20px" class="bi bi-bell"></i></span>
+          <a class="nav-link nav-profile d-flex align-items-center pe-1 <?php echo (isset($page) && $page == 'notifikasi') ? 'active' : ''; ?>" href="notifikasi.php">
+            <span class="d-none d-md-block ps-2" style="color: <?php echo (isset($page) && $page == 'notifikasi') ? '#EFAA31' : '#2D3A3A'; ?>">
+              <i style="font-size: 20px ; color: <?php echo (isset($page) && $page == 'notifikasi') ? '#EFAA31' : '#2D3A3A'; ?>" class="bi bi-bell"></i></span>
           </a>
         </li>
         <li class="nav-item pe-4">
-          <a class="nav-link nav-profile d-flex align-items-center pe-1" href="add_to_cart.php">
-            <span class="d-none d-md-block ps-2"><i style="font-size: 20px" class="bi bi-cart"></i></span>
+          <a class="nav-link nav-profile d-flex align-items-center pe-1  <?php echo (isset($page) && $page == 'keranjang') ? 'active' : ''; ?>" href="add_to_cart.php">
+            <span class="d-none d-md-block ps-2" style="color: <?php echo (isset($page) && $page == 'keranjang') ? '#EFAA31' : '#2D3A3A'; ?>">
+              <i style="font-size: 20px; color: <?php echo (isset($page) && $page == 'keranjang') ? '#EFAA31' : '#2D3A3A'; ?>" class="bi bi-cart"></i></span>
           </a>
         </li>
 

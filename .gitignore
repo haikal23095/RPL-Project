@@ -1,1 +1,10 @@
+# .env dan config rahasia
+.env
+.env.*
+
+# db
 db.php
+
+# vendor & composer
+/vendor/
+/composer.lock

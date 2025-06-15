@@ -51,6 +51,13 @@ $result = mysqli_query($kon, $query);
     <?php include 'aset.php'; ?>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
         .chat-card {
             display: flex;
             flex-direction: column;
@@ -58,62 +65,40 @@ $result = mysqli_query($kon, $query);
             border-radius: 1rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             background-color: #fff;
+            overflow: hidden;
         }
+
         .chat-header {
-            border-bottom: 1px solid #e9ecef;
             padding: 1rem 1.5rem;
+            flex-shrink: 0;
+            background-color: #fd7e14; 
+            color: white;
+            border-bottom: 1px solid #e67311; 
         }
+
+        .chat-header h6 {
+            color: white; 
+        }
+        
+        .chat-header small {
+            color: #ffedd5; 
+        }
+
         .chat-body {
             flex-grow: 1;
             padding: 1.5rem;
             overflow-y: auto;
-            background-color: #f8f9fa;
+            background-color: #F0F0F0;
         }
         .chat-footer {
             border-top: 1px solid #e9ecef;
             padding: 1rem 1.5rem;
+            background-color: #F9F9F9;
+            flex-shrink: 0;
         }
         .message-row {
             display: flex;
             margin-bottom: 1.25rem;
-        }
-
-        /* --- PERBAIKAN DI SINI --- */
-        .message-bubble {
-            display: inline-block; 
-            padding: 0.7rem 1.1rem;
-            border-radius: 1.25rem;
-            max-width: 75%;
-            line-height: 1.4;
-            word-wrap: break-word;
-            min-width: 80px;      
-            text-align: left;     
-        }
-
-        .message-row.sent {
-            justify-content: flex-end;
-        }
-        .message-row.sent .message-bubble {
-            background-color: #0d6efd;
-            color: white;
-            border-top-right-radius: 0.5rem;
-        }
-        .message-row.received {
-            justify-content: flex-start;
-        }
-        .message-row.received .message-bubble {
-            background-color: #e9ecef;
-            color: #212529;
-            border-top-left-radius: 0.5rem;
-        }
-        .message-time {
-            font-size: 0.75rem;
-            color: #6c757d;
-            margin-top: 4px;
-            padding: 0 0.5rem;
-        }
-        .message-row.sent .message-time {
-            text-align: right;
         }
         .profile-pic {
             width: 45px;
@@ -121,20 +106,55 @@ $result = mysqli_query($kon, $query);
             border-radius: 50%;
             object-fit: cover;
         }
+
+        .message-bubble {
+            display: inline-block; 
+            padding: 0.75rem 1.2rem;
+            border-radius: 18px;
+            max-width: 75%;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message-row.sent {
+            justify-content: flex-start;
+        }
+        .message-row.sent .message-bubble {
+            background-color: #D9D9D9;
+            color: #333;
+            border-top-left-radius: 4px;
+        }
+        
+        .message-row.received {
+            justify-content: flex-end;
+        }
+        .message-row.received .message-bubble {
+            background-color: #fd7e14;
+            color: white;
+            border-top-right-radius: 4px;
+        }
+
         .chat-footer .form-control {
-            border-radius: 1.5rem;
-            border-color: #ced4da;
+            border: none;
+            background-color: transparent;
+            box-shadow: none;
+            border-radius: 0;
+            border-bottom: 1px solid #ced4da;
+            padding-left: 0;
+            padding-right: 0;
         }
         .chat-footer .form-control:focus {
-            border-color: #86b7fe;
-            box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+            border-color: #fd7e14;
         }
+
         .chat-footer .btn-send {
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            font-size: 1.2rem;
+            background: none;
+            border: none;
+            color: #fd7e14;
+            font-size: 1.5rem;
+            padding: 0;
         }
+
     </style>
 </head>
 
@@ -159,20 +179,15 @@ $result = mysqli_query($kon, $query);
                     <img src="../uploads/<?= htmlspecialchars($admin_photo); ?>" alt="Admin" class="profile-pic me-3">
                     <div>
                         <h6 class="fw-bold mb-0"><?= htmlspecialchars($admin_name); ?></h6>
-                        <small class="text-success"><i class="bi bi-circle-fill" style="font-size: 0.6rem;"></i> Online</small>
+                        <small><i class="bi bi-circle-fill" style="font-size: 0.6rem; color: #28a745;"></i> Online</small>
                     </div>
                 </div>
 
                 <div class="chat-body" id="chat-box">
                     <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                        <div class="message-row <?php echo $row['sender'] == 'user' ? 'sent' : 'received'; ?>">
-                            <div class="d-flex flex-column <?php echo $row['sender'] == 'user' ? 'align-items-end' : 'align-items-start'; ?>">
-                                <div class="message-bubble">
-                                    <?= nl2br(htmlspecialchars($row['message'])); ?>
-                                </div>
-                                <div class="message-time">
-                                    <?= date('H:i', strtotime($row['timestamp'])); ?>
-                                </div>
+                        <div class="message-row <?php echo $row['sender'] == 'user' ? 'received' : 'sent'; ?>">
+                            <div class="message-bubble">
+                                <?= nl2br(htmlspecialchars($row['message'])); ?>
                             </div>
                         </div>
                     <?php endwhile; ?>
@@ -180,8 +195,8 @@ $result = mysqli_query($kon, $query);
 
                 <div class="chat-footer">
                     <form method="POST" action="chat.php" class="d-flex align-items-center">
-                        <input type="text" name="message" class="form-control" placeholder="Ketik pesan Anda..." required autocomplete="off">
-                        <button class="btn btn-primary btn-send ms-2 flex-shrink-0" type="submit">
+                        <input type="text" name="message" class="form-control" placeholder="Tulis pesan" required autocomplete="off">
+                        <button class="btn btn-send ms-3 flex-shrink-0" type="submit">
                             <i class="bi bi-send-fill"></i>
                         </button>
                     </form>
@@ -190,15 +205,12 @@ $result = mysqli_query($kon, $query);
         </section>
     </main>
 
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/main.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const chatBox = document.getElementById('chat-box');
-            // Scroll ke pesan paling bawah saat halaman dimuat
             chatBox.scrollTop = chatBox.scrollHeight;
         });
     </script>
