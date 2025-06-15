@@ -45,6 +45,7 @@ $cartSuccess = isset($_GET['cart_success']);
             --casaluxe-primary: #EFAA31;
             --casaluxe-dark: #2D3A3A;
             --casaluxe-light-bg: #F8F7F1;
+            --casaluxe-green : #1a877e;
         }
         
         body {
@@ -115,13 +116,23 @@ $cartSuccess = isset($_GET['cart_success']);
         }
 
         .btn-casaluxe-primary {
+            background-color: var(--casaluxe-green);
+            color: #fff;
+            border-color: var(--casaluxe-green);
+        }
+        .btn-casaluxe-primary:hover {
+            background-color: #1a877e;
+            border-color: #1a877e;
+            color: #fff;
+        }
+        .btn-casaluxe-primaryy {
             background-color: var(--casaluxe-primary);
             color: #fff;
             border-color: var(--casaluxe-primary);
         }
-        .btn-casaluxe-primary:hover {
-            background-color: #e09f2b;
-            border-color: #e09f2b;
+        .btn-casaluxe-primaryy:hover {
+            background-color:#ffa811;
+            border-color: #ffa811;
             color: #fff;
         }
         .btn-outline-casaluxe-primary {
@@ -131,6 +142,30 @@ $cartSuccess = isset($_GET['cart_success']);
         .btn-outline-casaluxe-primary:hover {
             background-color: var(--casaluxe-primary);
             color: #fff;
+        }
+        .breadcrumb {
+        font-size: 14px;
+        font-family: "Andika", sans-serif;
+        color: #EFAA31 !important;
+        font-weight: 600;
+        }
+
+        .breadcrumb a {
+        color: #EFAA31 !important;
+        transition: 0.3s;
+        }
+
+        .breadcrumb a:hover {
+        color: #EFAA31 !important;
+        }
+
+        .breadcrumb .breadcrumb-item::before {
+        color: #EFAA31 !important;
+        }
+
+        .breadcrumb .active {
+        color: #ff771d !important;
+        font-weight: 800;
         }
     </style>
 
@@ -185,10 +220,7 @@ $cartSuccess = isset($_GET['cart_success']);
                 <div class="col-lg-4 d-flex align-items-stretch"> 
                     <div class="card shadow-sm p-3 text-center d-flex flex-column justify-content-center align-items-center w-100">
                         <img src="../assets/img/BARANG B.png" alt="Product Tersedia" class="img-fluid rounded mb-3" style="max-height: 200px; object-fit: contain;">
-                        <h2 class="fs-5 fw-bold mb-3" style="color: var(--casaluxe-dark);">Kursi Kantor Pink</h2>
-                        <a href="detail_produk.php?product_id=<?= urlencode('3'); ?>">
-                            <button class="btn btn-casaluxe-primary fw-bold py-2 px-4 rounded-lg shadow-sm">TERSEDIA SEKARANG</button>
-                        </a>
+                        <button class="btn btn-casaluxe-primaryy fw-bold py-2 px-4 rounded-lg shadow-sm">TERSEDIA SEKARANG</button>
                     </div>
                 </div>
             </section>
