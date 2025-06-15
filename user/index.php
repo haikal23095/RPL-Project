@@ -185,7 +185,10 @@ $cartSuccess = isset($_GET['cart_success']);
                 <div class="col-lg-4 d-flex align-items-stretch"> 
                     <div class="card shadow-sm p-3 text-center d-flex flex-column justify-content-center align-items-center w-100">
                         <img src="../assets/img/BARANG B.png" alt="Product Tersedia" class="img-fluid rounded mb-3" style="max-height: 200px; object-fit: contain;">
-                        <button class="btn btn-casaluxe-primary fw-bold py-2 px-4 rounded-lg shadow-sm">TERSEDIA SEKARANG</button>
+                        <h2 class="fs-5 fw-bold mb-3" style="color: var(--casaluxe-dark);">Kursi Kantor Pink</h2>
+                        <a href="detail_produk.php?product_id=<?= urlencode('3'); ?>">
+                            <button class="btn btn-casaluxe-primary fw-bold py-2 px-4 rounded-lg shadow-sm">TERSEDIA SEKARANG</button>
+                        </a>
                     </div>
                 </div>
             </section>
@@ -208,7 +211,9 @@ $cartSuccess = isset($_GET['cart_success']);
                         while ($product = mysqli_fetch_assoc($result)) {
                             echo '<div class="col">';
                             echo '  <div class="card shadow-sm overflow-hidden product-card">'; 
-                            echo '      <img src="../uploads/' . htmlspecialchars($product['gambar']) . '" class="card-img-top" alt="' . htmlspecialchars($product['nama_produk']) . '">';
+                            echo '      <a href="detail_produk.php?product_id=' . urlencode($product['id_produk']) . '">';
+                            echo '          <img src="../uploads/' . htmlspecialchars($product['gambar']) . '" class="card-img-top" alt="' . htmlspecialchars($product['nama_produk']) . '">';
+                            echo '      </a>';
                             echo '      <div class="card-body p-3">'; 
                             echo '        <div>';
                             echo '            <h5 class="card-title fs-6 fw-bold mb-1">' . htmlspecialchars($product['nama_produk']) . '</h5>';
