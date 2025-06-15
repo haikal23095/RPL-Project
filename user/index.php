@@ -218,6 +218,7 @@ $cartSuccess = isset($_GET['cart_success']);
                 <div class="col-lg-4 d-flex align-items-stretch"> 
                     <div class="card shadow-sm p-3 text-center d-flex flex-column justify-content-center align-items-center w-100">
                         <img src="../assets/img/BARANG B.png" alt="Product Tersedia" class="img-fluid rounded mb-3" style="max-height: 200px; object-fit: contain;">
+                        <h3 class="fs-5 fw-bold mb-3" style="color: var(--casaluxe-dark);">Kursi Kantor Pink</h3>
                         <button class="btn btn-casaluxe-primaryy fw-bold py-2 px-4 rounded-lg shadow-sm">TERSEDIA SEKARANG</button>
                     </div>
                 </div>
