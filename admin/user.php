@@ -150,7 +150,7 @@ if (isset($_POST["update"])) {
                                 <div class="stat-item">
                                     <div class="text-muted">Online User</div>
                                     <div>
-                                        <span class="stat-number">20</span>
+                                        <span class="stat-number">2</span>
                                         <span class="stat-label">User</span>
                                     </div>
                                 </div>
