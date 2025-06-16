@@ -13,7 +13,7 @@
 }
 
 body {
-  font-family: "Andika", sans-serif;
+  font-family: "Andika", sans-serif !important;
   background: #F8F7F1;
   color: #2D3A3A;
 }

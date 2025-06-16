@@ -89,24 +89,29 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <?php include 'aset.php'; ?>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         .table th, .table td {
             vertical-align: middle;
             text-align: center;
         }
         body {
             background: #F8F7F1 !important;
-            font-family: 'Andika', sans-serif !important;
+            font-family: 'Andika', sans-serif;
             color: #2D3A3A;
         }
-        h5 {
+ 
+        h5{
             font-size: 20px !important;
             color: #2D3A3A !important;
             font-weight: bold !important;
         }
-        h3 {
+ 
+        h3{
             font-size: 30px !important;
             color: #efaa31 !important;
         }
+        
         .btn-grafik {
             background-color: #FF8C12;
             color: white;
