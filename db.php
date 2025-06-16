@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";
 $user = "root";
-$pwd  = "48475948";
+$pwd  = "";
 $db   = "casaluxedb";
 
 $kon  = mysqli_connect($host, $user, $pwd, $db);
