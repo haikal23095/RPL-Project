@@ -139,7 +139,7 @@ $products = mysqli_fetch_all($resultProducts, MYSQLI_ASSOC);
                     </div>
                     <br>
                     <div class="card-body">
-                        <table class="table table-bordered table-hover">
+                        <table class="table datatable">
                             <thead class="table-light">
                                 <tr>
                                     <th>Nama Produk</th>
