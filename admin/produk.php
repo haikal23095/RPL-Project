@@ -124,12 +124,16 @@ $deleteError = isset($_GET['delete_error']); // Cek apakah ada notifikasi error
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
             transition: all 0.3s ease-in-out;
             padding: 16px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
         .card:hover {
             transform: translateY(-4px);
         }
         .card-title {
-            font-size: 14px;
+            font-size: 10px;
             font-weight: 500;
             margin-bottom: 0;
         }
