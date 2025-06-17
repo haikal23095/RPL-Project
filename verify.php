@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once './vendor/autoload.php';
+
 use Twilio\Rest\Client;
 
 // 1. Validasi sesi terlebih dahulu
@@ -25,7 +26,7 @@ $twilio = new Client($sid, $token);
 // 3. Handle POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $code = $_POST["otp"] ?? '';
-    
+
     if (empty($code)) {
         $_SESSION['error'] = "Kode OTP tidak boleh kosong.";
         header("Location: verification.php");
@@ -51,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     exit;
                 case "cs":
                     $_SESSION["cs"] = $user_data["nama"];
-                    header("Location: cs/chat.php"); 
+                    header("Location: cs/chat.php");
                     exit;
                 case "user":
                     $_SESSION["user"] = $user_data["nama"];
@@ -60,9 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 default:
                     $msg = '<div class="alert alert-danger">&nbsp; ERROR: Level pengguna tidak dikenal.</div>';
                     break;
-                }
+            }
             exit();
-
         } else {
             $_SESSION['error'] = "Kode OTP salah atau sudah kedaluwarsa.";
             header("Location: verification.php");
@@ -78,4 +78,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header("Location: verification.php");
     exit();
 }
-?>
