@@ -446,7 +446,7 @@ $deleteError = isset($_GET['delete_error']);
                         <h5 class="modal-title" id="tambahProdukModalLabel">
                             Tambah Produk Baru
                         </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        
                     </div>
                     <div class="modal-body">
                         <form id="tambahProdukForm" enctype="multipart/form-data">

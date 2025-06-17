@@ -314,6 +314,29 @@ $pesanan_dibatalkan = $stmt->fetchAll(PDO::FETCH_ASSOC);
             font-style: italic;
             padding: 2rem;
         }
+         /* Styling untuk tombol kembali (baru) */
+        .standalone-back-button-container {
+            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
+            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
     </style>
     <?php include 'aset.php'; ?>
 </head>
@@ -323,6 +346,12 @@ $pesanan_dibatalkan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <main id="main" class="main">
     <div class="main-content">
+        <div class="standalone-back-button-container">
+            <a href="informasipromo.php" class="standalone-back-button">
+                <i class="bi bi-arrow-left"></i>
+                Kembali
+            </a>
+        </div>
         <!-- Page Header -->
         <div class="page-header">
             <h1 class="page-title">
@@ -334,7 +363,8 @@ $pesanan_dibatalkan = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <nav class="breadcrumb-nav">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">HOME</a></li>
-                    <li class="breadcrumb-item active">PESANAN MASUK</li>
+                    <li class="breadcrumb-item"><a href="order.php">PESANAN MASUK</a></li>
+                    <li class="breadcrumb-item active">PESANAN DIBATALKAN</li>
                 </ol>
             </nav>
         </div>
