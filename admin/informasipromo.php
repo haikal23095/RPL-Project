@@ -162,6 +162,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
         
         .beruntung {
             font-size: 0.8rem;
+            color: #F8F7F1;
         }
         
         .promo-validity {
