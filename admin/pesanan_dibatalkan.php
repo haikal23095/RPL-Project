@@ -350,7 +350,7 @@ $pesanan_dibatalkan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <main id="main" class="main">
     <div class="main-content">
         <div class="standalone-back-button-container">
-            <a href="informasipromo.php" class="standalone-back-button">
+            <a href="order.php" class="standalone-back-button">
                 <i class="bi bi-arrow-left"></i>
                 Kembali
             </a>
