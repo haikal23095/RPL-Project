@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../db.php';
-
+$page = 'dashboard';
 // --- LOGIKA PHP TETAP SAMA ---
 
 if (!isset($_SESSION['user'])) {

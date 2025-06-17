@@ -110,7 +110,7 @@ function formatCurrency($number) {
             font-size: 14px;
         }
         main{
-            padding: 40px !important;
+            padding: 10px !important;
         }
         .page-header {
             padding: 0 0;
@@ -264,7 +264,15 @@ function formatCurrency($number) {
             font-size: 1.1em;
             margin-right: 8px; 
         }
-        
+        .sidebar {
+            width: auto !important; /* Equivalent to w-64 in Tailwind */
+            background-color: #F8F7F1 !important;
+            padding: 1rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            height: 100vh !important;
+        }
     </style>
 </head>
 
