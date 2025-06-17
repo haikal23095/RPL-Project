@@ -89,6 +89,9 @@ if ($top_products_query) {
             font-family: 'Andika', sans-serif;
             color: #2D3A3A;
         }
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
         h5 {
             color: #2D3A3A !important;
             font-weight: bold !important;

@@ -54,10 +54,15 @@ $query_komentar = mysqli_query($kon, "
     <title>Topik Diskusi</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background-color: #2e2e2e;
-            color: white;
-            font-family: Arial, sans-serif;
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A;
+        }
+        .sidebar {
+            background-color: #F8F7F1 !important;
         }
         .container {
             margin-top: 20px;

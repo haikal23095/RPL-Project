@@ -56,8 +56,11 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
         body {
             background: #F8F7F1 !important;
             font-family: 'Andika', sans-serif;
+            color: #2D3A3A;
         }
-        
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
         .promo-card {
             margin-bottom: 20px;
             transition: transform 0.3s;

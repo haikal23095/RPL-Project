@@ -107,6 +107,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         body {
             background: #F8F7F1 !important;
             font-family: 'Andika', sans-serif;
+            color: #2D3A3A;
+        }
+        .sidebar {
+            background-color: #F8F7F1 !important;
         }
         .standalone-back-button-container {
             margin-bottom: 15px; /* Jarak bawah dari tombol kembali */

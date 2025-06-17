@@ -86,6 +86,9 @@ if ($result) {
             font-family: 'Andika', sans-serif;
             color: #2D3A3A;
         }
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
         h2 {
             font-size: 18px !important;
             font-weight: bold !important;
