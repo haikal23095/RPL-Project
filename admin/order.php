@@ -258,7 +258,7 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Page Header -->
         <div class="page-header">
             <h1 class="page-title">
-                <i class="bi bi-grid"></i>
+                <i class="bi bi-currency-dollar"></i>
                 PESANAN MASUK
             </h1>
             

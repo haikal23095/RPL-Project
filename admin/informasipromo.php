@@ -22,7 +22,7 @@ $informasipromo = mysqli_fetch_all($result, MYSQLI_ASSOC);
 // Separate informasipromo by type
 $all_informasipromo = $informasipromo;
 $discount_informasipromo = array_filter($informasipromo, fn($promo) => $promo['promo_type'] === 'discount');
-$bonus_informasipromo = array_filter($informasipromo, function($promo) {
+$bonus_informasipromo = array_filter($informasipromo, function ($promo) {
     return $promo['promo_type'] === 'bonus';
 });
 
@@ -32,7 +32,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
     $delete_sql = "DELETE FROM informasipromo WHERE id = ?";
     $delete_stmt = mysqli_prepare($kon, $delete_sql);
     mysqli_stmt_bind_param($delete_stmt, "i", $promo_id);
-    
+
     if (mysqli_stmt_execute($delete_stmt)) {
         $_SESSION['success_message'] = "Promo berhasil dihapus!";
         header('Location: informasipromo.php');
@@ -45,6 +45,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,25 +54,30 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+
         body {
             background: #F8F7F1 !important;
             font-family: 'Andika', sans-serif;
             color: #2D3A3A;
         }
+
         .sidebar {
             background-color: #F8F7F1 !important;
         }
-        header{
+
+        header {
             background-color: #F8F7F1 !important;
         }
+
         .promo-card {
             margin-bottom: 20px;
             transition: transform 0.3s;
         }
+
         .promo-card:hover {
             transform: scale(1.05);
         }
-        
+
         /* New Orange Card Styles */
         .orange-promo-card {
             background: linear-gradient(135deg, #ff7b00 0%, #ff9500 100%);
@@ -84,7 +90,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
             border: none;
             box-shadow: 0 8px 25px rgba(255, 123, 0, 0.3);
         }
-        
+
         .orange-promo-card .card-img-top {
             position: absolute;
             top: 20px;
@@ -100,7 +106,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
             background-color: #fff;
             border-radius: 24px;
         }
-        
+
         .orange-promo-card .card-body {
             position: relative;
             z-index: 3;
@@ -118,7 +124,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
         .card-bonus p {
             color: black;
         }
-        
+
         .promo-title {
             font-size: 1.5rem;
             font-weight: bold;
@@ -126,19 +132,19 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
             /* margin-bottom: 5px; */
             line-height: 1.2;
         }
-        
+
         .promo-subtitle {
             font-size: 0.9rem;
             opacity: 0.9;
             margin-bottom: 15px;
         }
-        
+
         .promo-price {
             font-size: 1.2rem;
             font-weight: bold;
             margin-bottom: 10px;
         }
-        
+
         .promo-discount {
             width: 50%;
             display: flex;
@@ -162,17 +168,17 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
             text-transform: uppercase;
             font-size: 1.4rem;
         }
-        
+
         .beruntung {
             font-size: 0.8rem;
         }
-        
+
         .promo-validity {
             font-size: 0.8rem;
             opacity: 0.8;
             margin-bottom: 15px;
         }
-        
+
         .card-actions {
             position: absolute;
             top: 15px;
@@ -181,7 +187,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
             gap: 8px;
             z-index: 4;
         }
-        
+
         .h-bonus {
             /* background-color: tomato; */
             width: 100%;
@@ -193,7 +199,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
             padding: 0 20px;
             z-index: 4;
         }
-        
+
         .action-btn {
             width: 35px;
             height: 35px;
@@ -206,22 +212,22 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
             transition: all 0.3s;
             backdrop-filter: blur(10px);
         }
-        
+
         .edit-btn {
             background: #E78738;
             color: #515151;
         }
-        
+
         .delete-btn {
             background: #763D2D;
             color: white;
         }
-        
+
         .action-btn:hover {
             transform: scale(1.1);
             backdrop-filter: blur(15px);
         }
-        
+
         .promo-type-btn {
             color: #fff;
             background-color: #FF8C12;
@@ -232,12 +238,13 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
             font-weight: bold;
             transition: all 0.3s;
         }
+
         .promo-type-btn.active {
             background-color: #FFC300;
             border-color: #FFC300;
             color: #fff;
         }
-        
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .orange-promo-card .card-img-top {
@@ -246,11 +253,11 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
                 top: 15px;
                 right: 15px;
             }
-            
+
             .promo-title {
                 font-size: 1.2rem;
             }
-            
+
             .card-actions {
                 top: 10px;
                 right: 10px;
@@ -259,6 +266,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
     </style>
     <?php include 'aset.php'; ?>
 </head>
+
 <body>
     <?php require "atas.php"; ?>
     <?php require "menu.php"; ?>
@@ -275,18 +283,20 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
         </div>
 
         <?php if (isset($_SESSION['success_message'])): ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <?= $_SESSION['success_message'] ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <?php unset($_SESSION['success_message']); endif; ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?= $_SESSION['success_message'] ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php unset($_SESSION['success_message']);
+        endif; ?>
 
         <?php if (isset($_SESSION['error_message'])): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?= $_SESSION['error_message'] ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <?php unset($_SESSION['error_message']); endif; ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?= $_SESSION['error_message'] ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php unset($_SESSION['error_message']);
+        endif; ?>
 
         <section class="section">
             <div class="row mt-4">
@@ -306,76 +316,76 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
                             </div>
                             <div class="row" id="promoContainer">
                                 <?php foreach ($informasipromo as $promo): ?>
-                                <div class="col-md-4 col-lg-3 promo-card" data-type="<?= htmlspecialchars($promo['promo_type']) ?>">
-                                    <div class="card orange-promo-card" style="border-radius: 16px;">
-                                        <!-- Action Buttons -->
-                                        <?php if ($promo['promo_type'] === 'discount' && !empty($promo['discount_percentage'])): ?>
-                                            <div class="card-actions">
-                                                <form method="POST" class="d-inline" onsubmit="return confirm('Anda yakin ingin menghapus promo ini?');">
-                                                    <input type="hidden" name="promo_id" value="<?= $promo['id'] ?>">
-                                                    <button type="submit" name="delete_promo" class="action-btn delete-btn">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
-                                                <a href="editpromo.php?id=<?= $promo['id'] ?>" class="action-btn edit-btn">
-                                                    <img src="../assets/img/edit.svg" alt="edit-btn" style="width: 20px;">
-                                                </a>
-                                            </div>
-                                        <?php elseif ($promo['promo_type'] === 'bonus'): ?>
-                                            <div class="card-actions h-bonus">
-                                                <form method="POST" class="d-inline" onsubmit="return confirm('Anda yakin ingin menghapus promo ini?');">
-                                                    <input type="hidden" name="promo_id" value="<?= $promo['id'] ?>">
-                                                    <button type="submit" name="delete_promo" class="action-btn delete-btn">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </form>
-                                                <a href="editpromo.php?id=<?= $promo['id'] ?>" class="action-btn edit-btn">
-                                                    <img src="../assets/img/edit.svg" alt="edit-btn" style="width: 20px;">
-                                                </a>
-                                            </div>
-                                        <?php endif; ?>
-                                        
-                                        <!-- Product Image -->
-                                        <?php if (!empty($promo['photo_url'])): ?>
-                                            <!-- <img src="../uploads/<?= htmlspecialchars($promo['photo_url']) ?>" class="card-img-top" alt="<?= htmlspecialchars($promo['title']) ?>"> -->
-                                             <img src="../assets/img/barang A.png" alt="" class="mb-4">
-                                        <?php endif; ?>
-                                        
-                                        <!-- Discount Badge -->
-                                        <?php if ($promo['promo_type'] === 'discount' && !empty($promo['discount_percentage'])): ?>
-                                            <div class="card-body pb-3 pt-0">
-                                                <div>
-                                                    <h5 class="promo-title"><?= htmlspecialchars($promo['title']) ?></h5>
-                                                    <p class="promo-subtitle"><?= htmlspecialchars($promo['description']) ?></p>
-                                                    
-                                                    <div class="promo-validity">
-                                                        Sampai <?= date('d M Y', strtotime($promo['end_date'])) ?>
+                                    <div class="col-md-4 col-lg-3 promo-card" data-type="<?= htmlspecialchars($promo['promo_type']) ?>">
+                                        <div class="card orange-promo-card" style="border-radius: 16px;">
+                                            <!-- Action Buttons -->
+                                            <?php if ($promo['promo_type'] === 'discount' && !empty($promo['discount_percentage'])): ?>
+                                                <div class="card-actions">
+                                                    <form method="POST" class="d-inline" onsubmit="return confirm('Anda yakin ingin menghapus promo ini?');">
+                                                        <input type="hidden" name="promo_id" value="<?= $promo['id'] ?>">
+                                                        <button type="submit" name="delete_promo" class="action-btn delete-btn">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                    <a href="editpromo.php?id=<?= $promo['id'] ?>" class="action-btn edit-btn">
+                                                        <img src="../assets/img/edit.svg" alt="edit-btn" style="width: 20px;">
+                                                    </a>
+                                                </div>
+                                            <?php elseif ($promo['promo_type'] === 'bonus'): ?>
+                                                <div class="card-actions h-bonus">
+                                                    <form method="POST" class="d-inline" onsubmit="return confirm('Anda yakin ingin menghapus promo ini?');">
+                                                        <input type="hidden" name="promo_id" value="<?= $promo['id'] ?>">
+                                                        <button type="submit" name="delete_promo" class="action-btn delete-btn">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                    <a href="editpromo.php?id=<?= $promo['id'] ?>" class="action-btn edit-btn">
+                                                        <img src="../assets/img/edit.svg" alt="edit-btn" style="width: 20px;">
+                                                    </a>
+                                                </div>
+                                            <?php endif; ?>
+
+                                            <!-- Product Image -->
+                                            <?php if (!empty($promo['photo_url'])): ?>
+                                                <!-- <img src="../uploads/<?= htmlspecialchars($promo['photo_url']) ?>" class="card-img-top" alt="<?= htmlspecialchars($promo['title']) ?>"> -->
+                                                <img src="../assets/img/barang A.png" alt="" class="mb-4">
+                                            <?php endif; ?>
+
+                                            <!-- Discount Badge -->
+                                            <?php if ($promo['promo_type'] === 'discount' && !empty($promo['discount_percentage'])): ?>
+                                                <div class="card-body pb-3 pt-0">
+                                                    <div>
+                                                        <h5 class="promo-title"><?= htmlspecialchars($promo['title']) ?></h5>
+                                                        <p class="promo-subtitle"><?= htmlspecialchars($promo['description']) ?></p>
+
+                                                        <div class="promo-validity">
+                                                            Sampai <?= date('d M Y', strtotime($promo['end_date'])) ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-0">
+                                                        <div class="promo-subtitle mb-0 text-decoration-line-through">
+                                                            IDR 700.000 <?= $promo['harga']; ?>
+                                                        </div>
+                                                        <div class="promo-title">
+                                                            IDR 500.000
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-0">
-                                                    <div class="promo-subtitle mb-0 text-decoration-line-through">
-                                                        IDR 700.000 <?= $promo['harga']; ?>
-                                                    </div>
-                                                    <div class="promo-title">
-                                                        IDR 500.000
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="promo-discount">- <?= $promo['discount_percentage'] ?>%</div>
-                                        <?php elseif ($promo['promo_type'] === 'bonus'): ?>
-                                            <div class="card-body card-bonus pb-3">
-                                                <div>
-                                                    <div class="promo-discount promo-bonus">DISKON UP TO 90%</div>
-                                                    <p>+ Bonus <?= $promo['bonus_item'] ?></p>
-                                                    <img src="../uploads/<?= $promo['gambar'] ?>" alt="adslf">
-                                                    <div class="promo-discount promo-bonus beruntung mb-0">
-                                                        raih keberuntunganmu!
+                                                <div class="promo-discount">- <?= $promo['discount_percentage'] ?>%</div>
+                                            <?php elseif ($promo['promo_type'] === 'bonus'): ?>
+                                                <div class="card-body card-bonus pb-3">
+                                                    <div>
+                                                        <img src="../uploads/<?= $promo['gambar'] ?>" alt="adslf" width="260">
+                                                        <div class="promo-discount promo-bonus">DISKON UP TO 90%</div>
+                                                        <p>+ Bonus 1 <?= $promo['nama_produk'] ?></p>
+                                                        <div class="promo-discount promo-bonus beruntung mb-0">
+                                                            raih keberuntunganmu!
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        <?php endif; ?>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
-                                </div>
                                 <?php endforeach; ?>
                             </div>
                         </div>
@@ -385,23 +395,23 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
         </section>
     </main>
 
-   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="../assets/vendor/chart.js/chart.umd.js"></script>
-  <script src="../assets/vendor/echarts/echarts.min.js"></script>
-  <script src="../assets/vendor/quill/quill.min.js"></script>
-  <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
+    <!-- Vendor JS Files -->
+    <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="../assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="../assets/vendor/echarts/echarts.min.js"></script>
+    <script src="../assets/vendor/quill/quill.min.js"></script>
+    <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="../assets/vendor/php-email-form/validate.js"></script>
 
-  <!-- Core Bootstrap JS -->
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <!-- Core Bootstrap JS -->
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/js/main.js"></script>
+    <!-- Vendor JS Files -->
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Promo type filtering
@@ -418,7 +428,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
 
                     promoCards.forEach(card => {
                         const cardType = card.getAttribute('data-type');
-                        
+
                         if (filter === 'all' || cardType === filter) {
                             card.style.display = 'block';
                         } else {
@@ -430,4 +440,5 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
         });
     </script>
 </body>
+
 </html>
