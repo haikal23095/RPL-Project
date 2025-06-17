@@ -525,7 +525,7 @@ document.getElementById('filterSelect').addEventListener('change', function() {
 function approveOrder(orderId) {
     if (confirm('Apakah Anda yakin ingin menyetujui pembatalan pesanan ini?')) {
         // Here you would typically send an AJAX request to update the order status
-        fetch('update_cancellation_status.php', {
+        fetch('update_pembatalan.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -549,7 +549,7 @@ function approveOrder(orderId) {
 
 function rejectOrder(orderId) {
     if (confirm('Apakah Anda yakin ingin menolak pembatalan pesanan ini?')) {
-        fetch('update_cancellation_status.php', {
+        fetch('update_pembatalan.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
