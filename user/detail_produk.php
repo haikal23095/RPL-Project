@@ -204,13 +204,10 @@ $wishlistSuccess = isset($_GET['wishlist_success']);
             }
         }
         .sidebar {
-            width: auto !important; /* Equivalent to w-64 in Tailwind */
             background-color: #F8F7F1 !important;
-            padding: 1rem !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: space-between !important;
-            height: 100vh !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
         }
     </style>
 </head>

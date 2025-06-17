@@ -260,6 +260,9 @@ if (isset($_POST['confirm_order'])) {
             font-family: 'Andika', sans-serif;
             color: #2D3A3A !important;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         .product-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 0.375rem; }
         #summary-card { position: sticky; top: 80px; }
         .summary-card .list-group-item { border: none; padding-left: 0; padding-right: 0; }
@@ -267,15 +270,24 @@ if (isset($_POST['confirm_order'])) {
         .payment-method .form-check-input:checked + .form-check-label { border-color: #0d6efd; background-color: #e7f1ff; box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25); }
         .payment-method .form-check-input { display: none; }
         #promo-feedback { font-size: 0.875em; }
-        
+        .btn-primary{
+            background-color: #f87117 !important;
+            border: hidden;
+        }
         .sidebar {
-            width: auto !important; /* Equivalent to w-64 in Tailwind */
             background-color: #F8F7F1 !important;
-            padding: 1rem !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: space-between !important;
-            height: 100vh !important;
+        }
+        span.text-primary{
+            color:rgb(255, 120, 57) !important;
+        }
+        .btn-outline-primary{
+            border: 1px solid #f89317;
+            color: #f89317 !important;
+        }
+        .btn-outline-primary:hover{
+            border: 1px solid transparent;
+            color: #ffffff !important;
+            background-color: #f89317 !important;
         }
     </style>
 </head>
@@ -362,7 +374,7 @@ if (isset($_POST['confirm_order'])) {
                                         <li class="list-group-item d-flex justify-content-between fs-5 fw-bold border-top pt-3"><span>Total</span><span class="text-primary" id="summary-grand-total"><?= formatCurrency($grandTotal); ?></span></li>
                                     </ul>
                                     <div class="d-grid mt-4">
-                                        <button type="submit" name="confirm_order" class="btn btn-primary btn-lg">Konfirmasi Pesanan</button>
+                                        <button href="pesanan_diproses.php" type="submit" name="confirm_order" class="btn btn-primary btn-lg">Konfirmasi Pesanan</button>
                                     </div>
                                 </div>
                             </div>

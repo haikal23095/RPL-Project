@@ -57,17 +57,14 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
         @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
             background: #F8F7F1 !important;
-            font-family: 'Andika', sans-serif;
+            font-family: 'Andika', sans-serif !important;
             color: #2D3A3A !important;
         }
         .sidebar {
-            width: auto !important; /* Equivalent to w-64 in Tailwind */
             background-color: #F8F7F1 !important;
-            padding: 1rem !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: space-between !important;
-            height: 100vh !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
         }
         .pesanan-card {
             border: 1px solid #ddd;

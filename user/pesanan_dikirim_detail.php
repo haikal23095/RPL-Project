@@ -40,8 +40,14 @@ if (!$pesanan) {
         @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
             background: #F8F7F1 !important;
-            font-family: 'Andika', sans-serif;
+            font-family: 'Andika', sans-serif !important;
             color: #2D3A3A !important;
+        }
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
         }
         .pesanan-detail-card {
             border: 1px solid #ddd;
