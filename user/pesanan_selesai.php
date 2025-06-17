@@ -8,6 +8,10 @@ if (!isset($_SESSION['user'])) {
     exit;
 }   
 
+function formatCurrency($number) {
+    return 'Rp ' . number_format($number ?? 0, 0, ',', '.');
+}
+
 $nama_user = $_SESSION['user'];
 
 // Ambil filter status pesanan dari checkbox (bisa lebih dari satu)
@@ -81,17 +85,24 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
             justify-content: space-between;
             height: 100vh;
         }
+        .product-img-gallery {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: .5rem;
+            border: 1px solid #eee;
+        }
  </style>
 <main id="main" class="main">
     <div class="pagetitle">
-            <h1><i class="bi bi-bag-check"></i> PESANAN SELESAI</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">PROFIL</a></li>
-                    <li class="breadcrumb-item active">PESANAN SELESAI</li>
-                </ol>
-            </nav>
-        </div>
+        <h1><i class="bi bi-bag-check"></i> PESANAN SELESAI</h1>
+           <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.php">PROFIL</a></li>
+                <li class="breadcrumb-item active">PESANAN SELESAI</li>
+            </ol>
+        </nav>
+    </div>
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <form method="get" class="d-inline">
@@ -108,58 +119,95 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
             </form>
         </div>
 
-        <?php if (count($pesanan) > 0): ?>
-            <div class="table-responsive">
-                <table class="table table-bordered align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID Pesanan</th>
-                            <th>Tanggal</th>
-                            <th>Total Harga</th>
-                            <th>Status Review</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($pesanan as $row): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($row['id_pesanan']) ?></td>
-                            <td><?= date('d-m-Y', strtotime($row['tanggal_pesanan'])) ?></td>
-                            <td>IDR <?= number_format($row['total_harga'], 0, ',', '.') ?></td>
-                            <td><?= htmlspecialchars($row['review_status']) ?></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary btn-detail"
-                                    data-id="<?= $row['id_pesanan'] ?>"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#detailModal">
-                                    Detail
-                                </button>
-                                <?php if ($row['review_status'] === 'Menunggu Dinilai'): ?>
-                                    <a href="review.php?id=<?= $row['id_pesanan'] ?>" class="btn btn-secondary btn-sm">Nilai</a>
-                                <?php else: ?>
-                                    <a href="checkout.php?ulang=<?= $row['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
+        <section class="section">
+        <div class="row">
+                <div class="col-lg-12">
+                    <?php if (count($pesanan) > 0): // Changed $pesanan_list to $pesanan ?>
+                        <?php foreach ($pesanan as $pesanan_item): // Changed $pesanan_list to $pesanan and used a different variable name for clarity ?>
+                            <?php
+                            // Query untuk mendapatkan semua gambar produk dalam pesanan ini
+                            $gambar_stmt = $kon->prepare("SELECT p.gambar, p.nama_produk FROM pesanan_detail dp 
+                                                                 JOIN produk p ON dp.id_produk = p.id_produk 
+                                                                 WHERE dp.id_pesanan = ?");
+                            $gambar_stmt->bind_param("s", $pesanan_item['id_pesanan']); // Use $pesanan_item here
+                            $gambar_stmt->execute();
+                            $gambar_result = $gambar_stmt->get_result();
+                            $produk_images = $gambar_result->fetch_all(MYSQLI_ASSOC);
+                            $gambar_stmt->close();
+                            ?>
+                            <div class="card pesanan-card mb-4">
+                                <div class="card-header pesanan-header d-flex justify-content-between align-items-center flex-wrap">
+                                    <div class="my-1">
+                                        <strong>ID Pesanan:</strong> #<?= htmlspecialchars($pesanan_item['id_pesanan']) ?>
+                                    </div>
+                                    <span class="badge bg-primary my-1"><?= htmlspecialchars($pesanan_item['status_pesanan']) ?></span>
+                                </div>
+                                
+                                <div class="product-gallery">
+                                    <?php if (!empty($produk_images)): ?>
+                                        <?php foreach ($produk_images as $img): ?>
+                                            <img src="../uploads/<?= htmlspecialchars($img['gambar']) ?>" class="product-img-gallery" title="<?= htmlspecialchars($img['nama_produk']) ?>">
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <p class="text-muted small px-3">Tidak ada gambar produk.</p>
+                                    <?php endif; ?>
+                                </div>
+                                
+                                <div class="card-footer-actions">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6 mb-2 mb-md-0">
+                                            <span class="text-muted">Total Belanja:</span>
+                                            <h5 class="total-harga d-inline-block ms-2 mb-0"><?= formatCurrency($pesanan_item['total_harga']) ?></h5>
+                                        </div>
+                                        <div class="col-md-6 text-md-end">
+                                            <button class="btn btn-outline-primary btn-sm btn-detail" 
+                                                            type="button" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#detailModal"
+                                                            data-id="<?= $pesanan_item['id_pesanan'] ?>"> Detail Pesanan
+                                            </button>
+                                            <a href="form_pembatalan.php?id_pesanan=<?= $pesanan_item['id_pesanan'] ?>" 
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Yakin ingin mengajukan pembatalan untuk pesanan ini?');">Batalkan
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         <?php endforeach; ?>
-                    </tbody>
-                </table>
+                    <?php else: ?>
+                        <div class="card">
+                            <div class="card-body text-center p-5">
+                                <i class="bi bi-check-circle-fill fs-1 text-success"></i>
+                                <h5 class="mt-3">Tidak Ada Pesanan yang Diproses</h5>
+                                <p class="text-muted">Semua pesanan Anda sudah dalam pengiriman atau telah selesai. <br>Lihat halaman lain untuk melacaknya.</p>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
-        <?php else: ?>
-            <p>Tidak ada pesanan untuk ditampilkan.</p>
-        <?php endif; ?>
+        </section>
     </div>
 </main>
 
-<!-- Modal Detail Pesanan -->
+
+
 <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
-      <!-- Konten detail akan dimuat via AJAX -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalLabel">Detail Pesanan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-detail-content">
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Memuat detail...</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<!-- End Modal -->
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

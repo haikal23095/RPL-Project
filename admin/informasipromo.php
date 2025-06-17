@@ -292,6 +292,7 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
                                     <i class="bi bi-plus-circle"></i> Tambah Promo Baru
                                 </a>
                             </div>
+                            <br>
                             <div class="text-center mb-4">
                                 <button class="promo-type-btn active" data-filter="all">Semua Promo</button>
                                 <button class="promo-type-btn" data-filter="discount">Promo Diskon</button>

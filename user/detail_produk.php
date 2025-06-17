@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../db.php';
-
+$page = 'dashboard';
 // --- LOGIKA PHP TETAP SAMA ---
 
 if (!isset($_SESSION['user'])) {
@@ -85,7 +85,13 @@ $wishlistSuccess = isset($_GET['wishlist_success']);
     
     <?php include 'aset.php'; ?>
     <style>
-        body { background-color: #f8f9fa; }
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        body {
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A !important;
+        }
         .product-detail-card {
             background-color: #fff;
             border-radius: 1rem;
@@ -196,6 +202,15 @@ $wishlistSuccess = isset($_GET['wishlist_success']);
             .main-product-image {
                  border-radius: 1rem 1rem 0 0;
             }
+        }
+        .sidebar {
+            width: auto !important; /* Equivalent to w-64 in Tailwind */
+            background-color: #F8F7F1 !important;
+            padding: 1rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            height: 100vh !important;
         }
     </style>
 </head>

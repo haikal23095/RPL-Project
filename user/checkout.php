@@ -267,6 +267,16 @@ if (isset($_POST['confirm_order'])) {
         .payment-method .form-check-input:checked + .form-check-label { border-color: #0d6efd; background-color: #e7f1ff; box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25); }
         .payment-method .form-check-input { display: none; }
         #promo-feedback { font-size: 0.875em; }
+        
+        .sidebar {
+            width: auto !important; /* Equivalent to w-64 in Tailwind */
+            background-color: #F8F7F1 !important;
+            padding: 1rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            height: 100vh !important;
+        }
     </style>
 </head>
 <body>
@@ -362,7 +372,8 @@ if (isset($_POST['confirm_order'])) {
             <?php endif; ?>
         </section>
     </main>
-
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>          
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {

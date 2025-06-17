@@ -70,7 +70,7 @@ $cartSuccess = isset($_GET['cart_success']);
 
         .main {
             /* Memberikan padding yang konsisten di sekitar konten utama */
-            padding: 40px !important;
+            padding: 10px !important;
         }
         .sidebar {
             width: auto; /* Equivalent to w-64 in Tailwind */

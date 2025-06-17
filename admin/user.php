@@ -7,6 +7,11 @@ if (!isset($_SESSION["admin"])) {
     header("Location: ../login.php");
 }
 
+$total_user_query = mysqli_query($kon, "SELECT COUNT(id_user) AS total FROM user");
+$total_user_result = mysqli_fetch_assoc($total_user_query);
+$total_user = $total_user_result['total'];
+
+
 $target_dir = "../uploads/";
 
 // Prosedur Hapus Data
@@ -33,11 +38,6 @@ if (isset($_POST["submit"])) {
         $foto = "../uploads/" . $foto; // Simpan path relatif ke foto
     }
 
-    // Debugging - Print all received data
-    echo '<pre>';
-    print_r($_POST);
-    echo '</pre>';
-
     if (empty($email) or empty($pwd) or empty($nama) or empty($alamat) or empty($no_tlp)) {
         echo '<script>alert("MAAF, DATA TERSEBUT MASIH KOSONG. SILAHKAN DI-ISI TERLEBIH DAHULU !"); window.location = "";</script>';
     } else {
@@ -52,8 +52,6 @@ if (isset($_POST["submit"])) {
         }
     }
 }
-
-
 
 // Prosedur Update Data
 if (isset($_POST["update"])) {
@@ -72,7 +70,6 @@ if (isset($_POST["update"])) {
         move_uploaded_file($_FILES["foto"]["tmp_name"], $target_file);
         $foto = "../uploads/" . $foto; // Simpan path relatif ke foto
     } else {
-        // Jika tidak ada file foto yang diupload, gunakan foto yang ada sebelumnya
         $foto = mysqli_real_escape_string($kon, $_POST["foto_lama"]);
     }
 
@@ -96,11 +93,7 @@ if (isset($_POST["update"])) {
     <meta name="robots" content="noindex, nofollow" />
     <meta content="" name="description" />
     <meta content="" name="keywords" />
-
-
     <?php include 'aset.php'; ?>
-
-    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 </head>
 <body>
@@ -110,12 +103,24 @@ if (isset($_POST["update"])) {
         body {
             background: #F8F7F1;
         }
+        .stat-item .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2D3A3A;
+        }
+        .stat-item .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        h5{
+            font-size: 20px !important;
+            color: #2D3A3A !important;
+            font-weight: bold !important;
+        }
     </style>
     
-    <!-- HEADER -->
     <?php require "atas.php"; ?>
 
-    <!-- SIDEBAR -->
     <?php require "menu.php"; ?>
 
     <main id="main" class="main">
@@ -133,32 +138,51 @@ if (isset($_POST["update"])) {
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            
+                            <h5 class="card-title">Manajemen User</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="stat-item me-5">
+                                    <div class="text-muted">Semua User</div>
+                                    <div>
+                                        <span class="stat-number"><?= $total_user ?></span>
+                                        <span class="stat-label">User</span>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="text-muted">Online User</div>
+                                    <div>
+                                        <span class="stat-number">2</span>
+                                        <span class="stat-label">User</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
                             <br>
-                            
                             <button type="button" class="btn-tambah" data-bs-toggle="modal" data-bs-target="#tambahData">
                                 <i class="bi bi-plus"></i>&nbsp; TAMBAH USER
                             </button>
-
                             <br><br>
-                            
                             <table class="table datatable">
-                                <tr>
-                                    <th><center>NO</center></th>
-                                    <th><center>EMAIL</center></th>
-                                    <th><center>NAMA LENGKAP</center></th>
-                                    <th><center>LEVEL</center></th>
-                                    <th><center>ALAMAT</center></th>
-                                    <th><center>NO. TELP</center></th>
-                                    <th><center>LAST ACTIVE</center></th>
-                                    <th><center>AKSI</center></th>
-                                </tr>
-                                <?php
+                                <thead> <tr>
+                                        <th><center>NO</center></th>
+                                        <th><center>EMAIL</center></th>
+                                        <th><center>NAMA LENGKAP</center></th>
+                                        <th><center>LEVEL</center></th>
+                                        <th><center>ALAMAT</center></th>
+                                        <th><center>NO. TELP</center></th>
+                                        <th><center>LAST ACTIVE</center></th>
+                                        <th><center>AKSI</center></th>
+                                    </tr>
+                                </thead>
+                                <tbody> <?php
                                 $sql = mysqli_query($kon, "SELECT * FROM user ORDER BY id_user DESC");
-                                $no = 1; // Inisialisasi variabel penghitung
+                                $no = 1;
 
                                 while ($gb = mysqli_fetch_array($sql)) {
-                                   
                                 ?>
                                 <tr>
                                     <td><center><?= $no++ ?></center></td> 
@@ -168,13 +192,11 @@ if (isset($_POST["update"])) {
                                     <td><center><?= $gb["alamat"] ?></center></td>
                                     <td><center><?= $gb["no_tlp"] ?></center></td>
                                     <td><center><?= $gb["active"] ?></center></td>
-                                    <td>
-                                        <button type="button" data-bs-toggle="modal" data-bs-target="#editData<?= $gb["id_user"] ?>" class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
+                                    <td><center> <button type="button" data-bs-toggle="modal" data-bs-target="#editData<?= $gb["id_user"] ?>" class="btn btn-warning"><i class="bi bi-pencil-square"></i></button>
                                         <button type="button" data-bs-toggle="modal" data-bs-target="#hapusData<?= $gb["id_user"] ?>" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-                                    </td>
+                                    </center></td>
                                 </tr>
 
-                                <!-- EDIT DATA -->
                                 <div class="modal fade" id="editData<?= $gb["id_user"] ?>" tabindex="-1">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
@@ -183,63 +205,47 @@ if (isset($_POST["update"])) {
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                
                                                 <form method="post" enctype="multipart/form-data">
                                                     <div class="form-group">
                                                         <label>EMAIL</label>
                                                         <input name="email" class="form-control" type="text" placeholder="Masukkan Email" value="<?= $gb["email"] ?>" required>
                                                     </div>
-
                                                     <br>
-
                                                     <div class="form-group">
                                                         <label>PASSWORD</label>
                                                         <input name="pwd" class="form-control" type="password" placeholder="Masukkan password" value="<?= $gb["password"] ?>" required>
                                                     </div>
-
                                                     <br>
-
                                                     <div class="form-group">
                                                         <label>NAMA</label>
                                                         <input name="nama" class="form-control" type="text" placeholder="Masukkan Nama" value="<?= $gb["nama"] ?>" required>
                                                     </div>
-
                                                     <br>
-
                                                     <div class="form-group">
                                                         <label>ALAMAT</label>
                                                         <textarea name="alamat" class="form-control" rows="7" placeholder="Masukkan alamat siswa" required><?= $gb["alamat"] ?></textarea>
                                                     </div>
-
                                                     <br>
-
                                                     <div class="form-group">
                                                         <label>NO. TELP</label>
                                                         <input name="no_tlp" class="form-control" type="number" placeholder="Masukkan nomor telepon siswa" value="<?= $gb["no_tlp"] ?>" required>
                                                     </div>
-
                                                     <br>
-
                                                     <div class="form-group">
                                                         <label>FOTO</label>
                                                         <input name="foto" class="form-control" type="file">
                                                         <input type="hidden" name="foto_lama" value="<?= $gb["foto"] ?>">
                                                     </div>
-
                                                     <input type="hidden" name="id_user" value="<?= $gb["id_user"] ?>">
-                                                
                                             </div>
-
                                             <div class="modal-footer">
                                                 <button name="update" type="submit" class="btn btn-success"><i class="bi bi-check-circle-fill"></i>&nbsp; SAVE</button>
                                                 </form>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- HAPUS DATA -->
                                 <div class="modal fade" id="hapusData<?= $gb["id_user"] ?>" tabindex="-1">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
@@ -248,29 +254,23 @@ if (isset($_POST["update"])) {
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                
                                                 <h2 class="text-center">
                                                     Apakah Anda yakin ingin menghapus data ini ?
                                                 </h2>
-
                                                 <form method="post">
                                                     <input type="hidden" name="id_user" value="<?= $gb["id_user"] ?>">
                                             </div>
-
                                             <div class="modal-footer">
                                                 <button name="delete" type="submit" class="btn btn-danger"><i class="bi bi-check-circle-fill"></i>&nbsp; HAPUS</button>
                                                 </form>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
-
                                 <?php } ?>
-
+                                </tbody>
                             </table>
 
-                            <!-- TAMBAH DATA -->
                             <div class="modal fade" id="tambahData" tabindex="-1">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
@@ -279,60 +279,45 @@ if (isset($_POST["update"])) {
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            
                                             <form method="post" enctype="multipart/form-data">
                                                 <div class="form-group">
                                                     <label>EMAIL</label>
                                                     <input name="email" class="form-control" type="text" placeholder="Masukkan Email" required>
                                                 </div>
-
                                                 <br>
-
                                                 <div class="form-group">
                                                     <label>PASSWORD</label>
                                                     <input name="pwd" class="form-control" type="password" placeholder="Masukkan password" required>
                                                 </div>
-
                                                 <br>
-
                                                 <div class="form-group">
                                                     <label>NAMA LENGKAP</label>
                                                     <input name="nama" class="form-control" type="text" placeholder="Masukkan nama lengkap siswa" required>
                                                 </div>
-
                                                 <br>
-
                                                 <div class="form-group">
                                                     <label>ALAMAT</label>
                                                     <textarea name="alamat" class="form-control" rows="7" placeholder="Masukkan alamat siswa" required></textarea>
                                                 </div>
-
                                                 <br>
-
                                                 <div class="form-group">
                                                     <label>NO. TELP</label>
                                                     <input name="no_tlp" class="form-control" type="number" placeholder="Masukkan nomor telepon siswa" required>
                                                 </div>
-
                                                 <br>
-
                                                 <div class="form-group">
                                                     <label>FOTO</label>
                                                     <input name="foto" class="form-control" type="file" required>
                                                 </div>
-
                                                 <br>
                                         </div>
-
                                         <div class="modal-footer">
                                             <button name="submit" type="submit" class="btn btn-success"><i class="bi bi-check-circle-fill"></i>&nbsp; SAVE</button>
                                             </form>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -340,22 +325,8 @@ if (isset($_POST["update"])) {
         </section>
     </main>
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Vendor JS Files -->
-  <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="../assets/vendor/chart.js/chart.umd.js"></script>
-  <script src="../assets/vendor/echarts/echarts.min.js"></script>
-  <script src="../assets/vendor/quill/quill.min.js"></script>
-  <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
-
-  <!-- Core Bootstrap JS -->
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Vendor JS Files -->
-  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/js/main.js"></script>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
 </body>
 </html>

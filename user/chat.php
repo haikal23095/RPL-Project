@@ -173,11 +173,11 @@ $result = mysqli_query($kon, $query);
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1><i class="bi bi-headset"></i> Pelayanan Pelanggan</h1>
+            <h1><i class="bi bi-headset"></i> PELAYANAN PELANGGAN</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item active">Chat</li>
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item active">CHAT</li>
                 </ol>
             </nav>
         </div>

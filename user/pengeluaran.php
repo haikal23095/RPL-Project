@@ -63,7 +63,7 @@ $grafikRefs = [];
 foreach ($grafikParams as $key => $value) {
     $grafikRefs[$key] = &$grafikParams[$key];
 }
-// Baris 60
+// print_r($grafikRefs); // Debugging: Cek isi $grafikRefs
 call_user_func_array([$grafikStmt, 'bind_param'], array_merge([$bindTypesGrafik], $grafikRefs));
 
 $grafikStmt->execute();
@@ -80,34 +80,31 @@ $grafikStmt->close(); // Tutup statement grafik
 
 // Query untuk menampilkan data pengeluaran berdasarkan bulan dan tahun jika dipilih
 // KORRECTED: Menggunakan pesanan_detail dan produk untuk mendapatkan detail per item
-$query = "SELECT
-            pd.id_pesanan_detail,
-            pr.nama_produk,
+$tableQuery = "SELECT
+            p.id_pesanan,
             p.tanggal_pesanan,
-            pr.harga,
-            pd.jumlah AS kuantitas,
-            pd.subtotal AS total_item_harga
+            p.total_harga,
+            p.status_pesanan,
+            p.sudah_dinilai
           FROM pesanan p
-          JOIN pesanan_detail pd ON p.id_pesanan = pd.id_pesanan
-          JOIN produk pr ON pd.id_produk = pr.id_produk
-          WHERE p.id_user = ?"; // Menggunakan alias p untuk tabel pesanan
-$params = [$user_id];
-$bindTypes = "i"; // Tipe untuk user_id
+          WHERE p.id_user = ?";
+$tableParams = [$user_id];
+$tableBindTypes = "i";
 
 if (!empty($month)) {
-    $query .= " AND MONTH(p.tanggal_pesanan) = ?";
-    $params[] = (int)$month; // Cast to int
-    $bindTypes .= "i"; // Tipe untuk bulan (integer)
+    $tableQuery .= " AND MONTH(p.tanggal_pesanan) = ?";
+    $tableParams[] = (int)$month; // Cast to int
+    $tableBindTypes .= "i"; // Tipe untuk bulan (integer)
 }
 if (!empty($year)) {
-    $query .= " AND YEAR(p.tanggal_pesanan) = ?";
-    $params[] = (int)$year; // Cast to int
-    $bindTypes .= "i"; // Tipe untuk tahun (integer)
+    $tableQuery .= " AND YEAR(p.tanggal_pesanan) = ?";
+    $tableParams[] = (int)$year; // Cast to int
+    $tableBindTypes .= "i"; // Tipe untuk tahun (integer)
 }
 
-$query .= " ORDER BY p.tanggal_pesanan DESC"; // Order by tanggal pesanan
+$tableQuery .= " ORDER BY p.tanggal_pesanan DESC"; // Order by tanggal pesanan
 
-$stmt = $kon->prepare($query);
+$stmt = $kon->prepare($tableQuery);
 // Check if prepare was successful
 if ($stmt === false) {
     die("Prepare failed for detail query: " . $kon->error);
@@ -116,11 +113,11 @@ if ($stmt === false) {
 // Perbaikan PENTING untuk bind_param: Gunakan referensi untuk setiap parameter
 // Buat array referensi
 $refs = [];
-foreach ($params as $key => $value) {
-    $refs[$key] = &$params[$key];
+foreach ($tableParams as $key => $value) {
+    $refs[$key] = &$tableParams[$key];
 }
 // Baris 108
-call_user_func_array([$stmt, 'bind_param'], array_merge([$bindTypes], $refs));
+call_user_func_array([$stmt, 'bind_param'], array_merge([$tableBindTypes], $refs));
 
 $stmt->execute();
 $result = $stmt->get_result();
@@ -231,11 +228,10 @@ $nama_bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Produk</th>
+                                        <th>ID Pesanan</th>
                                         <th>Tanggal Pembelian</th>
-                                        <th>Harga Satuan</th>
-                                        <th>Kuantitas</th>
-                                        <th>Total Harga Item</th>
+                                        <th>Status Pesanan</th>
+                                        <th>Total Harga</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -243,25 +239,24 @@ $nama_bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "
                                     if ($result->num_rows > 0) {
                                         $no = 1;
                                         while ($row = $result->fetch_assoc()) {
-                                            $totalPengeluaran += $row['total_item_harga'];
+                                            $totalPengeluaran += $row['total_harga'];
                                             echo "<tr>
                                                     <td>{$no}</td>
-                                                    <td>" . htmlspecialchars($row['nama_produk']) . "</td>
+                                                    <td>" . htmlspecialchars($row['id_pesanan']) . "</td>
                                                     <td>{$row['tanggal_pesanan']}</td>
-                                                    <td>Rp " . number_format($row['harga'], 0, ',', '.') . "</td>
-                                                    <td>{$row['kuantitas']}</td>
-                                                    <td>Rp " . number_format($row['total_item_harga'], 0, ',', '.') . "</td>
+                                                    <td>" . htmlspecialchars($row['status_pesanan']) . "</td>
+                                                    <td>Rp " . number_format($row['total_harga'], 0, ',', '.') . "</td>
                                                 </tr>";
                                             $no++;
                                         }
                                     } else {
-                                        echo "<tr><td colspan='6' class='text-center'>Tidak ada data pengeluaran</td></tr>";
+                                        echo "<tr><td colspan='4' class='text-center'>Tidak ada data pengeluaran</td></tr>";
                                     }
                                     ?>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="5" class="text-right">Total Pengeluaran (Bulan/Tahun Terpilih)</th>
+                                        <th colspan="4" class="text-right">Total Pengeluaran (Bulan/Tahun Terpilih)</th>
                                         <th>Rp <?= number_format($totalPengeluaran, 0, ',', '.') ?></th>
                                     </tr>
                                 </tfoot>
