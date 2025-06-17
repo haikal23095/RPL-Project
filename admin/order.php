@@ -298,7 +298,6 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <th>Tanggal</th>
                         <th>Nama Pembeli</th>
                         <th>Total</th>
-                        <th>Qty</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
