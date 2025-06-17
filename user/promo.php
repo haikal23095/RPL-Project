@@ -204,10 +204,6 @@ $promo_result = mysqli_query($kon, $promo_query);
                                 <div class="action-title">KLAIM</div>
                             </div>
                             
-                            <div class="action-section" onclick="window.location.href='how_to_use.php'">
-                                <div class="action-title">CARA PENGGUNAAN</div>
-                            </div>
-                            
                             <div class="divider"></div>
                             
                             <div class="customer-service">

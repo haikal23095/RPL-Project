@@ -173,20 +173,22 @@ $cartSuccess = isset($_GET['cart_success']);
                     </div>
 
                     <!-- All Promo Section -->
+                     <div class="d-flex justify-content-center mb-3">
+                        <button id="showAllPromos" class="btn btn-primary">Tampilkan Semua Promo</button>
+                    </div>
+
                     <div class="promo-section">
                         <h3 class="promo-section-title">SEMUA PROMO</h3>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="promo-card">
-                                    <div class="card-body text-center">
+                                <div class="promo-card" id="filterDiscount"> <div class="card-body text-center">
                                         <h4 class="card-title">PROMO DISKON</h4>
                                         <p class="card-text">Nikmati berbagai penawaran diskon spesial untuk produk pilihan</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="promo-card">
-                                    <div class="card-body text-center">
+                                <div class="promo-card" id="filterBonus"> <div class="card-body text-center">
                                         <h4 class="card-title">PROMO BONUS</h4>
                                         <p class="card-text">Dapatkan bonus menarik dengan pembelian produk tertentu, buruan</p>
                                     </div>
@@ -241,7 +243,9 @@ $cartSuccess = isset($_GET['cart_success']);
                                                             $interval = $end->diff($now);
                                                             echo $interval->days . ' hari tersisa';
                                                             ?>
+                                                            <?php if ($promo['promo_type'] === 'discount'): ?>
                                                             <a href="promo.php?id=<?= $promo['id'] ?>" class="btn btn-primary" style="margin-top: 20px;">Lihat Promo</a>
+                                                            <?php endif; ?>
                                                         </span>
                                                     </div>
                                                     <div class="d-flex mt-3">
@@ -271,5 +275,46 @@ $cartSuccess = isset($_GET['cart_success']);
     <!-- Vendor JS Files -->
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const promoCards = document.querySelectorAll('.promo-card[data-type]'); // Select all actual promo cards
+            const filterDiscount = document.getElementById('filterDiscount');
+            const filterBonus = document.getElementById('filterBonus');
+            const showAllPromosBtn = document.getElementById('showAllPromos');
+
+            function filterPromos(type) {
+                promoCards.forEach(card => {
+                    if (type === 'all' || card.dataset.type === type) {
+                        card.style.display = 'block'; // Show card
+                    } else {
+                        card.style.display = 'none'; // Hide card
+                    }
+                });
+            }
+
+            // Event Listeners for filter cards
+            if (filterDiscount) {
+                filterDiscount.addEventListener('click', function() {
+                    filterPromos('discount');
+                });
+            }
+
+            if (filterBonus) {
+                filterBonus.addEventListener('click', function() {
+                    filterPromos('bonus');
+                });
+            }
+
+            // Event Listener for "Show All" button
+            if (showAllPromosBtn) {
+                showAllPromosBtn.addEventListener('click', function() {
+                    filterPromos('all');
+                });
+            }
+
+            // Initially show all promos when the page loads
+            filterPromos('all');
+        });
+    </script>
 </body>
 </html>
