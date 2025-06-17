@@ -7,9 +7,10 @@ if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
 }
-$user_id = $_SESSION['user'];
-$kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$user_id'");
+$userName = $_SESSION['user'];
+$kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$userName'");
 $row_user = mysqli_fetch_array($kue_user);
+$user_id = $row_user['id_user']; // Get the actual user ID
 
 // Fetch all active informasipromo
 $current_date = date('Y-m-d');
@@ -249,11 +250,13 @@ $cartSuccess = isset($_GET['cart_success']);
                                                         </span>
                                                     </div>
                                                     <div class="d-flex mt-3">
-                                                        <?php if ($promo['promo_type'] === 'bonus'): ?>
+                                                        <?php if ($promo['promo_type'] === 'bonus' && !empty($promo['bonus_item'])): ?>
                                                             <form method="POST" action="add_to_cart.php" class="d-inline">
-                                                                <input type="hidden" name="product_id" value="<?= $promo['bonus_item']; ?>">
+                                                                <input type="hidden" name="product_id" value="<?= htmlspecialchars($promo['bonus_item']); ?>">
                                                                 <button type="submit" name="add_to_cart" class="btn btn-success">Add to Cart</button>
                                                             </form>
+                                                        <?php elseif ($promo['promo_type'] === 'bonus'): ?>
+                                                            <span class="text-danger">Produk bonus tidak diatur.</span>
                                                         <?php endif; ?>
                                                     </div>
                                                 </div>
