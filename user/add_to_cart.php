@@ -112,13 +112,18 @@ if (isset($_POST['checkout']) && isset($_POST['selected_items'])) {
             padding-bottom: 2rem;
         }
         .sidebar {
-            width: auto !important; /* Equivalent to w-64 in Tailwind */
             background-color: #F8F7F1 !important;
-            padding: 1rem !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: space-between !important;
-            height: 100vh !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
+        }
+        .strong {
+            color:rgb(246, 130, 35) !important;
+        }
+        button.btn-danger {
+            background-color:rgb(246, 130, 35) !important;
+            color: #ffffff;
+            border: hidden;
         }
         .cart-item-card {
             display: flex;
@@ -161,7 +166,7 @@ if (isset($_POST['checkout']) && isset($_POST['selected_items'])) {
         }
         .subtotal-price {
             font-size: 1.2rem;
-            color: #dc3545;
+            color:rgb(255, 134, 41);
             font-weight: bold;
         }
         

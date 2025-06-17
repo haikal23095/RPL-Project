@@ -30,17 +30,18 @@ $result = mysqli_query($kon, $query);
     <!-- Link Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background-color: #F8F7F1;
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif !important;
+            color: #2D3A3A !important;
         }
         .sidebar {
-            width: auto !important; /* Equivalent to w-64 in Tailwind */
             background-color: #F8F7F1 !important;
-            padding: 1rem !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: space-between !important;
-            height: 100vh !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
         }
         .card {
             border-radius: 15px;

@@ -63,6 +63,12 @@ $row_user = mysqli_fetch_array($kue_user);
             font-family: 'Andika', sans-serif;
             color: #2D3A3A !important;
         }
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         main{
           margin-left: 20px;
         }

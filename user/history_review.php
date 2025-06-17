@@ -62,13 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_review'])) {
             color: #2D3A3A !important;
         }
         .sidebar {
-            width: auto; /* Equivalent to w-64 in Tailwind */
-            background-color: #F8F7F1;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100vh;
+            background-color: #F8F7F1 !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
         }
         .table th, .table td {
             vertical-align: middle;
