@@ -117,6 +117,9 @@ if (isset($_SESSION['error'])) {
         .sidebar {
             background-color: #F8F7F1 !important;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
          /* Styling untuk tombol kembali (baru) */
         .standalone-back-button-container {
             margin-bottom: 15px; /* Jarak bawah dari tombol kembali */

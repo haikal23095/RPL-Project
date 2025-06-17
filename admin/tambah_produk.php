@@ -195,6 +195,9 @@ if (isset($_GET['delete_product'])) {
             font-family: 'Andika', sans-serif;
             color: #2D3A3A;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         .sidebar {
             background-color: #F8F7F1 !important;
         }

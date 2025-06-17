@@ -89,6 +89,9 @@ if ($result) {
         .sidebar {
             background-color: #F8F7F1 !important;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         h2 {
             font-size: 18px !important;
             font-weight: bold !important;

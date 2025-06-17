@@ -66,7 +66,9 @@ $products = mysqli_fetch_all($resultProducts, MYSQLI_ASSOC);
         .sidebar {
             background-color: #F8F7F1 !important;
         }
-
+        header{
+            background-color: #F8F7F1 !important;
+        }
         h4 {
             font-size: 20px;
         }

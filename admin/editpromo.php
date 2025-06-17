@@ -112,6 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .sidebar {
             background-color: #F8F7F1 !important;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         .standalone-back-button-container {
             margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
             padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */

@@ -61,6 +61,9 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .sidebar {
             background-color: #F8F7F1 !important;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         .main-content {
             padding: 1rem .5rem;
             max-width: 1800px;
