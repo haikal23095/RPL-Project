@@ -8,3 +8,9 @@ db.php
 # vendor & composer
 /vendor/
 /composer.lock
+
+
+# yang ada keynya
+login.php
+verification.php
+verify.php
