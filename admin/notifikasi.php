@@ -125,6 +125,9 @@ try {
         .sidebar {
             background-color: #F8F7F1 !important;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         .btn-outline-secondary {
             color: #2D3A3A !important;
             background-color: transparent !important;

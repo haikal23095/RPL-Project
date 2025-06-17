@@ -69,6 +69,9 @@ if (isset($_POST['generate_promo'])) {
             font-family: 'Andika', sans-serif;
             color: #2D3A3A;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         .sidebar {
             background-color: #F8F7F1 !important;
         }

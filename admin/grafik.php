@@ -92,6 +92,9 @@ if ($top_products_query) {
         .sidebar {
             background-color: #F8F7F1 !important;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         h5 {
             color: #2D3A3A !important;
             font-weight: bold !important;
@@ -150,6 +153,29 @@ if ($top_products_query) {
             /* Menjadikannya inline-block agar text-align di parentnya bekerja */
             display: inline-block; 
         }
+         /* Styling untuk tombol kembali (baru) */
+        .standalone-back-button-container {
+            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
+            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
     </style>
     <?php require "atas.php"; ?>
 
@@ -159,6 +185,12 @@ if ($top_products_query) {
         <div class="container-fluid">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="pagetitle">
+                    <div class="standalone-back-button-container">
+                        <a href="penjualan.php" class="standalone-back-button">
+                            <i class="bi bi-arrow-left"></i>
+                            Kembali
+                        </a>
+                    </div>
                     <h1><i class="bi bi-bar-chart"></i>&nbsp; GRAFIK TOTAL PENJUALAN</h1>
                     <nav>
                         <ol class="breadcrumb">
@@ -168,10 +200,6 @@ if ($top_products_query) {
                         </ol>
                     </nav>
                 </div>
-                <a href="penjualan.php" class="standalone-back-button">
-                    <i class="bi bi-arrow-left"></i>
-                    Kembali
-                </a>
             </div>
 
             <div class="row mb-4">

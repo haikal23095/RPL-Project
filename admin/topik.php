@@ -64,6 +64,9 @@ $query_komentar = mysqli_query($kon, "
         .sidebar {
             background-color: #F8F7F1 !important;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         .container {
             margin-top: 20px;
         }

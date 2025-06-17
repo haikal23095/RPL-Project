@@ -67,6 +67,9 @@ $result = mysqli_query($kon, $query);
         .sidebar {
             background-color: #F8F7F1 !important;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         .card {
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

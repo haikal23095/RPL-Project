@@ -203,6 +203,9 @@ $deleteError = isset($_GET['delete_error']);
         .sidebar {
             background-color: #F8F7F1 !important;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         .btn-suksess {
             background: linear-gradient(to right, #EFAA31, #FF8A0D);
             border: none;

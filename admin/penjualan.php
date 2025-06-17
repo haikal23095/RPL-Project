@@ -99,6 +99,9 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .sidebar {
             background-color: #F8F7F1 !important;
         }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         .table th, .table td {
             vertical-align: middle;
             text-align: center;
