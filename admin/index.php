@@ -173,7 +173,7 @@ $row_produk = mysqli_num_rows($sql_produk);
 
             <div class="col-xxl-4 col-md-6">
               <div class="card info-card sales-card">
-              <a href="order.php?status=Dibatalkan">
+              <a href="pesanan_dibatalkan.php">
                 <div class="card-body">
                   <h5 class="card-title">PESANAN DIBATALKAN</h5>
 
