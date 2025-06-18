@@ -15,8 +15,8 @@ if (!isset($_SESSION['cs'])) {
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>CUSTOMER SERVICE CHAT</title>
     
-    <link href="../assets/img/logo_CasaLuxe.png" rel="icon">
-    <link href="../assets/img/logo_CasaLuxe.png" rel="apple-touch-icon">
+    <!-- Favicons -->
+  <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Nunito|Poppins" rel="stylesheet">
     <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
