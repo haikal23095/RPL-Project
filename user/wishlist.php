@@ -14,8 +14,9 @@ $kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$user'");
 $row_user = mysqli_fetch_array($kue_user);
 $user_id = $row_user['id_user'];
 
-$sql = "SELECT p.*, w.id_wishlist AS wishlist_id FROM wishlist w 
+$sql = "SELECT p.*, k.id_kategori, k.nama_kategori, w.id_wishlist AS wishlist_id FROM wishlist w 
         JOIN produk p ON w.id_produk = p.id_produk 
+        JOIN kategori k ON k.id_kategori = p.id_kategori 
         WHERE w.user_id = ?";
 
 $stmt = $kon->prepare($sql);
@@ -115,7 +116,7 @@ $cartSuccess = isset($_GET['cart_success']);
         .product-name {
             font-size: 0.95rem;
             font-weight: 600;
-            color: #212529;
+            color: #fd7e14;
             padding-right: 10px; /* Jarak antara nama dan harga */
             flex-grow: 1; /* Memastikan nama produk mengambil ruang yang tersedia */
         }
@@ -215,12 +216,13 @@ $cartSuccess = isset($_GET['cart_success']);
                             <div class="col-xxl-3 col-xl-4 col-lg-6 col-md-6">
                                  <div class="card product-card h-100">
                                      <a href="detail_produk.php?product_id=<?= $item['id_produk']; ?>">
-                                         <img src="../uploads/<?= htmlspecialchars($item['gambar']); ?>" class="card-img-top" alt="<?= htmlspecialchars($item['nama_produk']); ?>">
+                                         <img src="../uploads/<?= htmlspecialchars($item['gambar']); ?>" class="card-img-top" style="object-fit: contain;" alt="<?= htmlspecialchars($item['nama_produk']); ?>">
                                      </a>
                                      <div class="card-body">
                                         <div>
-                                            <div class="product-info">
-                                                <div class="product-name"><?= htmlspecialchars($item['nama_produk']); ?></div>
+                                            <div class="product-info d-flex flex-column">
+                                                <div class="product-name fs-5"><?= htmlspecialchars($item['nama_produk']); ?></div>
+                                                <p class="card-text mb-0 mt-3 small text-muted">Kategori: <?= htmlspecialchars($item['nama_kategori']) ?></p>
                                                 <div class="product-price">Rp <?= number_format($item['harga'], 0, ',', '.'); ?></div>
                                             </div>
                                         </div>

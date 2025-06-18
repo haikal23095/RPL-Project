@@ -343,13 +343,12 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
                                                         <img src="../assets/img/edit.svg" alt="edit-btn" style="width: 20px;">
                                                     </a>
                                                 </div>
-                                            <?php endif; ?>
-
-                                            <!-- Product Image -->
-                                            <?php if (!empty($promo['photo_url'])): ?>
-                                                <!-- <img src="../uploads/<?= htmlspecialchars($promo['photo_url']) ?>" class="card-img-top" alt="<?= htmlspecialchars($promo['title']) ?>"> -->
-                                                <img src="../assets/img/barang A.png" alt="" class="mb-4">
-                                            <?php endif; ?>
+                                                <?php endif; ?>
+                                                
+                                                <!-- Product Image -->
+                                                    <!-- <img src="../uploads/<?= htmlspecialchars($promo['photo_url']) ?>" class="card-img-top" alt="<?= htmlspecialchars($promo['title']) ?>"> -->
+                                                    <!-- <img src="../assets/img/barang A.png" alt="" class="mb-4"> -->
+                                                    <img src="../uploads/<?= $promo['photo_url'] ?>" alt="adslf" width="260" class="d-flex align-self-center">
 
                                             <!-- Discount Badge -->
                                             <?php if ($promo['promo_type'] === 'discount' && !empty($promo['discount_percentage'])): ?>
@@ -375,9 +374,11 @@ if (isset($_POST['delete_promo']) && isset($_POST['promo_id'])) {
                                             <?php elseif ($promo['promo_type'] === 'bonus'): ?>
                                                 <div class="card-body card-bonus pb-3">
                                                     <div>
-                                                        <img src="../uploads/<?= $promo['gambar'] ?>" alt="adslf" width="260">
                                                         <div class="promo-discount promo-bonus">DISKON UP TO 90%</div>
-                                                        <p>+ Bonus 1 <?= $promo['nama_produk'] ?></p>
+                                                        <div class="d-flex mb-3">
+                                                            <p>+ Bonus 1 <?= $promo['nama_produk'] ?></p>
+                                                            <img src="../uploads/<?= $promo['gambar'] ?>" alt="adslf" width="60">
+                                                        </div>
                                                         <div class="promo-discount promo-bonus beruntung mb-0">
                                                             raih keberuntunganmu!
                                                         </div>

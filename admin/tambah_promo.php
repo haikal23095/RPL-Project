@@ -63,19 +63,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bonus_item = $_POST['bonus_item'] ?? null;
 
     // Handle file upload
-    $photo_url = '';
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-        $photo_url = uploadFile($_FILES['photo']);
-        if (strpos($photo_url, 'Sorry') === 0) {
-            $upload_error = $photo_url;
-            $photo_url = '';
+    // $photo_url = '';
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $imageName = basename($_FILES['photo']['name']);
+            $targetDir = "../uploads/";
+            $targetFilePath = $targetDir . $imageName;
+
+            // Hanya izinkan beberapa ekstensi file
+            $allowedFileTypes = ['jpg', 'jpeg', 'png', 'gif'];
+            $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+
+            if (in_array($fileType, $allowedFileTypes)) {
+                // Pastikan nama file unik
+                $imageName = uniqid() . '_' . $imageName;
+                $targetFilePath = $targetDir . $imageName;
+
+                // Upload file ke direktori target
+                if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFilePath)) {
+                    $imageUploaded = true;
+                } else {
+                    $imageUploaded = false;
+                    $errorMessage = "Gagal mengunggah gambar.";
+                }
+            } else {
+                $imageUploaded = false;
+                $errorMessage = "Format file gambar tidak valid. Hanya JPG, JPEG, PNG, dan GIF yang diperbolehkan.";
+            }
+        } else {
+            $imageUploaded = false;
+            $errorMessage = "Tidak ada gambar yang dipilih atau terjadi kesalahan saat mengunggah.";
         }
-    }
+    // if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+    //     $photo_url = uploadFile($_FILES['photo']);
+    //     if (strpos($photo_url, 'Sorry') === 0) {
+    //         $upload_error = $photo_url;
+    //         $photo_url = '';
+    //     }
+    // }
 
     $sql = "INSERT INTO informasipromo (id_produk, title, description, photo_url, promo_type, start_date, end_date, discount_percentage, bonus_item) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($kon, $sql);
-    mysqli_stmt_bind_param($stmt, "issssssss", $id_produk, $title, $description, $photo_url, $promo_type, $start_date, $end_date, $discount_percentage, $bonus_item);
+    mysqli_stmt_bind_param($stmt, "issssssss", $id_produk, $title, $description, $imageName, $promo_type, $start_date, $end_date, $discount_percentage, $bonus_item);
     mysqli_stmt_execute($stmt);
 
     header("Location: informasipromo.php");

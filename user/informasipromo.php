@@ -103,7 +103,7 @@ $cartSuccess = isset($_GET['cart_success']);
         .promo-card img {
             width: 100%;
             height: 200px;
-            object-fit: cover;
+            object-fit: contain;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
         }
@@ -218,7 +218,7 @@ $cartSuccess = isset($_GET['cart_success']);
                                         <div class="col-md-3 promo-card pt-3" href="promo.php?" data-type="<?= htmlspecialchars($promo['promo_type']) ?>">
                                             <div class="card">
                                                 <?php if (!empty($promo['photo_url'])): ?>
-                                                    <img src="../admin/uploads/<?= htmlspecialchars($promo['photo_url']); ?>" class="card-img-top" alt="<?= htmlspecialchars($promo['title']) ?>">
+                                                    <img src="../uploads/<?= htmlspecialchars($promo['photo_url']); ?>" class="card-img-top" alt="<?= htmlspecialchars($promo['title']) ?>">
                                                 <?php else: ?>
                                                     <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">No Image</div>
                                                 <?php endif; ?>

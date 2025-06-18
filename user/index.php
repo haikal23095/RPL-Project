@@ -107,7 +107,7 @@ $cartSuccess = isset($_GET['cart_success']);
 
         .product-card .card-img-top {
             height: 13rem;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .product-card .card-body {

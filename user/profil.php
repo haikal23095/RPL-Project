@@ -317,7 +317,7 @@ if (isset($_POST['delete_profile_photo'])) {
             width: 150px; /* Ukuran gambar profil */
             height: 150px;
             border-radius: 10%; /* Membulat seperti di gambar */
-            object-fit: cover; /* Pastikan gambar mengisi area tanpa distorsi */
+            object-fit: contain; /* Pastikan gambar mengisi area tanpa distorsi */
             border: 3px solid #EFAA31; /* Border warna orange/emas */
             padding: 3px; /* Sedikit padding sebelum border */
             margin-bottom: 20px;

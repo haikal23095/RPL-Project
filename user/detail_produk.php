@@ -100,7 +100,7 @@ $wishlistSuccess = isset($_GET['wishlist_success']);
         .main-product-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             border-radius: 1rem 0 0 1rem;
         }
         .detail-content {

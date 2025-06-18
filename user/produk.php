@@ -161,7 +161,7 @@ function formatCurrency($number) {
         }
         .product-card-img-top {
             aspect-ratio: 1 / 1;
-            object-fit: cover;
+            object-fit: contain !important;
         }
         .btn-wishlist {
             position: absolute;
@@ -198,9 +198,9 @@ function formatCurrency($number) {
             margin-bottom: 1rem;
         }
         .product-name {
-            font-size: 1.05rem;
+            /* font-size: 1.05rem; */
             font-weight: 600;
-            color: #212529;
+            color: #fd7e14;
             flex-grow: 1;
             padding-right: 10px;
         }
@@ -336,9 +336,12 @@ function formatCurrency($number) {
                                     </form>
                                 </div>
                                 <div class="card-body">
-                                    <div class="product-info">
-                                        <div class="product-name"><?= htmlspecialchars($product['name']); ?></div>
-                                        <div class="product-price"><?= formatCurrency($product['price']); ?></div>
+                                    <div class="product-info d-flex flex-column mb-0">
+                                        <div class="product-name mb-2 fs-5"><?= htmlspecialchars($product['name']); ?></div>
+                                        <div class="ap">
+                                            <p class="card-text mb-0 mt-3 small text-muted">Kategori: <?= htmlspecialchars($product['category']) ?></p>
+                                            <div class="product-price"><?= formatCurrency($product['price']); ?></div>
+                                        </div>
                                     </div>
                                     
                                     <div class="button-group">

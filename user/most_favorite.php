@@ -10,17 +10,22 @@ if (!isset($_SESSION['user'])) {
 }
 
 // Query untuk mendapatkan produk yang paling banyak dibeli
-$query = "SELECT produk.id_produk, produk.nama_produk, produk.deskripsi, produk.harga, produk.gambar, 
+$query = "SELECT produk.id_produk, produk.nama_produk, produk.deskripsi, produk.stok, k.nama_kategori, k.id_kategori, produk.harga, produk.gambar, 
                  SUM(pesanan_detail.jumlah) AS total_dibeli
           FROM produk
           JOIN pesanan_detail ON produk.id_produk = pesanan_detail.id_produk
+          JOIN kategori k ON produk.id_kategori = k.id_kategori
           GROUP BY produk.id_produk
           HAVING total_dibeli > 10
           ORDER BY total_dibeli DESC";
 $result = mysqli_query($kon, $query);
 
 // Mulai halaman HTML
+function formatCurrency($number) {
+    return 'Rp ' . number_format($number ?? 0, 0, ',', '.');
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,14 +98,178 @@ $result = mysqli_query($kon, $query);
   <?php require "menu.php"; ?>
   <!-- End Sidebar-->
    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
             background: #F8F7F1 !important;
-            font-family: 'Andika', sans-serif;
+            font-family: 'Andika', sans-serif !important;
             color: #2D3A3A !important;
         }
-   </style>
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
+        }
+        div.product-name{
+            font-size: 14px;
+        }
+        main{
+            padding: 10px !important;
+        }
+        .page-header {
+            padding: 0 0;
+            margin-bottom: 10px;
+        }
+        .page-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+        .page-header p {
+            font-size: 1.1rem;
+            color: #6c757d;
+        }
+        .btn-filter-dropdown {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            color: #333;
+            font-weight: 500;
+        }
+        .btn-filter-dropdown:hover, .btn-filter-dropdown:focus {
+            background-color: #f8f9fa;
+            border-color: #adb5bd;
+        }
+
+        .product-card {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: .75rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .product-card .card-img-container {
+            position: relative;
+        }
+        .product-card-img-top {
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+        }
+        .btn-wishlist {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(2px);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eee;
+            color: #333;
+            transition: all 0.2s ease;
+        }
+        .btn-wishlist:hover {
+            background-color: #e21d1d;
+            color: #fff;
+        }
+        .product-card .card-body {
+            padding: 1rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* PERUBAHAN TAMPILAN NAMA PRODUK & HARGA */
+        .product-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .product-name {
+            /* font-size: 1.05rem; */
+            font-weight: 600;
+            color: #fd7e14;
+            flex-grow: 1;
+            padding-right: 10px;
+        }
+        .product-price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fd7e14; /* Warna orange */
+            white-space: nowrap;
+        }
+        
+        /* PERUBAHAN TAMPILAN GRUP TOMBOL */
+        .product-card .button-group {
+            margin-top: auto;
+            display: flex;
+            gap: 10px; /* Jarak antar tombol */
+        }
+        .product-card .btn {
+            font-weight: 600;
+            flex: 1; /* Membuat kedua tombol memiliki lebar yang sama */
+        }
+        .btn-buy-now {
+            background-color: #1A877E; /* Warna hijau toska */
+            border-color: #1A877E;
+            color: #fff;
+            padding-top: 13px;
+            padding-bottom: 13px;
+            font-size: 10px;
+        }
+        .btn-buy-now:hover {
+            background-color: #1A877E;
+            border-color: #1A877E;
+            box-shadow: 0 0 12px rgba(26, 135, 126, 0.64);
+            color: #ffffff !important;
+        }
+        .btn-add-to-cart {
+            background-color:transparent; /* Warna kuning-oranye */
+            border-color: #ffc107;
+            padding-top: 13px;
+            padding-bottom: 13px;
+            font-size: 10px;
+            color: #ffc107;
+        }
+        .btn-add-to-cart:hover {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #ffffff;
+        }
+        .standalone-back-button-container {
+            margin-bottom: 15px; 
+            padding-left: 0px; 
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
+    </style>
     <main id="main" class="main">
         <div class="pagetitle">
       <h1><i class="bi bi-star-fill"></i>&nbsp; PRODUK FAVORIT</h1>
@@ -115,22 +284,41 @@ $result = mysqli_query($kon, $query);
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
             <div class="col">
-            <div class="card h-100 shadow-sm border-0 rounded-4">
-                <a href="detail_produk.php?product_id=<?= $row['id_produk']; ?>">
-                <img src="../uploads/<?= htmlspecialchars($row['gambar']); ?>" class="card-img-top rounded-top-4" alt="Gambar Produk" style="height: 200px; object-fit: cover;">
-                </a>
-                <div class="card-body d-flex flex-column justify-content-between">
-                <h6 class="fw-semibold mb-1"><?= htmlspecialchars($row['nama_produk']); ?></h6>
-                <p class="text-warning fw-bold mb-2">Rp <?= number_format($row['harga'], 0, ',', '.'); ?></p>
+                <div class="card h-50 shadow-sm border-0 rounded-4">
+                    <a href="detail_produk.php?product_id=<?= $row['id_produk']; ?>">
+                        <img src="../uploads/<?= htmlspecialchars($row['gambar']); ?>" class="card-img-top rounded-top-4 w-100" alt="Gambar Produk" style="height: 236px; object-fit: contain;">
+                    </a>
+                    <div class="card-body mt-4">
+                        <div class="product-info d-flex flex-column mb-0">
+                            <div class="product-name mb-2 fs-5"><?= htmlspecialchars($row['nama_produk']); ?></div>
+                            <div class="ap">
+                                <p class="card-text mb-0 mt-3 small text-muted">Kategori: <?= htmlspecialchars($row['nama_kategori']) ?></p>
+                                <div class="product-price"><?= formatCurrency($row['harga']); ?></div>
+                            </div>
+                        </div>
+                        
+                        <div class="button-group d-flex gap-3 mt-4">
+                            <form method="POST" action="checkout.php" class="w-50">
+                                <input type="hidden" name="product_id" value="<?= $row['id_produk']; ?>">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" name="buy_now" class="btn btn-buy-now w-100">Beli Sekarang</button>
+                            </form>
+                            <form method="POST" action="add_to_cart.php" class="w-50">
+                                <input type="hidden" name="product_id" value="<?= $row['id_produk']; ?>">
+                                <button type="submit" name="add_to_cart" class="btn btn-add-to-cart w-100">Masuk Keranjang</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
 
-                <div class="mt-auto d-flex justify-content-between gap-2">
+                <!-- <div class="mt-auto d-flex justify-content-between gap-2">
                     <form method="POST" action="add_to_cart.php" class="w-50">
                         <input type="hidden" name="product_id" value="<?= $row['id_produk']; ?>">
                         <button type="submit" name="add_to_cart" class="btn btn-sm text-white w-100 fw-semibold btn-custom-small" style="background-color: #1a877e;">BELI SEKARANG</button>
                     </form>
                     <a href="detail_produk.php?product_id=<?= $row['id_produk']; ?>" class="btn btn-warning text-white btn-sm w-50 fw-semibold btn-custom-small">MASUK KERANJANG</a>
-                </div>
+                </div> -->
 
             
             
