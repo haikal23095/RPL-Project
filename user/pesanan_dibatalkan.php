@@ -16,7 +16,11 @@ $stmt = $kon->prepare("SELECT * FROM pesanan JOIN user ON user.id_user = pesanan
 $stmt->bind_param("i", $nama_user);
 $stmt->execute();
 $result = $stmt->get_result();
-$pesanan = $result->fetch_all(MYSQLI_ASSOC);
+$pesanan_list = $result->fetch_all(MYSQLI_ASSOC);
+
+function formatCurrency($number) {
+    return 'Rp ' . number_format($number ?? 0, 0, ',', '.');
+}
 ?>
 
 <!DOCTYPE html>
@@ -108,44 +112,72 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
             <h4>Pesanan Dibatalkan</h4>
         </div>
 
-        <?php if (count($pesanan) > 0): ?>
-            <div class="table-responsive">
-                <table class="table table-bordered align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID Pesanan</th>
-                            <th>Tanggal</th>
-                            <th>Total Harga</th>
-                            <th>Status</th>
-                            <th>Notifikasi</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($pesanan as $i => $row): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($row['id_pesanan']) ?></td>
-                            <td><?= date('d-m-Y', strtotime($row['tanggal_pesanan'])) ?></td>
-                            <td>IDR <?= number_format($row['total_harga'], 0, ',', '.') ?></td>
-                            <td><?= htmlspecialchars($row['status_pesanan']) ?></td>
-                            <td><?= htmlspecialchars($row['notifikasi_status']) ?></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary btn-detail"
-                                    data-id="<?= $row['id_pesanan'] ?>"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#detailModal">
-                                    Detail
-                                </button>
-                                <a href="checkout.php?ulang=<?= $row['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
-                            </td>
-                        </tr>
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+                    <?php if (count($pesanan_list) > 0): ?>
+                        <?php foreach ($pesanan_list as $pesanan): ?>
+                            <?php
+                            // Query untuk mendapatkan semua gambar produk dalam pesanan ini
+                            $gambar_stmt = $kon->prepare("SELECT p.gambar, p.nama_produk FROM pesanan_detail dp 
+                                                        JOIN produk p ON dp.id_produk = p.id_produk 
+                                                        WHERE dp.id_pesanan = ?");
+                            $gambar_stmt->bind_param("s", $pesanan['id_pesanan']);
+                            $gambar_stmt->execute();
+                            $gambar_result = $gambar_stmt->get_result();
+                            $produk_images = $gambar_result->fetch_all(MYSQLI_ASSOC);
+                            $gambar_stmt->close();
+                            ?>
+                            <div class="card pesanan-card mb-4">
+                                <div class="card-header pesanan-header d-flex justify-content-between align-items-center flex-wrap">
+                                    <div class="my-1">
+                                        <strong>ID Pesanan:</strong> #<?= htmlspecialchars($pesanan['id_pesanan']) ?>
+                                    </div>
+                                    <span class="badge bg-primary my-1"><?= htmlspecialchars($pesanan['status_pesanan']) ?></span>
+                                </div>
+                                
+                                <div class="product-gallery">
+                                    <?php if (!empty($produk_images)): ?>
+                                        <?php foreach ($produk_images as $img): ?>
+                                            <img src="../uploads/<?= htmlspecialchars($img['gambar']) ?>" class="product-img-gallery" title="<?= htmlspecialchars($img['nama_produk']) ?>">
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <p class="text-muted small px-3">Tidak ada gambar produk.</p>
+                                    <?php endif; ?>
+                                </div>
+                                
+                                <div class="card-footer-actions">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6 mb-2 mb-md-0">
+                                            <span class="text-muted">Total Belanja:</span>
+                                            <h5 class="total-harga d-inline-block ms-2 mb-0"><?= formatCurrency($pesanan['total_harga']) ?></h5>
+                                        </div>
+                                        <div class="col-md-6 text-md-end">
+                                            <button class="btn btn-outline-primary btn-sm btn-detail" 
+                                                    type="button" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#detailModal"
+                                                    data-id="<?= $pesanan['id_pesanan'] ?>"> Detail Pesanan
+                                            </button>
+                                            <a href="checkout.php?ulang=<?= htmlspecialchars($pesanan['id_pesanan']) ?>" class="btn btn-success btn-sm">Beli Lagi</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         <?php endforeach; ?>
-                    </tbody>
-                </table>
+                    <?php else: ?>
+                        <div class="card">
+                            <div class="card-body text-center p-5">
+                                <i class="bi bi-check-circle-fill fs-1 text-success"></i>
+                                <h5 class="mt-3">Tidak Ada Pesanan yang Dikirim</h5>
+                                <p class="text-muted">Semua pesanan Anda sudah dalam pengiriman atau telah selesai. <br>Lihat halaman lain untuk melacaknya.</p>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
-            <?php else: ?>
-            <p>Tidak ada pesanan yang dibatalkan.</p>
-        <?php endif; ?>
+        </section>
     </div>
 </main>
 
