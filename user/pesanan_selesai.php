@@ -295,6 +295,8 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
   </div>
 </div>
 
+<div class="modal fade" id="reviewModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Beri Ulasan untuk Pesanan #<span id="modal-order-id"></span></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div id="modal-alert-placeholder"></div><form id="reviewForm"><input type="hidden" id="form-order-id" name="order_id"><div id="review-product-list"><div class="text-center" id="modal-loader"><div class="spinner-border"><span>Loading...</span></div></div></div></form></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button><button type="button" class="btn btn-primary" id="submit-review-btn">Kirim Ulasan</button></div></div></div></div>
+
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -351,6 +353,63 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // --- LOGIKA MODAL REVIEW (Tidak Diubah) ---
+        // (Kode modal review yang sudah ada tetap di sini)
+        const reviewModal = new bootstrap.Modal(document.getElementById('reviewModal'));
+        const modalBody = document.getElementById('review-product-list');
+        const modalOrderIdSpan = document.getElementById('modal-order-id');
+        const formOrderIdInput = document.getElementById('form-order-id');
+        const modalLoader = document.getElementById('modal-loader');
+        const modalAlertPlaceholder = document.getElementById('modal-alert-placeholder');
+
+        document.querySelectorAll('.open-review-modal').forEach(button => {
+            button.addEventListener('click', function () {
+                const orderId = this.dataset.orderId;
+                modalOrderIdSpan.textContent = orderId;
+                formOrderIdInput.value = orderId;
+                modalLoader.style.display = 'block';
+                modalBody.innerHTML = '';
+                modalBody.appendChild(modalLoader);
+                modalAlertPlaceholder.innerHTML = '';
+                fetch(`get_review_details.php?order_id=${orderId}`).then(response => response.json()).then(data => {
+                    modalLoader.style.display = 'none';
+                    if (data.success) { buildReviewForm(data.products); } 
+                    else { showAlert(data.message, 'danger'); }
+                }).catch(() => showAlert('Gagal memuat data produk.', 'danger'));
+                reviewModal.show();
+            });
+        });
+
+        function buildReviewForm(products) {
+            let formHtml = '', hasReviewableItems = false;
+            products.forEach((product, index) => {
+                if (product.review_count > 0) {
+                    formHtml += `<div class="alert alert-light p-2">Anda sudah memberikan ulasan untuk <strong>${product.nama_produk}</strong>.</div>`;
+                } else {
+                    hasReviewableItems = true;
+                    formHtml += `<div class="review-product-item mb-4 border-bottom pb-3"><img src="../uploads/${product.gambar}" alt="${product.nama_produk}"><div class="details"><h6 class="mb-2">${product.nama_produk}</h6><input type="hidden" name="reviews[${index}][product_id]" value="${product.id_produk}"><select name="reviews[${index}][rating_produk]" class="form-select form-select-sm" required><option value="" disabled selected>Rating Produk...</option><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option><option value="2">⭐⭐</option><option value="1">⭐</option></select><select name="reviews[${index}][rating_pelayanan]" class="form-select form-select-sm" required><option value="" disabled selected>Rating Pelayanan...</option><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option><option value="2">⭐⭐</option><option value="1">⭐</option></select><select name="reviews[${index}][rating_pengiriman]" class="form-select form-select-sm" required><option value="" disabled selected>Rating Pengiriman...</option><option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option><option value="2">⭐⭐</option><option value="1">⭐</option></select><textarea name="reviews[${index}][komentar]" class="form-control" rows="2" placeholder="Bagikan pendapatmu..." required></textarea></div></div>`;
+                }
+            });
+            modalBody.innerHTML = formHtml;
+            document.getElementById('submit-review-btn').style.display = hasReviewableItems ? 'inline-block' : 'none';
+        }
+
+        document.getElementById('submit-review-btn').addEventListener('click', function() {
+            const form = document.getElementById('reviewForm');
+            const formData = new FormData(form);
+            const submitBtn = this;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Mengirim...`;
+            fetch('submit_review.php', { method: 'POST', body: formData }).then(response => response.json()).then(data => {
+                if (data.success) { reviewModal.hide(); alert(data.message); location.reload(); } 
+                else { showAlert(data.message || 'Terjadi kesalahan.', 'danger'); }
+            }).catch(() => showAlert('Terjadi kesalahan jaringan.', 'danger')).finally(() => { submitBtn.disabled = false; submitBtn.textContent = 'Kirim Ulasan'; });
+        });
+
+        function showAlert(message, type) {
+            modalAlertPlaceholder.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show">${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`;
+        }
 });
 </script>
 
