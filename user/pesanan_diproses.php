@@ -259,12 +259,7 @@ function formatCurrency($number) {
                                             <?php if ($cancel_request_status === 'Pending'): ?>
                                                 <button class="btn btn-secondary btn-sm" disabled>Menunggu Persetujuan Pembatalan</button>
                                             <?php elseif ($cancel_request_status === 'Ditolak'): ?>
-                                                <button class="btn btn-dangerr btn-sm btn-cancel-order"
-                                                        type="button"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#cancelModal"
-                                                        data-id-pesanan="<?= htmlspecialchars($pesanan['id_pesanan']) ?>">Batalkan (Ditolak Sebelumnya)
-                                                </button>
+                                                <button class="btn btn-dangerr btn-sm disabled">Permintaan Pembatalan Ditolak</button>
                                             <?php else: // Belum ada permintaan pembatalan atau sudah disetujui (dibatalkan) ?>
                                                 <button class="btn btn-dangerr btn-sm btn-cancel-order"
                                                         type="button"

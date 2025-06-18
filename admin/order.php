@@ -317,7 +317,6 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             data-id="<?= $order['id_pesanan'] ?>">
                                         <option value="Diproses" <?= $order['status_pesanan'] == 'Diproses' ? 'selected' : '' ?>>Diproses</option>
                                         <option value="Dikirim" <?= $order['status_pesanan'] == 'Dikirim' ? 'selected' : '' ?>>Dikirim</option>
-                                        <option value="Dibatalkan" <?= $order['status_pesanan'] == 'Dibatalkan' ? 'selected' : '' ?>>Dibatalkan</option>
                                     </select>
                                 </td>
                             </tr>

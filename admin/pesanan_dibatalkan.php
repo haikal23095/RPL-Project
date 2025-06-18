@@ -45,7 +45,7 @@ $sample_count = $check_stmt->fetch(PDO::FETCH_ASSOC)['count'];
 
 if ($sample_count == 0) {
     // Insert sample data untuk pesanan yang dibatalkan
-    $sample_pesanan_query = "SELECT id_pesanan FROM pesanan WHERE status_pesanan = 'Dibatalkan' LIMIT 10";
+    $sample_pesanan_query = "SELECT id_pesanan FROM pesanan WHERE status_pesanan = 'Dibatalkan'";
     $sample_stmt = $pdo->prepare($sample_pesanan_query);
     $sample_stmt->execute();
     $sample_pesanan = $sample_stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -65,7 +65,7 @@ $stats_query = "SELECT
     COUNT(CASE WHEN sp.status_pembatalan = 'Disetujui' THEN 1 END) as disetujui
     FROM status_pembatalan sp
     JOIN pesanan p ON sp.id_pesanan = p.id_pesanan 
-    WHERE p.status_pesanan = 'Dibatalkan'";
+    ";
 
 $stats_stmt = $pdo->prepare($stats_query);
 $stats_stmt->execute();
@@ -84,7 +84,7 @@ $query = "SELECT p.id_pesanan, u.nama AS customer_name,
           FROM pesanan p
           JOIN user u ON p.id_user = u.id_user
           LEFT JOIN status_pembatalan sp ON p.id_pesanan = sp.id_pesanan
-          WHERE p.status_pesanan = 'Dibatalkan'
+          WHERE p.id_pesanan = sp.id_pesanan
           ORDER BY sp.tanggal_request DESC, p.tanggal_pesanan DESC";
 
 $stmt = $pdo->prepare($query);
