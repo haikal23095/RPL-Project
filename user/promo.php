@@ -70,6 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['promo_id'])) {
             print_r($claimed_count); // Debugging line to check claimed count
             
             if ($claimed_count > 0) {
+                echo "<script>alert('Promo sudah diklaim sebelumnya!');</script>";
                 throw new Exception('already_claimed');
             }
 
@@ -94,6 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['promo_id'])) {
                     throw new Exception('Database error on update promo usage: ' . mysqli_error($kon));
                 }
                 mysqli_stmt_close($stmt_update_promo);
+                echo "<script>alert('Promo berhasil diklaim!');</script>";
             }
 
             mysqli_commit($kon); // Commit the transaction
