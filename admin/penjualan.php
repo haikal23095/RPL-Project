@@ -91,14 +91,20 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
-        .table th, .table td {
-            vertical-align: middle;
-            text-align: center;
-        }
         body {
             background: #F8F7F1 !important;
             font-family: 'Andika', sans-serif;
             color: #2D3A3A;
+        }
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
         }
  
         h5{

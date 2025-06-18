@@ -87,6 +87,13 @@ if (isset($_POST['edit_product'])) {
         body {
             background: #F8F7F1 !important;
             font-family: 'Andika', sans-serif;
+            color: #2D3A3A;
+        }
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
         }
          /* Styling untuk tombol kembali (baru) */
         .standalone-back-button-container {
@@ -111,7 +118,14 @@ if (isset($_POST['edit_product'])) {
             font-size: 1.1em;
             margin-right: 8px; 
         }
-
+        span.text-success{
+            color: #1A877E !important;
+            font-weight: bold !important;
+        }
+        h3.text-danger {
+            color: #FF8C12 !important;
+            font-weight: bold !important;
+        }
         .btn-secondary {
             color: #763D2D !important;
             background-color: transparent !important;
@@ -153,6 +167,7 @@ if (isset($_POST['edit_product'])) {
             font-size: 0.875rem; /* Bootstrap default for btn-sm */
             box-shadow: 0 0 15px transparent !important;
             transition: all 0.2s ease-in-out;
+            font-weight: bold !important;
         }
 
         .btn-warning:hover {
@@ -188,7 +203,6 @@ if (isset($_POST['edit_product'])) {
             border-radius: 6px;
             margin-left: 10px;
         }
-
         .edit-product-form {
             position: fixed;
             top: 0;

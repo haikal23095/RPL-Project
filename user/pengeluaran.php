@@ -151,22 +151,20 @@ $nama_bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "
         @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
             background: #F8F7F1 !important;
-            font-family: 'Andika', sans-serif;
+            font-family: 'Andika', sans-serif !important;
             color: #2D3A3A !important;
+        }
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
         }
         .btn-primary{
             background-color: #FFBB34 !important;
             border: 1px solid #FFBB34 !important;
         }
-        .sidebar {
-            width: auto; /* Equivalent to w-64 in Tailwind */
-            background-color: #F8F7F1;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100vh;
-        }
+        
     </style>
     <main id="main" class="main">
         <div class="pagetitle">

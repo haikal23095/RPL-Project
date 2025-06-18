@@ -60,11 +60,19 @@ $pesanan_dibatalkan = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background-color: #f8f9fa;
-            font-family: 'Andika', sans-serif;;
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A;
         }
-        
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         .main-content {
             padding: 1rem .5rem;
             max-width: 1800px;
@@ -309,6 +317,29 @@ $pesanan_dibatalkan = $stmt->fetchAll(PDO::FETCH_ASSOC);
             font-style: italic;
             padding: 2rem;
         }
+         /* Styling untuk tombol kembali (baru) */
+        .standalone-back-button-container {
+            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
+            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
     </style>
     <?php include 'aset.php'; ?>
 </head>
@@ -318,6 +349,12 @@ $pesanan_dibatalkan = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <main id="main" class="main">
     <div class="main-content">
+        <div class="standalone-back-button-container">
+            <a href="order.php" class="standalone-back-button">
+                <i class="bi bi-arrow-left"></i>
+                Kembali
+            </a>
+        </div>
         <!-- Page Header -->
         <div class="page-header">
             <h1 class="page-title">
@@ -329,7 +366,8 @@ $pesanan_dibatalkan = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <nav class="breadcrumb-nav">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">HOME</a></li>
-                    <li class="breadcrumb-item active">PESANAN MASUK</li>
+                    <li class="breadcrumb-item"><a href="order.php">PESANAN MASUK</a></li>
+                    <li class="breadcrumb-item active">PESANAN DIBATALKAN</li>
                 </ol>
             </nav>
         </div>
@@ -487,7 +525,7 @@ document.getElementById('filterSelect').addEventListener('change', function() {
 function approveOrder(orderId) {
     if (confirm('Apakah Anda yakin ingin menyetujui pembatalan pesanan ini?')) {
         // Here you would typically send an AJAX request to update the order status
-        fetch('update_cancellation_status.php', {
+        fetch('update_pembatalan.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -511,7 +549,7 @@ function approveOrder(orderId) {
 
 function rejectOrder(orderId) {
     if (confirm('Apakah Anda yakin ingin menolak pembatalan pesanan ini?')) {
-        fetch('update_cancellation_status.php', {
+        fetch('update_pembatalan.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

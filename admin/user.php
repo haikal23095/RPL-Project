@@ -101,7 +101,20 @@ if (isset($_POST["update"])) {
         @import url('https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
-            background: #F8F7F1;
+            background: #F8F7F1 !important;
+            font-family: 'Andika', sans-serif;
+            color: #2D3A3A;
+        }
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
+        }
+        .main-content {
+            padding: 1rem .5rem;
+            max-width: 1800px;
+            margin: 0 auto;
         }
         .stat-item .stat-number {
             font-size: 2rem;

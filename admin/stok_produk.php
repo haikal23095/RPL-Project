@@ -61,8 +61,14 @@ $products = mysqli_fetch_all($resultProducts, MYSQLI_ASSOC);
         body {
             background: #F8F7F1 !important;
             font-family: 'Andika', sans-serif;
+            color: #2D3A3A;
         }
-
+        .sidebar {
+            background-color: #F8F7F1 !important;
+        }
+        header{
+            background-color: #F8F7F1 !important;
+        }
         h4 {
             font-size: 20px;
         }
