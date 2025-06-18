@@ -289,6 +289,29 @@ if (isset($_POST['confirm_order'])) {
             color: #ffffff !important;
             background-color: #f89317 !important;
         }
+         /* Styling untuk tombol kembali (baru) */
+        .standalone-back-button-container {
+            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
+            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
     </style>
 </head>
 <body>
@@ -296,6 +319,10 @@ if (isset($_POST['confirm_order'])) {
     <?php require "menu.php"; ?>
 
     <main id="main" class="main">
+        <a href="produk.php" class="standalone-back-button">
+                <i class="bi bi-arrow-left"></i>
+                Kembali
+            </a>
         <div class="pagetitle">
             <h1><i class="bi bi-cart"></i>&nbsp; PEMBAYARAN</h1>
             <nav><ol class="breadcrumb">

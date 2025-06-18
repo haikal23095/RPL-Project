@@ -48,7 +48,7 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesanan Dinilai</title>
+    <title>Pesanan Selesai</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -174,7 +174,6 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
             object-fit: cover;
             border-radius: 6px;
         }
-
  </style>
 <main id="main" class="main">
     <div class="pagetitle">
@@ -328,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         });
     }
-
+    
     // --- NEW JAVASCRIPT FOR CANCEL MODAL ---
     const cancelModal = document.getElementById('cancelModal');
     if(cancelModal) {
@@ -353,7 +352,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 26145a066c8c06380cfb0bb3e3322cb7a05dff1e
     // --- LOGIKA MODAL REVIEW (Tidak Diubah) ---
         // (Kode modal review yang sudah ada tetap di sini)
         const reviewModal = new bootstrap.Modal(document.getElementById('reviewModal'));
