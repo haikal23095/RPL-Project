@@ -255,7 +255,7 @@ $pesanan_list = $pesanan_list->fetch_all(MYSQLI_ASSOC);
                                                     data-id="<?= $pesanan['id_pesanan'] ?>"> Detail Pesanan
                                             </button>
                                             <a href="lacak.php?id=<?= $pesanan['id_pesanan'] ?>" class="btn btn-info btn-sm">Lacak</a>
-                                            <a href="pesanan_selesai.php?id=<?= $pesanan['id_pesanan'] ?>" class="btn btn-warning btn-sm">Selesai</a>
+                                            <a href="proses_selesai_pesanan.php?id=<?= htmlspecialchars($pesanan['id_pesanan']) ?>" class="btn btn-warning btn-sm">Selesai</a>
                                             
                                         </div>
                                     </div>

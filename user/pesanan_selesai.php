@@ -8,11 +8,14 @@ if (!isset($_SESSION['user'])) {
     exit;
 }   
 
+$nama_user = $_SESSION['user'];
+
+
+
 function formatCurrency($number) {
     return 'Rp ' . number_format($number ?? 0, 0, ',', '.');
 }
 
-$nama_user = $_SESSION['user'];
 
 // Ambil filter status pesanan dari checkbox (bisa lebih dari satu)
 $status_filter = isset($_GET['filter']) ? $_GET['filter'] : '';
