@@ -93,7 +93,7 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
             border: 1px solid #FFC300 !important;
         }
         .badge{
-            background-color: #FFBB34 !important;
+            background-color: #1A877E !important;
         }
         .btn-danger {
             background-color: transparent !important;
@@ -248,6 +248,7 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
                                                             data-bs-target="#detailModal"
                                                             data-id="<?= $pesanan_item['id_pesanan'] ?>"> Detail Pesanan
                                             </button>
+                                            <a href="checkout.php?ulang=<?= $pesanan_item['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
                                         </div>
                                     </div>
                                 </div>
@@ -286,28 +287,65 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
   </div>
 </div>
 
+
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const detailButtons = document.querySelectorAll('.btn-detail');
-    detailButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const idPesanan = this.getAttribute('data-id');
-            const modalContent = document.querySelector('#detailModal .modal-content');
-            modalContent.innerHTML = `<div class="text-center py-4">
-                <div class="spinner-border text-primary" role="status"></div>
-                <div>Memuat detail...</div>
-            </div>`;
+    const detailModal = document.getElementById('detailModal');
+    if(detailModal) {
+        detailModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const idPesanan = button.getAttribute('data-id');
+            const modalContent = document.getElementById('modal-detail-content');
+            const modalTitle = document.getElementById('detailModalLabel');
+
+            modalTitle.textContent = 'Detail Pesanan #' + idPesanan;
+            modalContent.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Memuat detail...</p></div>`;
+
+            // Panggil file AJAX untuk mengisi konten modal
             fetch('pesanan_detail_ajax.php?id_pesanan=' + idPesanan)
-                .then(res => res.text())
+                .then(response => {
+                    if (!response.ok) { throw new Error('Gagal mengambil data'); }
+                    return response.text();
+                })
                 .then(html => {
                     modalContent.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    modalContent.innerHTML = '<div class="alert alert-danger">Gagal memuat detail pesanan. Silakan coba lagi nanti.</div>';
                 });
         });
-    });
+    }
+
+    // --- NEW JAVASCRIPT FOR CANCEL MODAL ---
+    const cancelModal = document.getElementById('cancelModal');
+    if(cancelModal) {
+        cancelModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            const idPesanan = button.getAttribute('data-id-pesanan'); // Extract info from data-* attributes
+            const inputOrderId = cancelModal.querySelector('#cancelOrderId');
+
+            if (inputOrderId) {
+                inputOrderId.value = idPesanan;
+            }
+        });
+
+        // Optional: Reset form fields when modal is closed
+        cancelModal.addEventListener('hidden.bs.modal', function () {
+            const form = document.getElementById('formPembatalan');
+            if (form) {
+                form.reset(); // Reset form fields
+                // Optionally clear textarea/select manually if reset() doesn't work for them
+                form.querySelector('#alasan_pembatalan_modal').value = '';
+                form.querySelector('#deskripsi_pembatalan_modal').value = '';
+            }
+        });
+    }
 });
 </script>
+
 
 <!-- Vendor JS Files -->
 <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

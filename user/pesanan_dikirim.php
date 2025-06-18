@@ -126,6 +126,16 @@ $pesanan_list = $pesanan_list->fetch_all(MYSQLI_ASSOC);
             background-color: #1A877E !important;
             color: #ffffff !important;
         }
+        .btn-info {
+            background-color: #1A877E !important;
+            border: 1px solid #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-warning {
+            background-color: #FFBB34 !important;
+            border: 1px solid #FFBB34 !important;
+            color: #ffffff !important;
+        }
         .pesanan-card {
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
             border-radius: .75rem;
@@ -168,6 +178,7 @@ $pesanan_list = $pesanan_list->fetch_all(MYSQLI_ASSOC);
             object-fit: cover;
             border-radius: 6px;
         }
+        
     </style>
     <?php include 'aset.php'; ?>
 </head>
@@ -239,7 +250,9 @@ $pesanan_list = $pesanan_list->fetch_all(MYSQLI_ASSOC);
                                                     data-bs-target="#detailModal"
                                                     data-id="<?= $pesanan['id_pesanan'] ?>"> Detail Pesanan
                                             </button>
-                                    
+                                            <a href="lacak.php?id=<?= $pesanan['id_pesanan'] ?>" class="btn btn-info btn-sm">Lacak</a>
+                                            <a href="pesanan_selesai.php?id=<?= $pesanan['id_pesanan'] ?>" class="btn btn-warning btn-sm">Selesai</a>
+                                            
                                         </div>
                                     </div>
                                 </div>

@@ -78,7 +78,7 @@ function formatCurrency($number) {
         @import url('https://fonts.googleapis.com/css2?family=Aclonica&family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Pixelify+Sans:wght@400..700&display=swap');
         body {
             background: #F8F7F1 !important;
-            font-family: 'Andika', sans-serif;
+            font-family: 'Andika', sans-serif !important;
             color: #2D3A3A !important;
         }
         .sidebar {
@@ -89,11 +89,14 @@ function formatCurrency($number) {
         }
         h5{
             font-size: 18px !important;
-            color: #2D3A3A !important;
+            color: #ff771d !important;
             font-weight: bold !important;
         }
         strong{
             color: #ff771d;
+        }
+        div.my-1 {
+            color: #FF8C12;
         }
         .btn-primary {
             background-color: #FFC300 !important;
@@ -102,12 +105,24 @@ function formatCurrency($number) {
         .badge{
             background-color: #FFBB34 !important;
         }
+        .badge.bg-primary{
+            background-color: #763D2D !important; /* This badge is for 'Dibatalkan' status, keeping it as is */
+        }
         .btn-danger {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-danger:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-dangerr { /* Seems like a typo, consider consolidating with .btn-danger if it's meant to be the same */
             background-color: transparent !important;
             border: 1px solid #763D2D !important;
             color: #763D2D !important;
         }
-        .btn-danger:hover{
+        .btn-dangerr:hover{
             background-color: #763D2D !important;
             color: #ffffff !important;
         }
@@ -117,6 +132,15 @@ function formatCurrency($number) {
             color: #FF8C12 !important;
         }
         .btn-outline-secondary:hover{
+            background-color: #FF8C12 !important;
+            color: #ffffff !important;
+        }
+        .btn-outline-primary {
+            background-color: transparent !important;
+            border: 1px solid #FF8C12 !important;
+            color: #FF8C12 !important;
+        }
+        .btn-outline-primary:hover{
             background-color: #FF8C12 !important;
             color: #ffffff !important;
         }
@@ -137,6 +161,75 @@ function formatCurrency($number) {
         .btn-success:hover{
             background-color: #1A877E !important;
             color: #ffffff !important;
+        }
+        .btn-secondary { /* This might be for "Kembali" buttons, keeping it as is */
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            color: #763D2D !important;
+        }
+        .btn-secondary:hover{
+            background-color: #763D2D !important;
+            color: #ffffff !important;
+        }
+        .btn-info {
+            background-color: #1A877E !important;
+            border: 1px solid #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-warning {
+            background-color: #FFBB34 !important;
+            border: 1px solid #FFBB34 !important;
+            color: #ffffff !important;
+        }
+        .pesanan-card {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            border-radius: .75rem;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease-in-out;
+        }
+        .pesanan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        .pesanan-header {
+            background-color: #f8f9fa !important;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .product-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 1rem;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .product-img-gallery {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: .5rem;
+            border: 1px solid #eee;
+        }
+        .card-footer-actions {
+            padding: 0.75rem 1.25rem;
+            background-color: #fdfdfd;
+        }
+        .total-harga {
+            color: #fd7e14;
+            font-weight: 700;
+        }
+        .modal-body .product-image-small {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        h5#cancelModalLabel{
+            color: #ffffff !important;
+        }
+        div.modal-headerr {
+            border-top-left-radius: 6px; border-top-right-radius: 6px;
+            padding: 10px;
+            background-color: #fd7e14 !important;
         }
     </style>
     <main id="main" class="main">
@@ -227,7 +320,7 @@ function formatCurrency($number) {
                                         data-ongkir="<?= formatCurrency($ongkir_dihitung); ?>"
                                         data-diskon="<?= formatCurrency($diskon_dihitung); ?>"
                                         data-total="<?= formatCurrency($order['total_harga']); ?>">
-                                        Lihat Detail
+                                        Detail Pesanan
                                     </button>
 
                                     <?php if ($order['status_pesanan'] === 'Selesai'): ?>
@@ -236,9 +329,14 @@ function formatCurrency($number) {
                                         <?php else: ?>
                                             <button class="btn btn-success btn-sm" disabled>Dinilai</button>
                                         <?php endif; ?>
-                                         <a href="checkout.php?ulang=<?= $order['id_pesanan'] ?>" class="btn btn-outline-success btn-sm">Beli Lagi</a>
+                                        <a href="checkout.php?ulang=<?= htmlspecialchars($pesanan['id_pesanan']) ?>" class="btn btn-success btn-sm">Beli Lagi</a>
                                     <?php elseif ($order['status_pesanan'] === 'Diproses'): ?>
-                                        <a href="form_pembatalan.php?id_pesanan=<?= urlencode($order['id_pesanan']); ?>" class="btn btn-danger btn-sm">Batalkan</a>
+                                        <button class="btn btn-dangerr btn-sm btn-cancel-order"
+                                                type="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#cancelModal"
+                                                data-id-pesanan="<?= htmlspecialchars($order['id_pesanan']) ?>">Batalkan
+                                        </button>
                                     <?php elseif ($order['status_pesanan'] === 'Dibatalkan'): ?>
                                          <a href="checkout.php?ulang=<?= $order['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
                                     <?php elseif ($order['status_pesanan'] !== 'Selesai' AND $order['status_pesanan'] !== 'Dibatalkan'  AND $order['status_pesanan'] !== 'Diproses'): ?>
@@ -255,7 +353,53 @@ function formatCurrency($number) {
             <?php endif; ?>
         </section>
     </main>
-    
+
+    <!-- Modal Pembatalan Pesanan (BARU) -->
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-headerr bg-danger text-white">
+                    <h5 class="modal-title" id="cancelModalLabel"> Ajukan Pembatalan Pesanan</h5>
+                                            
+                </div>
+                <div class="modal-body">
+                    <form action="proses_pembatalan.php" method="POST" id="formPembatalan">
+                        <!-- ID Pesanan (Hidden) - Akan diisi via JavaScript -->
+                        <input type="hidden" name="id_pesanan" id="cancelOrderId" value="">
+                                            
+                        <!-- Alasan Pembatalan -->
+                        <div class="mb-3">
+                            <label for="alasan_pembatalan_modal" class="form-label">Alasan Pembatalan</label>
+                            <select name="alasan_pembatalan" id="alasan_pembatalan_modal" class="form-select" required>
+                                <option value="">-- Pilih Alasan --</option>
+                                <option value="berubah_pikiran">Berubah Pikiran</option>
+                                <option value="harga_lebih_murah">Harga Lebih Murah</option>
+                                <option value="barang_salah">Barang Salah</option>
+                                <option value="pengiriman_lama">Pengiriman Lama</option>
+                                <option value="masalah_pembayaran">Masalah Pembayaran</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                                            
+                        <!-- Deskripsi Pembatalan -->
+                        <div class="mb-3">
+                            <label for="deskripsi_pembatalan_modal" class="form-label">Deskripsi Pembatalan</label>
+                            <textarea name="deskripsi_pembatalan" id="deskripsi_pembatalan_modal" class="form-control" rows="4" placeholder="Jelaskan alasan pembatalan..."></textarea>
+                        </div>
+                                            
+                        <!-- Tombol Submit -->
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-danger">
+                                 Kirim Pembatalan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+                                            
     <div class="modal fade" id="detailModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Detail Pesanan</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="row"><div class="col-md-6"><p><strong>Status Pesanan:</strong> <br><span id="modal-detail-status" class="badge bg-primary"></span></p><p><strong>No. Pesanan:</strong> <br><span id="modal-detail-order-id"></span></p><p><strong>Tanggal Pembelian:</strong> <br><span id="modal-detail-tanggal"></span></p></div><div class="col-md-6"><h6>Informasi Pengiriman</h6><p class="mb-0"><strong>Kurir:</strong> <span id="modal-detail-kurir"></span></p><p class="mb-0"><strong>No. Resi:</strong> <span id="modal-detail-resi"></span></p><p><strong>Alamat:</strong> <br><span id="modal-detail-alamat"></span></p></div></div><hr><h6>Rincian Pembayaran</h6><table class="table table-sm"><tbody><tr><td>Metode Pembayaran</td><td class="text-end" id="modal-detail-metode"></td></tr><tr><td>Subtotal Produk</td><td class="text-end" id="modal-detail-subtotal"></td></tr><tr><td>Ongkos Kirim</td><td class="text-end" id="modal-detail-ongkir"></td></tr><tr><td>Diskon</td><td class="text-end text-danger" id="modal-detail-diskon"></td></tr><tr class="fw-bold"><td>Total Pembayaran</td><td class="text-end fs-5" id="modal-detail-total"></td></tr></tbody></table></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button></div></div></div></div>
     <div class="modal fade" id="reviewModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Beri Ulasan untuk Pesanan #<span id="modal-order-id"></span></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div id="modal-alert-placeholder"></div><form id="reviewForm"><input type="hidden" id="form-order-id" name="order_id"><div id="review-product-list"><div class="text-center" id="modal-loader"><div class="spinner-border"><span>Loading...</span></div></div></div></form></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button><button type="button" class="btn btn-primary" id="submit-review-btn">Kirim Ulasan</button></div></div></div></div>
 
@@ -381,6 +525,29 @@ function formatCurrency($number) {
             });
         });
         // --- AKHIR KODE BARU ---
+        const cancelModal = document.getElementById('cancelModal');
+        if(cancelModal) {
+            cancelModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget; // Button that triggered the modal
+                const idPesanan = button.getAttribute('data-id-pesanan'); // Extract info from data-* attributes
+                const inputOrderId = cancelModal.querySelector('#cancelOrderId');
+
+                if (inputOrderId) {
+                    inputOrderId.value = idPesanan;
+                }
+            });
+
+            // Optional: Reset form fields when modal is closed
+            cancelModal.addEventListener('hidden.bs.modal', function () {
+                const form = document.getElementById('formPembatalan');
+                if (form) {
+                    form.reset(); // Reset form fields
+                    // Optionally clear textarea/select manually if reset() doesn't work for them
+                    form.querySelector('#alasan_pembatalan_modal').value = '';
+                    form.querySelector('#deskripsi_pembatalan_modal').value = '';
+                }
+            });
+        }
     });
     </script>
 </body>
