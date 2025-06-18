@@ -9,7 +9,7 @@ if (!isset($_SESSION["admin"])) {
 $host = 'localhost';
 $dbname = 'casaluxedb';
 $username = 'root';
-$password = '48475948';
+$password = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
