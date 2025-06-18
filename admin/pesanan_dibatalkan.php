@@ -19,32 +19,73 @@ try {
     exit;
 }
 
-// Query untuk statistik permintaan pembatalan
+// Buat tabel status_pembatalan jika belum ada
+$create_table_query = "CREATE TABLE IF NOT EXISTS status_pembatalan (
+    id_status INT AUTO_INCREMENT PRIMARY KEY,
+    id_pesanan INT NOT NULL,
+    status_pembatalan ENUM('Pending', 'Disetujui', 'Ditolak') DEFAULT 'Pending',
+    alasan TEXT,
+    tanggal_request TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tanggal_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_pesanan) REFERENCES pesanan(id_pesanan) ON DELETE CASCADE,
+    UNIQUE KEY unique_pesanan (id_pesanan)
+)";
+
+try {
+    $pdo->exec($create_table_query);
+} catch (PDOException $e) {
+    // Tabel sudah ada atau error lainnya
+}
+
+// Insert data sample untuk pesanan yang dibatalkan jika belum ada
+$check_sample_query = "SELECT COUNT(*) as count FROM status_pembatalan";
+$check_stmt = $pdo->prepare($check_sample_query);
+$check_stmt->execute();
+$sample_count = $check_stmt->fetch(PDO::FETCH_ASSOC)['count'];
+
+if ($sample_count == 0) {
+    // Insert sample data untuk pesanan yang dibatalkan
+    $sample_pesanan_query = "SELECT id_pesanan FROM pesanan WHERE status_pesanan = 'Dibatalkan' LIMIT 10";
+    $sample_stmt = $pdo->prepare($sample_pesanan_query);
+    $sample_stmt->execute();
+    $sample_pesanan = $sample_stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    foreach ($sample_pesanan as $pesanan) {
+        $insert_sample = "INSERT IGNORE INTO status_pembatalan (id_pesanan, status_pembatalan, alasan) VALUES (?, 'Pending', 'Ingin membatalkan pesanan karena salah pesan')";
+        $insert_stmt = $pdo->prepare($insert_sample);
+        $insert_stmt->execute([$pesanan['id_pesanan']]);
+    }
+}
+
+// Query untuk statistik permintaan pembatalan yang dinamis
 $stats_query = "SELECT 
-    COUNT(CASE WHEN status_pesanan = 'Semua' THEN 1 END) as semua,
-    COUNT(CASE WHEN status_pesanan = 'Pending' THEN 1 END) as pending,
-    COUNT(CASE WHEN status_pesanan = 'Ditolak' THEN 1 END) as ditolak,
-    COUNT(CASE WHEN status_pesanan = 'Disetujui' THEN 1 END) as disetujui
-    FROM pesanan WHERE status_pesanan IN ('Dibatalkan', 'Pending', 'Ditolak', 'Disetujui')";
+    COUNT(*) as semua,
+    COUNT(CASE WHEN sp.status_pembatalan = 'Pending' THEN 1 END) as pending,
+    COUNT(CASE WHEN sp.status_pembatalan = 'Ditolak' THEN 1 END) as ditolak,
+    COUNT(CASE WHEN sp.status_pembatalan = 'Disetujui' THEN 1 END) as disetujui
+    FROM status_pembatalan sp
+    JOIN pesanan p ON sp.id_pesanan = p.id_pesanan 
+    WHERE p.status_pesanan = 'Dibatalkan'";
 
 $stats_stmt = $pdo->prepare($stats_query);
 $stats_stmt->execute();
 $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
 
 // Set default values jika null
-$stats['semua'] = $stats['semua'] ?? 150;
-$stats['pending'] = $stats['pending'] ?? 10;
-$stats['ditolak'] = $stats['ditolak'] ?? 30;
+$stats['semua'] = $stats['semua'] ?? 0;
+$stats['pending'] = $stats['pending'] ?? 0;
+$stats['ditolak'] = $stats['ditolak'] ?? 0;
 $stats['disetujui'] = $stats['disetujui'] ?? 0;
 
-// Query untuk menampilkan daftar pesanan yang dibatalkan
+// Query untuk menampilkan daftar pesanan yang dibatalkan dengan status pembatalan
 $query = "SELECT p.id_pesanan, u.nama AS customer_name, 
                  p.tanggal_pesanan, p.total_harga, p.status_pesanan,
-                 'Ingin membatalkan pesanan karena salah pesan' as alasan
+                 sp.status_pembatalan, sp.alasan, sp.tanggal_request
           FROM pesanan p
           JOIN user u ON p.id_user = u.id_user
+          LEFT JOIN status_pembatalan sp ON p.id_pesanan = sp.id_pesanan
           WHERE p.status_pesanan = 'Dibatalkan'
-          ORDER BY p.tanggal_pesanan DESC";
+          ORDER BY sp.tanggal_request DESC, p.tanggal_pesanan DESC";
 
 $stmt = $pdo->prepare($query);
 $stmt->execute();
@@ -268,6 +309,26 @@ $pesanan_dibatalkan = $stmt->fetchAll(PDO::FETCH_ASSOC);
             text-transform: uppercase;
         }
         
+        .status-disetujui {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .status-ditolak {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
         .action-buttons {
             display: flex;
             gap: 0.5rem;
@@ -302,6 +363,12 @@ $pesanan_dibatalkan = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         .btn-reject:hover {
             background-color: #5a6268;
+        }
+        
+        .btn-approve:disabled,
+        .btn-reject:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
         .reason-text {
@@ -442,22 +509,38 @@ $pesanan_dibatalkan = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php
                     if (!empty($pesanan_dibatalkan)) {
                         foreach ($pesanan_dibatalkan as $index => $order) {
+                            $status_pembatalan = $order['status_pembatalan'] ?? 'Pending';
+                            $alasan = $order['alasan'] ?? 'Ingin membatalkan pesanan karena salah pesan';
+                            
+                            // Tentukan class CSS untuk status
+                            $status_class = 'status-pending';
+                            if ($status_pembatalan === 'Disetujui') {
+                                $status_class = 'status-disetujui';
+                            } elseif ($status_pembatalan === 'Ditolak') {
+                                $status_class = 'status-ditolak';
+                            }
                             ?>
                             <tr>
                                 <td><?= $index + 1 ?></td>
                                 <td class="order-id">#<?= str_pad($order['id_pesanan'], 6, '0', STR_PAD_LEFT) ?></td>
                                 <td class="customer-name"><?= htmlspecialchars($order['customer_name']) ?></td>
                                 <td class="order-date"><?= date('Y-m-d', strtotime($order['tanggal_pesanan'])) ?></td>
-                                <td class="reason-text"><?= htmlspecialchars($order['alasan']) ?></td>
+                                <td class="reason-text"><?= htmlspecialchars($alasan) ?></td>
                                 <td>
-                                    <span class="status-pending">PENDING</span>
+                                    <span class="<?= $status_class ?>"><?= strtoupper($status_pembatalan) ?></span>
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="action-btn btn-approve" onclick="approveOrder(<?= $order['id_pesanan'] ?>)" title="Setujui">
+                                        <button class="action-btn btn-approve" 
+                                                onclick="approveOrder(<?= $order['id_pesanan'] ?>)" 
+                                                title="Setujui"
+                                                <?= ($status_pembatalan !== 'Pending') ? 'disabled' : '' ?>>
                                             <i class="bi bi-check"></i>
                                         </button>
-                                        <button class="action-btn btn-reject" onclick="rejectOrder(<?= $order['id_pesanan'] ?>)" title="Tolak">
+                                        <button class="action-btn btn-reject" 
+                                                onclick="rejectOrder(<?= $order['id_pesanan'] ?>)" 
+                                                title="Tolak"
+                                                <?= ($status_pembatalan !== 'Pending') ? 'disabled' : '' ?>>
                                             <i class="bi bi-x"></i>
                                         </button>
                                     </div>
@@ -511,7 +594,7 @@ document.getElementById('filterSelect').addEventListener('change', function() {
         if (filterValue === '') {
             row.style.display = '';
         } else {
-            const statusCell = row.querySelector('.status-pending');
+            const statusCell = row.querySelector('[class*="status-"]');
             if (statusCell && statusCell.textContent.toLowerCase().includes(filterValue)) {
                 row.style.display = '';
             } else {
@@ -524,7 +607,6 @@ document.getElementById('filterSelect').addEventListener('change', function() {
 // Action functions
 function approveOrder(orderId) {
     if (confirm('Apakah Anda yakin ingin menyetujui pembatalan pesanan ini?')) {
-        // Here you would typically send an AJAX request to update the order status
         fetch('update_pembatalan.php', {
             method: 'POST',
             headers: {
