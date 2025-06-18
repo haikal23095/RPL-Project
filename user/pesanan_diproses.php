@@ -20,9 +20,12 @@ $userId = $user_row['id_user'];
 $user_stmt->close();
 
 // Query utama untuk mengambil data pesanan yang 'Diproses'
-$query = "SELECT * FROM pesanan 
-          WHERE id_user = ? AND status_pesanan = 'Diproses'
-          ORDER BY tanggal_pesanan DESC";
+// Tambahkan JOIN ke status_pembatalan untuk mengecek permintaan pending
+$query = "SELECT p.*,
+                 (SELECT status_pembatalan FROM status_pembatalan sp WHERE sp.id_pesanan = p.id_pesanan ORDER BY tanggal_request DESC LIMIT 1) AS status_pembatalan_request
+          FROM pesanan p
+          WHERE p.id_user = ? AND p.status_pesanan = 'Diproses'
+          ORDER BY p.tanggal_pesanan DESC";
 $stmt = $kon->prepare($query);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
@@ -248,13 +251,31 @@ function formatCurrency($number) {
                                                 data-bs-target="#detailModal"
                                                 data-id="<?= htmlspecialchars($pesanan['id_pesanan']) ?>"> Detail Pesanan
                                         </button>
-                                        <!-- Tombol Batalkan (Membuka Modal Pembatalan) -->
-                                        <button class="btn btn-dangerr btn-sm btn-cancel-order"
-                                                type="button"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#cancelModal"
-                                                data-id-pesanan="<?= htmlspecialchars($pesanan['id_pesanan']) ?>">Batalkan
-                                        </button>
+                                        <?php 
+                                        // Gunakan status_pembatalan_request dari query JOIN
+                                        $cancel_request_status = $pesanan['status_pembatalan_request'] ?? null; 
+                                        ?>
+                                        <?php if ($pesanan['status_pesanan'] === 'Diproses'): ?>
+                                            <?php if ($cancel_request_status === 'Pending'): ?>
+                                                <button class="btn btn-secondary btn-sm" disabled>Menunggu Persetujuan Pembatalan</button>
+                                            <?php elseif ($cancel_request_status === 'Ditolak'): ?>
+                                                <button class="btn btn-dangerr btn-sm btn-cancel-order"
+                                                        type="button"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#cancelModal"
+                                                        data-id-pesanan="<?= htmlspecialchars($pesanan['id_pesanan']) ?>">Batalkan (Ditolak Sebelumnya)
+                                                </button>
+                                            <?php else: // Belum ada permintaan pembatalan atau sudah disetujui (dibatalkan) ?>
+                                                <button class="btn btn-dangerr btn-sm btn-cancel-order"
+                                                        type="button"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#cancelModal"
+                                                        data-id-pesanan="<?= htmlspecialchars($pesanan['id_pesanan']) ?>">Batalkan
+                                                </button>
+                                            <?php endif; ?>
+                                        <?php elseif ($pesanan['status_pesanan'] === 'Dibatalkan'): ?>
+                                            <button class="btn btn-danger btn-sm" disabled>Dibatalkan</button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>

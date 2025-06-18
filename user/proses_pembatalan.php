@@ -1,56 +1,66 @@
 <?php
+require_once '../db.php';
 session_start();
-require '../db.php'; // File koneksi database Anda
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Ambil data dari form
+if (!isset($_SESSION['user'])) {
+    header("Location: ../login.php");
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_pesanan = $_POST['id_pesanan'] ?? '';
     $alasan_pembatalan = $_POST['alasan_pembatalan'] ?? '';
     $deskripsi_pembatalan = $_POST['deskripsi_pembatalan'] ?? '';
+    $nama_user = $_SESSION['user'];
 
-    // Validasi input
+    // Pastikan ID Pesanan atau Alasan Pembatalan tidak kosong
     if (empty($id_pesanan) || empty($alasan_pembatalan)) {
-        $_SESSION['error'] = "Alasan pembatalan wajib dipilih.";
-        header("Location: form_pembatalan.php?id_pesanan=$id_pesanan");
-        exit();
+        $_SESSION['pesan_error'] = "ID Pesanan atau Alasan Pembatalan tidak boleh kosong.";
+        header("Location: pesanan_diproses.php");
+        exit;
     }
 
-    // Tanggal pembatalan
-    $tanggal_pembatalan = date('Y-m-d H:i:s');
+    // Ambil ID user untuk keamanan query
+    $user_stmt = $kon->prepare("SELECT id_user FROM user WHERE nama = ?");
+    $user_stmt->bind_param("s", $nama_user);
+    $user_stmt->execute();
+    $user_result = $user_stmt->get_result();
+    $user_row = $user_result->fetch_assoc();
+    $userId = $user_row['id_user'];
+    $user_stmt->close();
 
-    // Query transaksi: insert pembatalan dan update status pesanan
-    $query = "INSERT INTO pembatalan_pesanan 
-                (id_pesanan, id_user, alasan_pembatalan, deskripsi_pembatalan, tanggal_pembatalan, dibuat_pada) 
-              VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP())";
+    // 1. Cek apakah pesanan memang milik user ini dan statusnya 'Diproses'
+    //    DAN BELUM ADA permintaan pembatalan yang 'Pending' untuk pesanan ini.
+    $check_stmt = $kon->prepare("SELECT p.id_pesanan FROM pesanan p
+                                 LEFT JOIN status_pembatalan sp ON p.id_pesanan = sp.id_pesanan
+                                 WHERE p.id_pesanan = ? AND p.id_user = ? AND p.status_pesanan = 'Diproses'
+                                 AND (sp.id_status IS NULL OR sp.status_pembatalan != 'Pending')"); // Pastikan belum ada request pending
+    $check_stmt->bind_param("si", $id_pesanan, $userId);
+    $check_stmt->execute();
+    $check_result = $check_stmt->get_result();
 
-    $query_update = "UPDATE pesanan SET status_pesanan = 'Dibatalkan' WHERE id_pesanan = ?";
+    if ($check_result->num_rows > 0) {
+        // 2. Masukkan permintaan pembatalan ke tabel status_pembatalan
+        $insert_cancel_stmt = $kon->prepare("INSERT INTO status_pembatalan (id_pesanan, status_pembatalan, alasan) VALUES (?, ?, ?)");
+        $initial_cancel_status = 'Pending'; // Sesuai dengan enum di tabel Anda
+        $insert_cancel_stmt->bind_param("sss", $id_pesanan, $initial_cancel_status, $alasan_pembatalan);
 
-    // Eksekusi query
-    try {
-        // Persiapkan koneksi
-        $kon->autocommit(false); // Start transaksi
-
-        // Insert ke pembatalan_pesanan
-        $stmt = $kon->prepare($query);
-        $id_user = 1; // Gantilah ini sesuai dengan user login
-        $stmt->bind_param("iisss", $id_pesanan, $id_user, $alasan_pembatalan, $deskripsi_pembatalan, $tanggal_pembatalan);
-        $stmt->execute();
-
-        // Update status pesanan
-        $stmt_update = $kon->prepare($query_update);
-        $stmt_update->bind_param("i", $id_pesanan);
-        $stmt_update->execute();
-
-        // Commit transaksi
-        $kon->commit();
-        $_SESSION['message'] = "Pesanan berhasil dibatalkan.";
-    } catch (Exception $e) {
-        $kon->rollback();
-        $_SESSION['error'] = "Gagal membatalkan pesanan: " . $e->getMessage();
+        if ($insert_cancel_stmt->execute()) {
+            $_SESSION['pesan_sukses'] = "Pengajuan pembatalan pesanan #" . htmlspecialchars($id_pesanan) . " berhasil dikirim. Menunggu persetujuan admin.";
+        } else {
+            $_SESSION['pesan_error'] = "Gagal mengajukan pembatalan pesanan. Error: " . $kon->error;
+        }
+        $insert_cancel_stmt->close();
+    } else {
+        $_SESSION['pesan_error'] = "Pesanan tidak ditemukan, tidak dapat dibatalkan, atau sudah ada permintaan pembatalan tertunda.";
     }
+    $check_stmt->close();
 
-    // Redirect
-    header("Location: history_pembayaran.php");
-    exit();
+    header("Location: pesanan_diproses.php");
+    exit;
+} else {
+    $_SESSION['pesan_error'] = "Akses tidak sah.";
+    header("Location: pesanan_diproses.php");
+    exit;
 }
 ?>
