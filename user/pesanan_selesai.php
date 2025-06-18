@@ -50,14 +50,10 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pesanan Dinilai</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/img/favicon.png" rel="icon">
+    
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    
     <?php include 'aset.php'; ?>
-    <style>
-        body { background-color: #f5f5f5; }
-        .pesanan-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
-        .btn-orange { background-color: orange; color: white; }
-    </style>
 </head>
 <body>
 
@@ -82,6 +78,81 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
         header{
             background-color: #F8F7F1 !important;
         }
+        h5{
+            font-size: 18px !important;
+            color: #ff771d !important;
+            font-weight: bold !important;
+        }
+        strong{
+            color: #ff771d;
+        }
+        div.my-1 {
+            color: #FF8C12;
+        }
+        .btn-primary {
+            background-color: #FFC300 !important;
+            border: 1px solid #FFC300 !important;
+        }
+        .badge{
+            background-color: #1A877E !important;
+        }
+        .btn-danger {
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            color: #763D2D !important;
+        }
+        .btn-danger:hover{
+            background-color: #763D2D !important;
+            color: #ffffff !important;
+        }
+        .btn-outline-primary {
+            background-color: transparent !important;
+            border: 1px solid #FF8C12 !important;
+            color: #FF8C12 !important;
+        }
+        .btn-outline-primary:hover{
+            background-color: #FF8C12 !important;
+            color: #ffffff !important;
+        }
+        .btn-outline-success {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-outline-success:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-success {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-success:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .pesanan-card {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            border-radius: .75rem;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease-in-out;
+        }
+        .pesanan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        .pesanan-header {
+            background-color: #f8f9fa !important;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .product-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 1rem;
+            border-bottom: 1px solid #f1f1f1;
+        }
         .product-img-gallery {
             width: 70px;
             height: 70px;
@@ -89,6 +160,21 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
             border-radius: .5rem;
             border: 1px solid #eee;
         }
+        .card-footer-actions {
+            padding: 0.75rem 1.25rem;
+            background-color: #fdfdfd;
+        }
+        .total-harga {
+            color: #fd7e14;
+            font-weight: 700;
+        }
+        .modal-body .product-image-small {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
  </style>
 <main id="main" class="main">
     <div class="pagetitle">
@@ -163,16 +249,14 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
                                                     data-bs-target="#detailModal"
                                                     data-id="<?= $pesanan_item['id_pesanan'] ?>"> Detail Pesanan
                                             </button>
-                                            
-                                            <?php if ($pesanan_item['review_status'] == 'Menunggu Dinilai'): ?>
-                                                <a href="tambah_review.php?id_pesanan=<?= $pesanan_item['id_pesanan'] ?>" 
-                                                   class="btn btn-warning btn-sm">Nilai Pesanan
-                                                </a>
+                                            <?php if ($pesanan_item['status_pesanan'] === 'Selesai'): ?>
+                                                <?php if (empty($pesanan_item['sudah_dinilai'])): ?>
+                                                    <button type="button" class="btn btn-primary btn-sm open-review-modal" data-order-id="<?= $pesanan_item['id_pesanan'] ?>">Nilai</button>
+                                                <?php else: ?>
+                                                    <button class="btn btn-success btn-sm" disabled>Dinilai</button>
+                                                <?php endif; ?>
+                                                <a href="checkout.php?ulang=<?= $pesanan_item['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
                                             <?php endif; ?>
-                                            
-                                            <a href="beli_lagi.php?id_pesanan=<?= $pesanan_item['id_pesanan'] ?>" 
-                                               class="btn btn-success btn-sm">Beli Lagi
-                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -190,7 +274,6 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
                 </div>
             </div>
         </section>
-    </div>
 </main>
 
 
@@ -212,28 +295,65 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
   </div>
 </div>
 
+
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const detailButtons = document.querySelectorAll('.btn-detail');
-    detailButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const idPesanan = this.getAttribute('data-id');
-            const modalContent = document.querySelector('#detailModal .modal-content');
-            modalContent.innerHTML = `<div class="text-center py-4">
-                <div class="spinner-border text-primary" role="status"></div>
-                <div>Memuat detail...</div>
-            </div>`;
+    const detailModal = document.getElementById('detailModal');
+    if(detailModal) {
+        detailModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const idPesanan = button.getAttribute('data-id');
+            const modalContent = document.getElementById('modal-detail-content');
+            const modalTitle = document.getElementById('detailModalLabel');
+
+            modalTitle.textContent = 'Detail Pesanan #' + idPesanan;
+            modalContent.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Memuat detail...</p></div>`;
+
+            // Panggil file AJAX untuk mengisi konten modal
             fetch('pesanan_detail_ajax.php?id_pesanan=' + idPesanan)
-                .then(res => res.text())
+                .then(response => {
+                    if (!response.ok) { throw new Error('Gagal mengambil data'); }
+                    return response.text();
+                })
                 .then(html => {
                     modalContent.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    modalContent.innerHTML = '<div class="alert alert-danger">Gagal memuat detail pesanan. Silakan coba lagi nanti.</div>';
                 });
         });
-    });
+    }
+
+    // --- NEW JAVASCRIPT FOR CANCEL MODAL ---
+    const cancelModal = document.getElementById('cancelModal');
+    if(cancelModal) {
+        cancelModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            const idPesanan = button.getAttribute('data-id-pesanan'); // Extract info from data-* attributes
+            const inputOrderId = cancelModal.querySelector('#cancelOrderId');
+
+            if (inputOrderId) {
+                inputOrderId.value = idPesanan;
+            }
+        });
+
+        // Optional: Reset form fields when modal is closed
+        cancelModal.addEventListener('hidden.bs.modal', function () {
+            const form = document.getElementById('formPembatalan');
+            if (form) {
+                form.reset(); // Reset form fields
+                // Optionally clear textarea/select manually if reset() doesn't work for them
+                form.querySelector('#alasan_pembatalan_modal').value = '';
+                form.querySelector('#deskripsi_pembatalan_modal').value = '';
+            }
+        });
+    }
 });
 </script>
+
 
 <!-- Vendor JS Files -->
 <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

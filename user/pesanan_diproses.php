@@ -73,14 +73,23 @@ function formatCurrency($number) {
             border: 1px solid #FFC300 !important;
         }
         .badge{
-            background-color: #FFBB34 !important;
+            background-color: #ff771d !important;
         }
         .btn-danger {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-danger:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-dangerr {
             background-color: transparent !important;
             border: 1px solid #763D2D !important;
             color: #763D2D !important;
         }
-        .btn-danger:hover{
+        .btn-dangerr:hover{
             background-color: #763D2D !important;
             color: #ffffff !important;
         }
@@ -109,6 +118,15 @@ function formatCurrency($number) {
         }
         .btn-success:hover{
             background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-secondary {
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            color: #763D2D !important;
+        }
+        .btn-secondary:hover{
+            background-color: #763D2D !important;
             color: #ffffff !important;
         }
         .pesanan-card {
@@ -152,6 +170,17 @@ function formatCurrency($number) {
             height: 60px;
             object-fit: cover;
             border-radius: 6px;
+        }
+        .modal-header.bg-danger .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%); /* Makes close button white */
+        }
+        h5#cancelModalLabel{
+            color: #ffffff !important;
+        }
+        div.modal-headerr {
+            border-top-left-radius: 6px; border-top-right-radius: 6px;
+            padding: 10px;
+            background-color: #fd7e14 !important;
         }
     </style>
 </head>
@@ -212,16 +241,20 @@ function formatCurrency($number) {
                                         <h5 class="total-harga d-inline-block ms-2 mb-0"><?= formatCurrency($pesanan['total_harga']) ?></h5>
                                     </div>
                                     <div class="col-md-6 text-md-end">
+                                        <!-- Tombol Detail Pesanan -->
                                         <button class="btn btn-outline-primary btn-sm btn-detail" 
                                                 type="button" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#detailModal"
-                                                data-id="<?= $pesanan['id_pesanan'] ?>"> Detail Pesanan
+                                                data-id="<?= htmlspecialchars($pesanan['id_pesanan']) ?>"> Detail Pesanan
                                         </button>
-                                        <a href="form_pembatalan.php?id_pesanan=<?= $pesanan['id_pesanan'] ?>" 
-                                           class="btn btn-danger btn-sm"
-                                           onclick="return confirm('Yakin ingin mengajukan pembatalan untuk pesanan ini?');">Batalkan
-                                        </a>
+                                        <!-- Tombol Batalkan (Membuka Modal Pembatalan) -->
+                                        <button class="btn btn-dangerr btn-sm btn-cancel-order"
+                                                type="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#cancelModal"
+                                                data-id-pesanan="<?= htmlspecialchars($pesanan['id_pesanan']) ?>">Batalkan
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -241,6 +274,7 @@ function formatCurrency($number) {
     </section>
 </main>
 
+<!-- Modal Detail Pesanan (yang sudah ada) -->
 <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
@@ -257,6 +291,53 @@ function formatCurrency($number) {
     </div>
   </div>
 </div>
+
+<!-- Modal Pembatalan Pesanan (BARU) -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-headerr bg-danger text-white">
+                <h5 class="modal-title" id="cancelModalLabel"> Ajukan Pembatalan Pesanan</h5>
+                
+            </div>
+            <div class="modal-body">
+                <form action="proses_pembatalan.php" method="POST" id="formPembatalan">
+                    <!-- ID Pesanan (Hidden) - Akan diisi via JavaScript -->
+                    <input type="hidden" name="id_pesanan" id="cancelOrderId" value="">
+
+                    <!-- Alasan Pembatalan -->
+                    <div class="mb-3">
+                        <label for="alasan_pembatalan_modal" class="form-label">Alasan Pembatalan</label>
+                        <select name="alasan_pembatalan" id="alasan_pembatalan_modal" class="form-select" required>
+                            <option value="">-- Pilih Alasan --</option>
+                            <option value="berubah_pikiran">Berubah Pikiran</option>
+                            <option value="harga_lebih_murah">Harga Lebih Murah</option>
+                            <option value="barang_salah">Barang Salah</option>
+                            <option value="pengiriman_lama">Pengiriman Lama</option>
+                            <option value="masalah_pembayaran">Masalah Pembayaran</option>
+                            <option value="lainnya">Lainnya</option>
+                        </select>
+                    </div>
+
+                    <!-- Deskripsi Pembatalan -->
+                    <div class="mb-3">
+                        <label for="deskripsi_pembatalan_modal" class="form-label">Deskripsi Pembatalan</label>
+                        <textarea name="deskripsi_pembatalan" id="deskripsi_pembatalan_modal" class="form-control" rows="4" placeholder="Jelaskan alasan pembatalan..."></textarea>
+                    </div>
+
+                    <!-- Tombol Submit -->
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">
+                             Kirim Pembatalan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -289,6 +370,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error('Error:', error);
                     modalContent.innerHTML = '<div class="alert alert-danger">Gagal memuat detail pesanan. Silakan coba lagi nanti.</div>';
                 });
+        });
+    }
+
+    // --- NEW JAVASCRIPT FOR CANCEL MODAL ---
+    const cancelModal = document.getElementById('cancelModal');
+    if(cancelModal) {
+        cancelModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            const idPesanan = button.getAttribute('data-id-pesanan'); // Extract info from data-* attributes
+            const inputOrderId = cancelModal.querySelector('#cancelOrderId');
+
+            if (inputOrderId) {
+                inputOrderId.value = idPesanan;
+            }
+        });
+
+        // Optional: Reset form fields when modal is closed
+        cancelModal.addEventListener('hidden.bs.modal', function () {
+            const form = document.getElementById('formPembatalan');
+            if (form) {
+                form.reset(); // Reset form fields
+                // Optionally clear textarea/select manually if reset() doesn't work for them
+                form.querySelector('#alasan_pembatalan_modal').value = '';
+                form.querySelector('#deskripsi_pembatalan_modal').value = '';
+            }
         });
     }
 });

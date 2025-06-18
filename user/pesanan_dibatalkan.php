@@ -10,13 +10,22 @@ if (!isset($_SESSION['user'])) {
 }
 
 $nama_user = $_SESSION['user'];
-// Query untuk mengambil data pesanan dengan status 'Dibatalkan'
+// Mengambil ID user untuk keamanan query
+$user_stmt = $kon->prepare("SELECT id_user FROM user WHERE nama = ?");
+$user_stmt->bind_param("s", $nama_user);
+$user_stmt->execute();
+$user_result = $user_stmt->get_result();
+$user_row = $user_result->fetch_assoc();
+$userId = $user_row['id_user'];
+$user_stmt->close();
+
 // Query untuk mengambil list pesanan user yang statusnya 'Dibatalkan'
-$stmt = $kon->prepare("SELECT * FROM pesanan JOIN user ON user.id_user = pesanan.id_user WHERE status_pesanan = 'Dibatalkan' AND nama = ? ORDER BY tanggal_pesanan DESC");
-$stmt->bind_param("i", $nama_user);
+$stmt = $kon->prepare("SELECT * FROM pesanan WHERE id_user = ? AND status_pesanan = 'Dibatalkan' ORDER BY tanggal_pesanan DESC");
+$stmt->bind_param("i", $userId); // Menggunakan $userId, bukan $nama_user (sesuai query sebelumnya)
 $stmt->execute();
 $result = $stmt->get_result();
 $pesanan_list = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close(); // Menutup statement setelah digunakan
 
 function formatCurrency($number) {
     return 'Rp ' . number_format($number ?? 0, 0, ',', '.');
@@ -29,6 +38,7 @@ function formatCurrency($number) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pesanan Dibatalkan</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/img/LOGOCASALUXE2.png" rel="icon">
     <link href="../assets/img/LOGOCASALUXE2.png" rel="apple-touch-icon">
@@ -60,30 +70,122 @@ function formatCurrency($number) {
         header{
             background-color: #F8F7F1 !important;
         }
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            min-height: 150px;
+        h5{
+            font-size: 18px !important;
+            color: #ff771d !important;
+            font-weight: bold !important;
         }
-        .card-img-top {
-            height: 150px;
-            object-fit: cover;
-            border-radius: 15px 15px 0 0;
+        strong{
+            color: #ff771d;
+        }
+        div.my-1 {
+            color: #FF8C12;
+        }
+        .btn-primary {
+            background-color: #FFC300 !important;
+            border: 1px solid #FFC300 !important;
+        }
+        .badge{
+            background-color: #FFBB34 !important;
+        }
+        .badge.bg-primary{
+            background-color: #763D2D !important; /* This badge is for 'Dibatalkan' status, keeping it as is */
+        }
+        .btn-danger {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-danger:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-dangerr { /* Seems like a typo, consider consolidating with .btn-danger if it's meant to be the same */
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            color: #763D2D !important;
+        }
+        .btn-dangerr:hover{
+            background-color: #763D2D !important;
+            color: #ffffff !important;
+        }
+        .btn-outline-primary {
+            background-color: transparent !important;
+            border: 1px solid #FF8C12 !important;
+            color: #FF8C12 !important;
+        }
+        .btn-outline-primary:hover{
+            background-color: #FF8C12 !important;
+            color: #ffffff !important;
+        }
+        .btn-outline-success {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-outline-success:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-success {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-success:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-secondary { /* This might be for "Kembali" buttons, keeping it as is */
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            color: #763D2D !important;
+        }
+        .btn-secondary:hover{
+            background-color: #763D2D !important;
+            color: #ffffff !important;
         }
         .pesanan-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            border-radius: .75rem;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease-in-out;
         }
-        .pesanan-card img {
-            max-width: 100px;
-            border-radius: 8px;
+        .pesanan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
-        .btn-orange {
-            background-color: orange;
-            color: white;
+        .pesanan-header {
+            background-color: #f8f9fa !important;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .product-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 1rem;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .product-img-gallery {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: .5rem;
+            border: 1px solid #eee;
+        }
+        .card-footer-actions {
+            padding: 0.75rem 1.25rem;
+            background-color: #fdfdfd;
+        }
+        .total-harga {
+            color: #fd7e14;
+            font-weight: 700;
+        }
+        .modal-body .product-image-small {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
         }
     </style>
     <?php include 'aset.php'; ?>
@@ -107,10 +209,6 @@ function formatCurrency($number) {
                 </ol>
             </nav>
         </div>
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4>Pesanan Dibatalkan</h4>
-        </div>
 
         <section class="section">
             <div class="row">
@@ -120,8 +218,8 @@ function formatCurrency($number) {
                             <?php
                             // Query untuk mendapatkan semua gambar produk dalam pesanan ini
                             $gambar_stmt = $kon->prepare("SELECT p.gambar, p.nama_produk FROM pesanan_detail dp 
-                                                        JOIN produk p ON dp.id_produk = p.id_produk 
-                                                        WHERE dp.id_pesanan = ?");
+                                                          JOIN produk p ON dp.id_produk = p.id_produk 
+                                                          WHERE dp.id_pesanan = ?");
                             $gambar_stmt->bind_param("s", $pesanan['id_pesanan']);
                             $gambar_stmt->execute();
                             $gambar_result = $gambar_stmt->get_result();
@@ -157,10 +255,9 @@ function formatCurrency($number) {
                                                     type="button" 
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#detailModal"
-                                                    data-id="<?= $pesanan['id_pesanan'] ?>"> Detail Pesanan
+                                                    data-id="<?= htmlspecialchars($pesanan['id_pesanan']) ?>"> Detail Pesanan
                                             </button>
                                             <a href="checkout.php?ulang=<?= htmlspecialchars($pesanan['id_pesanan']) ?>" class="btn btn-success btn-sm">Beli Lagi</a>
-
                                         </div>
                                     </div>
                                 </div>
@@ -171,20 +268,30 @@ function formatCurrency($number) {
                             <div class="card-body text-center p-5">
                                 <i class="bi bi-check-circle-fill fs-1 text-success"></i>
                                 <h5 class="mt-3">Tidak Ada Pesanan yang Dibatalkan</h5>
+                                <p class="text-muted">Semua pesanan Anda sudah dalam pengiriman atau telah selesai. <br>Lihat halaman lain untuk melacaknya.</p>
                             </div>
                         </div>
                     <?php endif; ?>
                 </div>
             </div>
         </section>
-    </div>
 </main>
 
 <!-- Modal Detail Pesanan -->
 <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-centered"> <!-- Added modal-dialog-centered for better vertical alignment -->
     <div class="modal-content">
-      <!-- Konten detail akan dimuat via AJAX -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalLabel">Detail Pesanan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-detail-content">
+        <!-- Isi detail pesanan akan dimuat via AJAX -->
+        <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"></div>
+            <div>Memuat detail...</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -192,28 +299,7 @@ function formatCurrency($number) {
 
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const detailButtons = document.querySelectorAll('.btn-detail');
-    detailButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const idPesanan = this.getAttribute('data-id');
-            const modalContent = document.querySelector('#detailModal .modal-content');
-            modalContent.innerHTML = `<div class="text-center py-4">
-                <div class="spinner-border text-primary" role="status"></div>
-                <div>Memuat detail...</div>
-            </div>`;
-            fetch('pesanan_detail_ajax.php?id_pesanan=' + idPesanan)
-                .then(res => res.text())
-                .then(html => {
-                    modalContent.innerHTML = html;
-                });
-        });
-    });
-});
-</script>
-
-<!-- Vendor JS Files -->
+<!-- Vendor JS Files (as provided in your original code) -->
 <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
 <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="../assets/vendor/chart.js/chart.umd.js"></script>
@@ -224,5 +310,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- Template Main JS File -->
 <script src="../assets/js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const detailButtons = document.querySelectorAll('.btn-detail');
+    detailButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const idPesanan = this.getAttribute('data-id');
+            const modalTitle = document.getElementById('detailModalLabel'); // Get modal title element
+            const modalContent = document.getElementById('modal-detail-content');
+
+            // Update modal title immediately
+            modalTitle.textContent = 'Detail Pesanan #' + idPesanan;
+
+            // Show loading spinner
+            modalContent.innerHTML = `<div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status"></div>
+                <div>Memuat detail...</div>
+            </div>`;
+
+            // Fetch content via AJAX
+            fetch('pesanan_detail_ajax.php?id_pesanan=' + idPesanan)
+                .then(response => {
+                    if (!response.ok) { // Check if response was successful
+                        throw new Error('Gagal mengambil data: ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    modalContent.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error fetching detail:', error);
+                    modalContent.innerHTML = `<div class="alert alert-danger" role="alert">
+                        Terjadi kesalahan saat memuat detail pesanan. Silakan coba lagi.
+                    </div>`;
+                });
+        });
+    });
+});
+</script>
 </body>
 </html>

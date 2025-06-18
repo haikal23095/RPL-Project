@@ -246,13 +246,14 @@ $wishlistSuccess = isset($_GET['wishlist_success']);
                     <div class="col-lg-6">
                         <div class="detail-content">
                             <div class="header-actions">
-                                <a href="produk.php" class="btn-back"><i class="bi bi-arrow-left"></i></a>
-                                <form method="POST" class="d-inline">
-                                    <input type="hidden" name="product_id" value="<?= $product['id_produk']; ?>">
-                                    <button type="submit" name="add_to_wishlist" class="btn btn-wishlist">
-                                        <i class="bi bi-heart"></i>
-                                    </button>   
-                                </form>
+                                    <div class="text-end mb-2">
+                                        <form method="POST" class="d-inline">
+                                            <input type="hidden" name="product_id" value="<?= $product['id_produk']; ?>">
+                                            <button type="submit" name="add_to_wishlist" class="btn btn-wishlist">
+                                                <i class="bi bi-heart"></i>
+                                            </button>   
+                                        </form>
+                                    </div>
                             </div>
 
                             <div>

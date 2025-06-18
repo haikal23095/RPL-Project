@@ -1,6 +1,7 @@
 <?php
 require_once '../db.php';
 session_start();
+$page = "pesanan_dikirim";
 
 if (!isset($_SESSION['user'])) {
     header("Location: ../login.php");
@@ -159,6 +160,29 @@ if ($shippingData['status_pesanan'] === 'Selesai') {
         .progress-step.active .progress-label {
             color: #0d6efd;
         }
+         /* Styling untuk tombol kembali (baru) */
+        .standalone-back-button-container {
+            margin-bottom: 15px; /* Jarak bawah dari tombol kembali */
+            padding-left: 0px; /* Sesuaikan padding agar sejajar dengan konten */
+        }
+        .standalone-back-button {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; 
+            color: #6c757d;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out; 
+        }
+        .standalone-back-button:hover {
+            background-color: #e9ecef; 
+            color: #495057;
+        }
+        .standalone-back-button .bi {
+            font-size: 1.1em;
+            margin-right: 8px; 
+        }
     </style>
 </head>
 <body>
@@ -166,12 +190,17 @@ if ($shippingData['status_pesanan'] === 'Selesai') {
     <?php require "profil_menu.php"; ?>
 
     <main id="main" class="main">
+        <a href="pesanan_dikirim.php" class="standalone-back-button">
+                <i class="bi bi-arrow-left"></i>
+                Kembali
+            </a>
         <div class="pagetitle">
-            <h1><i class="bi bi-geo-alt-fill"></i> Lacak Pesanan</h1>
+            <h1><i class="bi bi-geo-alt-fill"></i> PELACAKAN PESANAN</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                    <li class="breadcrumb-item active">Lacak Pesanan</li>
+                    <li class="breadcrumb-item"><a href="index.php">HOME</a></li>
+                    <li class="breadcrumb-item"><a href="pesanan_dikirim.php">PESANAN DIKIRIM</a></li>
+                    <li class="breadcrumb-item active">PELACAKAN PESANAN</li>
                 </ol>
             </nav>
         </div>
@@ -238,7 +267,7 @@ if ($shippingData['status_pesanan'] === 'Selesai') {
                         </div>
                     </div>
                 </div>
-                 <a href="history_pembayaran.php" class="btn btn-secondary mt-3"><i class="bi bi-arrow-left"></i> Kembali</a>
+                 
             </div>
         </section>
     </main>
