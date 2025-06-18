@@ -12,9 +12,9 @@ use Twilio\Rest\Client;
 // $dotenv->load();
 
 
-$sid = 'ACe52064ce7d7f46c9b2c1bdc15492c17a';
-$token = '686264dd59f4d3625b1bfc474426b25d';
-$verifySid = 'VA94b25bc03e55d9e18ec610f38d09a4e0';
+$sid = '';
+$token = '';
+$verifySid = '';
 
 
 // Debug sementara

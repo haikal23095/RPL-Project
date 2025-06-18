@@ -15,9 +15,9 @@ $dotenv->safeLoad(); // gunakan safeLoad agar tidak error fatal jika .env tidak 
 // $token      = getenv('TWILIO_AUTH_TOKEN');
 // $verifySid  = getenv('TWILIO_VERIFY_SID');
 
-$sid = 'ACe52064ce7d7f46c9b2c1bdc15492c17a';
-$token = '686264dd59f4d3625b1bfc474426b25d';
-$verifySid = 'VA94b25bc03e55d9e18ec610f38d09a4e0';
+$sid = '';
+$token = '';
+$verifySid = '';
 
 // Inisialisasi Twilio Client
 $twilio = new Client($sid, $token);
