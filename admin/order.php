@@ -298,7 +298,7 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <th>Tanggal</th>
                         <th>Nama Pembeli</th>
                         <th>Total</th>
-                        <th>Action</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -319,9 +319,6 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <option value="Dikirim" <?= $order['status_pesanan'] == 'Dikirim' ? 'selected' : '' ?>>Dikirim</option>
                                         <option value="Dibatalkan" <?= $order['status_pesanan'] == 'Dibatalkan' ? 'selected' : '' ?>>Dibatalkan</option>
                                     </select>
-                                </td>
-                                <td>
-                                    <i class="bi bi-eye action-icon" title="View Details"></i>
                                 </td>
                             </tr>
                             <?php
