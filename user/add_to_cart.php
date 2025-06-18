@@ -165,11 +165,13 @@ if (isset($_POST['checkout']) && isset($_POST['selected_items'])) {
             font-size: 1.1rem;
         }
         .subtotal-price {
-            font-size: 1.2rem;
+            font-size: 14px;
             color:rgb(255, 134, 41);
             font-weight: bold;
         }
-        
+        span{
+            font-size: 14px;
+        }
         .btn-primary{
             color: #1A877E !important;
             background-color: transparent !important;
@@ -184,6 +186,10 @@ if (isset($_POST['checkout']) && isset($_POST['selected_items'])) {
             background-color: #1A877E !important;
             color: #fff !important;
             border: 1px solid transparent !important;
+        }
+        h5{
+            font-weight: bold !important;
+            font-size: 16px !important;
         }
     </style>
 </head>
