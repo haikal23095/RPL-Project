@@ -112,7 +112,6 @@ $result = mysqli_query($kon, $query);
       </nav>
     </div><!-- End Page Title -->
     <div class="container mt-5">
-        <h2 class="text-center mb-4 fw-bold">PRODUK FAVORIT</h2>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
             <div class="col">
