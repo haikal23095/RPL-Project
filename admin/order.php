@@ -298,7 +298,6 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <th>Tanggal</th>
                         <th>Nama Pembeli</th>
                         <th>Total</th>
-                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -313,7 +312,6 @@ $pesanan = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td class="order-date"><?= date('d-m-Y', strtotime($order['tanggal_pesanan'])) ?></td>
                                 <td class="customer-name"><?= htmlspecialchars($order['customer_name']) ?></td>
                                 <td class="order-total">IDR <?= number_format($order['total_harga'], 0, ',', '.') ?></td>
-                                <td><span class="quantity-badge">1</span></td>
                                 <td>
                                     <select class="form-select status-select status-dropdown" 
                                             data-id="<?= $order['id_pesanan'] ?>">
