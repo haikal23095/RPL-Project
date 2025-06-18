@@ -53,11 +53,6 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
     <link href="../assets/img/favicon.png" rel="icon">
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
     <?php include 'aset.php'; ?>
-    <style>
-        body { background-color: #f5f5f5; }
-        .pesanan-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
-        .btn-orange { background-color: orange; color: white; }
-    </style>
 </head>
 <body>
 
@@ -82,6 +77,81 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
         header{
             background-color: #F8F7F1 !important;
         }
+        h5{
+            font-size: 18px !important;
+            color: #ff771d !important;
+            font-weight: bold !important;
+        }
+        strong{
+            color: #ff771d;
+        }
+        div.my-1 {
+            color: #FF8C12;
+        }
+        .btn-primary {
+            background-color: #FFC300 !important;
+            border: 1px solid #FFC300 !important;
+        }
+        .badge{
+            background-color: #FFBB34 !important;
+        }
+        .btn-danger {
+            background-color: transparent !important;
+            border: 1px solid #763D2D !important;
+            color: #763D2D !important;
+        }
+        .btn-danger:hover{
+            background-color: #763D2D !important;
+            color: #ffffff !important;
+        }
+        .btn-outline-primary {
+            background-color: transparent !important;
+            border: 1px solid #FF8C12 !important;
+            color: #FF8C12 !important;
+        }
+        .btn-outline-primary:hover{
+            background-color: #FF8C12 !important;
+            color: #ffffff !important;
+        }
+        .btn-outline-success {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-outline-success:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .btn-success {
+            background-color: transparent !important;
+            border: 1px solid #1A877E !important;
+            color: #1A877E !important;
+        }
+        .btn-success:hover{
+            background-color: #1A877E !important;
+            color: #ffffff !important;
+        }
+        .pesanan-card {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            border-radius: .75rem;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease-in-out;
+        }
+        .pesanan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        .pesanan-header {
+            background-color: #f8f9fa !important;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .product-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 1rem;
+            border-bottom: 1px solid #f1f1f1;
+        }
         .product-img-gallery {
             width: 70px;
             height: 70px;
@@ -89,6 +159,21 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
             border-radius: .5rem;
             border: 1px solid #eee;
         }
+        .card-footer-actions {
+            padding: 0.75rem 1.25rem;
+            background-color: #fdfdfd;
+        }
+        .total-harga {
+            color: #fd7e14;
+            font-weight: 700;
+        }
+        .modal-body .product-image-small {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
  </style>
 <main id="main" class="main">
     <div class="pagetitle">
@@ -163,10 +248,6 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
                                                             data-bs-target="#detailModal"
                                                             data-id="<?= $pesanan_item['id_pesanan'] ?>"> Detail Pesanan
                                             </button>
-                                            <a href="form_pembatalan.php?id_pesanan=<?= $pesanan_item['id_pesanan'] ?>" 
-                                            class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Yakin ingin mengajukan pembatalan untuk pesanan ini?');">Batalkan
-                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -184,7 +265,6 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
                 </div>
             </div>
         </section>
-    </div>
 </main>
 
 
