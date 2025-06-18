@@ -81,13 +81,13 @@ $cartSuccess = isset($_GET['cart_success']);
             margin-bottom: 1.5rem;
         }
         .promo-section {
-            margin-bottom: 3rem;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
         .promo-section-title {
-            color: #4154f1;
-            border-bottom: 2px solid #4154f1;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
+            color: #f4a460;
+            border-bottom: 2px solid #f4a460;
+            margin-bottom: 10px;
         }
         .promo-card {
             margin-bottom: 20px;
@@ -111,12 +111,12 @@ $cartSuccess = isset($_GET['cart_success']);
             padding: 1.5rem;
         }
         .card-title {
-            color: #4154f1;
+            color: #f4a460;
             font-weight: bold;
             font-size: 1.2rem;
         }
         .discount-badge {
-            background-color: #ff6b6b;
+            background-color:rgb(248, 120, 73);
             color: white;
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
@@ -128,18 +128,28 @@ $cartSuccess = isset($_GET['cart_success']);
             padding: 2rem;
             border-radius: 10px;
             text-align: center;
-            margin-top: 2rem;
+            margin-top: 10px;
         }
         .special-offer h3 {
-            color: #4154f1;
+            color: #f4a460;
             font-weight: bold;
         }
-        .divider {
-            border-top: 2px dashed #4154f1;
-            margin: 2rem 0;
+        h3{
+            color: #f4a460;
         }
-
-        
+        .btn-primary {
+            background-color: transparent !important;
+            color: #f4a460 !important;
+            border: 1px solid #f4a460 !important;
+        }
+        .btn-primary:hover {
+            background-color: #f4a460 !important;
+            color: #f4a460 !important;
+            border: 1px solid #f4a460 !important;
+        }
+        h4{
+            font-weight: bold !important;
+        }
     </style>
     <?php include 'aset.php'; ?>
 </head>
@@ -170,20 +180,8 @@ $cartSuccess = isset($_GET['cart_success']);
             <div class="row">
                 <div class="col-lg-12">
 
-                    <div class="d-flex justify-content-center mb-4">
-                        <img src="../assets/img/promo1.png" alt="promo1" style="width: 100%; max-width: 1500px;" class="">
-                    </div>
-                    <div class="d-flex justify-content-center mb-4">
-                        <img src="../assets/img/promo1.png" alt="promo1" style="width: 100%; max-width: 1500px;" class="">
-                    </div>
-
-                    <!-- All Promo Section -->
-                     <div class="d-flex justify-content-center mb-3">
-                        <button id="showAllPromos" class="btn btn-primary">Tampilkan Semua Promo</button>
-                    </div>
 
                     <div class="promo-section">
-                        <h3 class="promo-section-title">SEMUA PROMO</h3>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="promo-card" id="filterDiscount"> <div class="card-body text-center">
@@ -195,20 +193,16 @@ $cartSuccess = isset($_GET['cart_success']);
                             <div class="col-md-6">
                                 <div class="promo-card" id="filterBonus"> <div class="card-body text-center">
                                         <h4 class="card-title">PROMO BONUS</h4>
-                                        <p class="card-text">Dapatkan bonus menarik dengan pembelian produk tertentu, buruan</p>
+                                        <p class="card-text">Dapatkan bonus menarik dengan pembelian produk tertentu</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="divider"></div>
-
                     <!-- Special Offer Section -->
                     <div class="special-offer">
                         <h3>PENAWARAN SPESIAL</h3>
-                        <h4>SPECIAL 5.5</h4>
-                        <p>GRATIS BIAYA KIRIM HINGGA 2025</p>
+                        <h4>SPESIAL 5.5</h4>
                     </div>
 
                     <!-- Actual Promo Cards -->

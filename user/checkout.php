@@ -312,6 +312,13 @@ if (isset($_POST['confirm_order'])) {
             font-size: 1.1em;
             margin-right: 8px; 
         }
+        div.fw-bold{
+            font-size: 14px !important;
+        }
+        h5{
+            font-size: 16px !important;
+            font-weight: bold !important;
+        }
     </style>
 </head>
 <body>
