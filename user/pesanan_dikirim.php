@@ -87,6 +87,9 @@ $pesanan_list = $pesanan_list->fetch_all(MYSQLI_ASSOC);
         .badge{
             background-color: #FFBB34 !important;
         }
+        .badge.bg-primary {
+            background-color: #FFBB34 !important;
+        }
         .btn-danger {
             background-color: transparent !important;
             border: 1px solid #763D2D !important;
