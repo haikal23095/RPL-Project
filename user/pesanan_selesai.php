@@ -205,13 +205,13 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
         <div class="row">
                 <div class="col-lg-12">
                     <?php if (count($pesanan) > 0): // Changed $pesanan_list to $pesanan ?>
-                        <?php foreach ($pesanan as $pesanan_item): // Changed $pesanan_list to $pesanan and used a different variable name for clarity ?>
+                        <?php foreach ($pesanan as $pesanan_item): ?>
                             <?php
                             // Query untuk mendapatkan semua gambar produk dalam pesanan ini
                             $gambar_stmt = $kon->prepare("SELECT p.gambar, p.nama_produk FROM pesanan_detail dp 
-                                                                 JOIN produk p ON dp.id_produk = p.id_produk 
-                                                                 WHERE dp.id_pesanan = ?");
-                            $gambar_stmt->bind_param("s", $pesanan_item['id_pesanan']); // Use $pesanan_item here
+                                                            JOIN produk p ON dp.id_produk = p.id_produk 
+                                                            WHERE dp.id_pesanan = ?");
+                            $gambar_stmt->bind_param("s", $pesanan_item['id_pesanan']); 
                             $gambar_stmt->execute();
                             $gambar_result = $gambar_stmt->get_result();
                             $produk_images = $gambar_result->fetch_all(MYSQLI_ASSOC);
@@ -225,13 +225,13 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
                                     <span class="badge bg-primary my-1"><?= htmlspecialchars($pesanan_item['status_pesanan']) ?></span>
                                 </div>
                                 
-                                <div class="product-gallery">
+                                <div class="product-gallery px-3 py-2 d-flex flex-wrap gap-2">
                                     <?php if (!empty($produk_images)): ?>
                                         <?php foreach ($produk_images as $img): ?>
                                             <img src="../uploads/<?= htmlspecialchars($img['gambar']) ?>" class="product-img-gallery" title="<?= htmlspecialchars($img['nama_produk']) ?>">
                                         <?php endforeach; ?>
                                     <?php else: ?>
-                                        <p class="text-muted small px-3">Tidak ada gambar produk.</p>
+                                        <p class="text-muted small">Tidak ada gambar produk.</p>
                                     <?php endif; ?>
                                 </div>
                                 
@@ -243,10 +243,10 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
                                         </div>
                                         <div class="col-md-6 text-md-end">
                                             <button class="btn btn-outline-primary btn-sm btn-detail" 
-                                                            type="button" 
-                                                            data-bs-toggle="modal" 
-                                                            data-bs-target="#detailModal"
-                                                            data-id="<?= $pesanan_item['id_pesanan'] ?>"> Detail Pesanan
+                                                    type="button" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#detailModal"
+                                                    data-id="<?= $pesanan_item['id_pesanan'] ?>"> Detail Pesanan
                                             </button>
                                             <?php if ($pesanan_item['status_pesanan'] === 'Selesai'): ?>
                                                 <?php if (empty($pesanan_item['sudah_dinilai'])): ?>
@@ -265,8 +265,8 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
                         <div class="card">
                             <div class="card-body text-center p-5">
                                 <i class="bi bi-check-circle-fill fs-1 text-success"></i>
-                                <h5 class="mt-3">Tidak Ada Pesanan yang Diproses</h5>
-                                <p class="text-muted">Semua pesanan Anda sudah dalam pengiriman atau telah selesai. <br>Lihat halaman lain untuk melacaknya.</p>
+                                <h5 class="mt-3">Tidak Ada Pesanan Selesai</h5>
+                                <p class="text-muted">Silahkan berbelanja</p>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -352,6 +352,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 26145a066c8c06380cfb0bb3e3322cb7a05dff1e
     // --- LOGIKA MODAL REVIEW (Tidak Diubah) ---
         // (Kode modal review yang sudah ada tetap di sini)
         const reviewModal = new bootstrap.Modal(document.getElementById('reviewModal'));
