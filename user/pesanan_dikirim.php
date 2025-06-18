@@ -160,9 +160,8 @@ $pesanan_list = $pesanan_list->fetch_all(MYSQLI_ASSOC);
                                                     data-bs-target="#detailModal"
                                                     data-id="<?= $pesanan['id_pesanan'] ?>"> Detail Pesanan
                                             </button>
-                                            <a href="form_pembatalan.php?id_pesanan=<?= $pesanan['id_pesanan'] ?>" 
-                                            class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Yakin ingin mengajukan pembatalan untuk pesanan ini?');">Batalkan
+                                            <a href="lacak_pesanan.php?id_pesanan=<?= $pesanan['id_pesanan'] ?>" 
+                                               class="btn btn-primary btn-sm">Lacak Pesanan
                                             </a>
                                         </div>
                                     </div>

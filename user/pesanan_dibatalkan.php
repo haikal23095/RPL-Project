@@ -170,8 +170,7 @@ function formatCurrency($number) {
                         <div class="card">
                             <div class="card-body text-center p-5">
                                 <i class="bi bi-check-circle-fill fs-1 text-success"></i>
-                                <h5 class="mt-3">Tidak Ada Pesanan yang Dikirim</h5>
-                                <p class="text-muted">Semua pesanan Anda sudah dalam pengiriman atau telah selesai. <br>Lihat halaman lain untuk melacaknya.</p>
+                                <h5 class="mt-3">Tidak Ada Pesanan yang Dibatalkan</h5>
                             </div>
                         </div>
                     <?php endif; ?>
