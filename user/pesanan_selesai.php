@@ -50,8 +50,9 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pesanan Dinilai</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/img/favicon.png" rel="icon">
+    
     <link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    
     <?php include 'aset.php'; ?>
 </head>
 <body>
@@ -248,7 +249,14 @@ $pesanan = $result->fetch_all(MYSQLI_ASSOC);
                                                             data-bs-target="#detailModal"
                                                             data-id="<?= $pesanan_item['id_pesanan'] ?>"> Detail Pesanan
                                             </button>
-                                            <a href="checkout.php?ulang=<?= $pesanan_item['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
+                                            <?php if ($pesanan_item['status_pesanan'] === 'Selesai'): ?>
+                                                <?php if (empty($pesanan_item['sudah_dinilai'])): ?>
+                                                    <button type="button" class="btn btn-primary btn-sm open-review-modal" data-order-id="<?= $pesanan_item['id_pesanan'] ?>">Nilai</button>
+                                                <?php else: ?>
+                                                    <button class="btn btn-success btn-sm" disabled>Dinilai</button>
+                                                <?php endif; ?>
+                                                <a href="checkout.php?ulang=<?= $pesanan_item['id_pesanan'] ?>" class="btn btn-success btn-sm">Beli Lagi</a>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>

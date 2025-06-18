@@ -90,6 +90,10 @@ $pesanan_list = $pesanan_list->fetch_all(MYSQLI_ASSOC);
         .badge.bg-primary {
             background-color: #FFBB34 !important;
         }
+        .btn-primary {
+            background-color: #FFC300 !important;
+            border: 1px solid #FFC300 !important;
+        }
         .btn-danger {
             background-color: transparent !important;
             border: 1px solid #763D2D !important;
