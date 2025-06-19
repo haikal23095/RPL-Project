@@ -215,19 +215,20 @@ function formatCurrency($number) {
         .product-card .button-group {
             margin-top: auto;
             display: flex;
-            gap: 10px; /* Jarak antar tombol */
+            flex-direction: row;
+            gap: 10px; 
         }
         .product-card .btn {
             font-weight: 600;
-            flex: 1; /* Membuat kedua tombol memiliki lebar yang sama */
+            flex: 1; 
         }
         .btn-buy-now {
-            background-color: #1A877E; /* Warna hijau toska */
+            background-color: #1A877E; 
             border-color: #1A877E;
             color: #fff;
             padding-top: 13px;
             padding-bottom: 13px;
-            font-size: 10px;
+            font-size: 12px;
         }
         .btn-buy-now:hover {
             background-color: #1A877E;
@@ -236,11 +237,11 @@ function formatCurrency($number) {
             color: #ffffff !important;
         }
         .btn-add-to-cart {
-            background-color:transparent; /* Warna kuning-oranye */
+            background-color:transparent;
             border-color: #ffc107;
             padding-top: 13px;
             padding-bottom: 13px;
-            font-size: 10px;
+            font-size: 12px;
             color: #ffc107;
         }
         .btn-add-to-cart:hover {
@@ -346,12 +347,12 @@ function formatCurrency($number) {
                                     
                                     <div class="button-group">
                                     <?php if ($product['stock'] > 0): ?>
-                                        <form method="POST" action="checkout.php" class="w-50">
+                                        <form method="POST" action="checkout.php" class="w-100">
                                             <input type="hidden" name="product_id" value="<?= $product['id']; ?>">
                                             <input type="hidden" name="quantity" value="1">
                                             <button type="submit" name="buy_now" class="btn btn-buy-now w-100">Beli Sekarang</button>
                                         </form>
-                                        <form method="POST" action="add_to_cart.php" class="w-50">
+                                        <form method="POST" action="add_to_cart.php" class="w-100">
                                             <input type="hidden" name="product_id" value="<?= $product['id']; ?>">
                                             <button type="submit" name="add_to_cart" class="btn btn-add-to-cart w-100">Masuk Keranjang</button>
                                         </form>

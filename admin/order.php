@@ -9,7 +9,7 @@ if (!isset($_SESSION["admin"])) {
 $host = 'localhost';
 $dbname = 'casaluxedb';
 $username = 'root';
-$password = '48475948';
+$password = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -26,7 +26,8 @@ $status_filter = isset($_GET['status']) ? $_GET['status'] : '';
 $query = "SELECT p.id_pesanan, u.nama AS customer_name, 
                  p.tanggal_pesanan, p.total_harga, p.status_pesanan
           FROM pesanan p
-          JOIN user u ON p.id_user = u.id_user";
+          JOIN user u ON p.id_user = u.id_user
+          WHERE p.status_pesanan != 'Selesai' AND p.status_pesanan != 'Dibatalkan'";
 
 if (!empty($status_filter)) {
     $query .= " WHERE p.status_pesanan = :status";

@@ -174,7 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['promo_id'])) {
             padding-bottom: 10px;
         }
         .promo-item {
-            border-left: 4px solid #007bff;
+            border-left: 4px solid #fd7e14;
             padding: 15px;
             margin-bottom: 15px;
             background-color: #f8f9fa;
@@ -183,7 +183,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['promo_id'])) {
         }
         .promo-title {
             font-weight: bold;
-            color: #007bff;
+            color: #fd7e14;
             margin-bottom: 5px;
         }
         .promo-detail {
@@ -228,6 +228,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['promo_id'])) {
             color: #6c757d;
             margin-top: 5px;
         }
+        .btn-primary {
+            background-color: #fd7e14 !important;
+            border:1px solid #fd7e14 !important;
+        }
+
     </style>
     <?php include 'aset.php'; ?>
 </head>
