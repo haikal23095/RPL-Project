@@ -1,16 +1,16 @@
 <?php
-session_start();
-$page = "penjualan";
-if (!isset($_SESSION["admin"])) {
-    header("Location: ../login.php");
-    exit;
-}
+// session_start();
+// $page = "penjualan";
+// if (!isset($_SESSION["admin"])) {
+//     header("Location: ../login.php");
+//     exit;
+// }
 
 // Koneksi Database menggunakan PDO
 $host = 'localhost';
 $dbname = 'casaluxedb';
 $username = 'root';
-$password = '';
+$password = '48475948';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
