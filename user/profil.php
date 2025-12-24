@@ -13,7 +13,7 @@ if (!isset($_SESSION["user"])) { // Cek sesi untuk user
 
 // Gunakan nama user dari session untuk mengambil data user yang login
 // Asumsi $_SESSION["user"] menyimpan NAMA user. Sesuaikan jika Anda menyimpan ID.
-$user_nama = $_SESSION["user"]["nama"];
+$user_nama = $_SESSION["user"];
 $query = $kon->prepare("SELECT * FROM user WHERE nama = ?");
 $query->bind_param("s", $user_nama);
 $query->execute();

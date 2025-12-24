@@ -8,7 +8,7 @@ if (!isset($_SESSION["user"])) {
 }
 
 // GET ID FROM USER
-$user = $_SESSION["user"]["nama"];
+$user = $_SESSION["user"];
 $kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$user'");
 $row_user = mysqli_fetch_array($kue_user);
 

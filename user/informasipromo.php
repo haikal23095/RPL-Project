@@ -7,7 +7,7 @@ if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
 }
-$userName = $_SESSION['user']["nama"];
+$userName = $_SESSION['user'];
 $kue_user = mysqli_query($kon, "SELECT * FROM user WHERE nama = '$userName'");
 $row_user = mysqli_fetch_array($kue_user);
 $user_id = $row_user['id_user']; // Get the actual user ID

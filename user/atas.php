@@ -37,7 +37,7 @@
             <span class="d-none d-md-block ps-2"
               style="color: <?php echo (isset($page) && $page == 'profil') ? '#EFAA31' : '#2D3A3A'; ?>">
               <i style="font-size: 20px; color: <?php echo (isset($page) && $page == 'profil') ? '#EFAA31' : '#2D3A3A'; ?>"
-                class="bi bi-person"></i>&nbsp; Halo, <?= $_SESSION["user"]["nama"] ?>!
+                class="bi bi-person"></i>&nbsp; Halo, <?= $_SESSION["user"] ?>!
             </span>
           </a><!-- End Profile Image Icon -->
         </li><!-- End Profile Nav -->

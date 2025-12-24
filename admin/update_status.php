@@ -1,11 +1,8 @@
 <?php
-$host = 'localhost';
-$dbname = 'casaluxedb';
-$username = 'root';
-$password = '';
+require "../db.php";
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo = new PDO("mysql:host=localhost;dbname=casaluxedb", "root", "48475948");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

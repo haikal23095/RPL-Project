@@ -1,4 +1,8 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+header('Content-Type: text/html; charset=utf-8');
+
 require_once '../db.php';
 
 if (!isset($_GET['id_pesanan'])) {
@@ -59,22 +63,27 @@ if ($diskon_dihitung < 0) {
 }
 
 
-function formatCurrency($number) {
+function formatCurrency($number)
+{
     return 'Rp ' . number_format($number ?? 0, 0, ',', '.');
 }
 ?>
 
 <div class="row">
     <div class="col-md-6">
-        <p><strong>Status Pesanan:</strong> <br><span class="badge bg-primary"><?= htmlspecialchars($pesanan['status_pesanan']); ?></span></p>
+        <p><strong>Status Pesanan:</strong> <br><span
+                class="badge bg-primary"><?= htmlspecialchars($pesanan['status_pesanan']); ?></span></p>
         <p><strong>No. Pesanan:</strong> <br>#<?= htmlspecialchars($pesanan['id_pesanan']); ?></p>
-        <p><strong>Tanggal Pembelian:</strong> <br><?= date('d M Y, H:i', strtotime($pesanan['tanggal_pesanan'])); ?></p>
+        <p><strong>Tanggal Pembelian:</strong> <br><?= date('d M Y, H:i', strtotime($pesanan['tanggal_pesanan'])); ?>
+        </p>
     </div>
     <div class="col-md-6">
         <h6>Informasi Pengiriman</h6>
         <p class="mb-0"><strong>Kurir:</strong> <?= htmlspecialchars($pesanan['nama_kurir'] ?? '-'); ?></p>
-        <p class="mb-0"><strong>No. Resi:</strong> <?= htmlspecialchars($pesanan['nomor_resi'] ?? 'Belum tersedia'); ?></p>
-        <p><strong>Alamat:</strong> <br><?= htmlspecialchars($pesanan['alamat_pengiriman'] ?? 'Alamat tidak tersedia.'); ?></p>
+        <p class="mb-0"><strong>No. Resi:</strong> <?= htmlspecialchars($pesanan['nomor_resi'] ?? 'Belum tersedia'); ?>
+        </p>
+        <p><strong>Alamat:</strong>
+            <br><?= htmlspecialchars($pesanan['alamat_pengiriman'] ?? 'Alamat tidak tersedia.'); ?></p>
     </div>
 </div>
 
@@ -83,14 +92,17 @@ function formatCurrency($number) {
 <h6>Rincian Produk</h6>
 <?php if (!empty($detail_pesanan)): ?>
     <?php foreach ($detail_pesanan as $detail): ?>
-    <div class="d-flex align-items-center mb-3 border-bottom pb-2">
-        <img src="../uploads/<?= htmlspecialchars($detail['gambar']) ?>" style="width: 50px; height: 50px; object-fit: cover; border-radius: .375rem; margin-right: 1rem;" alt="<?= htmlspecialchars($detail['nama_produk']) ?>">
-        <div class="flex-grow-1">
-            <div class="fw-bold"><?= htmlspecialchars($detail['nama_produk']) ?></div>
-            <div class="text-muted"><?= htmlspecialchars($detail['jumlah']) ?> x <?= formatCurrency($detail['harga']) ?></div>
+        <div class="d-flex align-items-center mb-3 border-bottom pb-2">
+            <img src="../uploads/<?= htmlspecialchars($detail['gambar']) ?>"
+                style="width: 50px; height: 50px; object-fit: cover; border-radius: .375rem; margin-right: 1rem;"
+                alt="<?= htmlspecialchars($detail['nama_produk']) ?>">
+            <div class="flex-grow-1">
+                <div class="fw-bold"><?= htmlspecialchars($detail['nama_produk']) ?></div>
+                <div class="text-muted"><?= htmlspecialchars($detail['jumlah']) ?> x <?= formatCurrency($detail['harga']) ?>
+                </div>
+            </div>
+            <div class="fw-bold"><?= formatCurrency($detail['subtotal']) ?></div>
         </div>
-        <div class="fw-bold"><?= formatCurrency($detail['subtotal']) ?></div>
-    </div>
     <?php endforeach; ?>
 <?php else: ?>
     <p class="text-muted">Tidak ada rincian produk untuk pesanan ini.</p>
