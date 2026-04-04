@@ -10,6 +10,5 @@ db.php
 /composer.lock
 
 # yang ada keynya
-login.php
 verification.php
 verify.php
